@@ -35,3 +35,6 @@
 - La precisión de la regla se deriva del rango, no de si la respuesta oculta es entera. Los extremos del rango son alcanzables exactamente; se permiten decimales con teclado y ajuste fino.
 - Inicio reduce ruido decorativo; configuración usa dificultad en cuadrícula 2×2 para fuentes grandes; introducción y pase tienen jerarquía y espaciado renovados; marcador aclara puntos acumulados; podio mejora nombres; ajustes separa preferencias y datos.
 - El inicio de la regla comprueba el número ya redondeado antes de apartarse de una respuesta coincidente. Las comparaciones con todos los valores iguales se centran, incluso con cero o fracciones. Pruebas nuevas reproducen la captura (23 frente a 28 y 38), empates de ocho jugadores, proporciones logarítmicas, extremos y precisión independiente de la respuesta.
+
+- La revelación muestra inmediatamente el resultado: se retiran las animaciones de barras/puntos flotantes que mezclaban etiquetas y números. Las listas mantienen espacio propio para cada dato y permiten desplazamiento con ocho jugadores.
+- v1.0.1 incrementa versionCode a 2. El script local toma el nombre del APK de Gradle. El workflow publica notas de esta versión y avisa explícitamente si utilizó firma temporal; sin la clave original no se promete actualización encima de v1.0.0.

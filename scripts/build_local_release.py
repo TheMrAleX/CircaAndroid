@@ -5,6 +5,7 @@ Use stable exported signing credentials for distributed updates.
 import base64
 import hashlib
 import os
+import re
 from pathlib import Path
 import secrets
 import shutil
@@ -28,7 +29,8 @@ def main():
             print('Firma temporal: este APK no conserva una identidad de actualización estable.',flush=True)
         subprocess.run(['./gradlew',':core:test',':app:lintRelease',':app:assembleRelease','--console=plain'],cwd=ROOT,env=environment,check=True)
         output=ROOT/'dist';output.mkdir(exist_ok=True)
-        apk=output/'Aproximado-v1.0.0-arm64-v8a.apk'
+        version=re.search(r'versionName\s*=\s*"([^"]+)"',(ROOT/'app/build.gradle.kts').read_text()).group(1)
+        apk=output/f'Aproximado-v{version}-arm64-v8a.apk'
         shutil.copyfile(ROOT/'app/build/outputs/apk/release/app-release.apk',apk)
         sdk=environment.get('ANDROID_HOME') or environment.get('ANDROID_SDK_ROOT')
         if sdk:

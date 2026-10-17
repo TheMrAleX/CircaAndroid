@@ -36,9 +36,11 @@ jobs:
           set -euo pipefail
           KEYSTORE_PATH="$RUNNER_TEMP/release.jks"
           if [[ -n "$KEYSTORE_BASE64" ]]; then
+            echo "SIGNING_MODE=stable" >> "$GITHUB_ENV"
             test -n "$KEYSTORE_PASSWORD" && test -n "$KEY_ALIAS" && test -n "$KEY_PASSWORD"
             printf '%s' "$KEYSTORE_BASE64" | base64 --decode > "$KEYSTORE_PATH"
           else
+            echo "SIGNING_MODE=temporary" >> "$GITHUB_ENV"
             KEYSTORE_PASSWORD="$(openssl rand -hex 24)"
             KEY_PASSWORD="$KEYSTORE_PASSWORD"
             KEY_ALIAS="aproximado"
@@ -59,7 +61,15 @@ jobs:
           cp app/build/outputs/apk/release/app-release.apk "dist/$APK"
           "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose "dist/$APK"
           (cd dist && sha256sum "$APK" > "$APK.sha256")
-          printf '\nAPK firmado para Android 8 o posterior. Juego completamente offline.\n\nSHA256:\n```\n' > dist/notes.md
+          if [[ -f "docs/releases/v${VERSION}.md" ]]; then
+            cp "docs/releases/v${VERSION}.md" dist/notes.md
+          else
+            printf 'Aproximado %s\n' "$VERSION" > dist/notes.md
+          fi
+          if [[ "$SIGNING_MODE" == temporary ]]; then
+            printf '\nFirma temporal: esta compilación no actualiza APK de otras ejecuciones. Si ya tienes una versión instalada con otra firma, debes desinstalarla (se borrarán partida e historial) antes de instalar esta.\n' >> dist/notes.md
+          fi
+          printf '\nAPK firmado para Android 8 o posterior. Juego completamente offline.\n\nSHA256:\n```\n' >> dist/notes.md
           cat "dist/$APK.sha256" >> dist/notes.md
           printf '```\n' >> dist/notes.md
       - name: Publish GitHub Release

@@ -12,3 +12,12 @@ Trabaja autónomamente: elige opciones razonables sin preguntar y registra decis
 - [x] 6 Documentación: README, DATA, RELEASING, DECISIONS y evidencias/capturas
 
 Cada tarea cloud ya está aislada; utilizar este checkout, no crear worktrees salvo petición expresa.
+
+## Revisión 1.0.1
+- [x] Nueve pantallas revisadas; revelación sin etiquetas flotantes; selector con áreas separadas.
+- [x] Motor: precisión independiente de la respuesta, extremos exactos y comparaciones lineales/logarítmicas.
+- [x] 13 tests de motor, 4 de integración y 68 renders registrados; build debug y lint correctos.
+- [x] Comparación final de las 68 referencias; 85 casos sin fallos ni omisiones, lint debug sin incidencias.
+- [ ] Release ARM64 y verificación remota.
+
+La petición de rediseño 1.0.1 sustituye las posiciones rígidas de la spec original; conservar jerarquía, legibilidad y privacidad. Justificaciones en DECISIONS.md.

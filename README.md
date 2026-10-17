@@ -2,14 +2,14 @@
 
 Juego nativo Android de trivia numérica para **2–8 personas** que se pasan un teléfono. 430 preguntas en español, 12 categorías y funcionamiento **100 % offline**: sin permiso de Internet, anuncios ni analytics.
 
-**[Descargar APK firmado v1.0.0](https://github.com/TheMrAleX/CircaAndroid/releases/download/v1.0.0/Aproximado-v1.0.0-arm64-v8a.apk)** · [Release y SHA256](https://github.com/TheMrAleX/CircaAndroid/releases/tag/v1.0.0)
+**[Descargar APK firmado v1.0.1](https://github.com/TheMrAleX/CircaAndroid/releases/download/v1.0.1/Aproximado-v1.0.1-arm64-v8a.apk)** · [Release y SHA256](https://github.com/TheMrAleX/CircaAndroid/releases/tag/v1.0.1)
 
 ## Cómo jugar
 
 1. Elige jugadores, nombres, colores distintos, 5/10/15/20 rondas, categorías y dificultad.
 2. Todos leen la pregunta. Pasa el teléfono a la persona indicada.
 3. Cada persona ajusta su estimación arrastrando la regla vertical, con los botones finos o con el teclado numérico. Confirma sin enseñar la pantalla.
-4. Al terminar todos, aparecen las barras de estimaciones y la respuesta real. Más cerca da más puntos; las escalas logarítmicas comparan proporciones. Exacto: +2; a menos del 1 %: +1. Los empates comparten puesto y puntos.
+4. Al terminar todos, aparecen la respuesta real y las tarjetas de resultados. Más cerca da más puntos; las escalas logarítmicas comparan proporciones. Exacto: +2; a menos del 1 %: +1. Los empates comparten puesto y puntos.
 5. Consulta el marcador y termina en el podio. Puedes salir y continuar una partida guardada. El selector bloquea capturas y la vista de recientes.
 
 ## Recorrido visual
@@ -17,9 +17,11 @@ Juego nativo Android de trivia numérica para **2–8 personas** que se pasan un
 - **Inicio:** fondo carbón, reglas laterales animadas, título azul con contorno y botones grandes.
 - **Configuración:** tarjetas redondeadas, nombres editables, colores y filtros.
 - **Pase de turno:** pantalla del color del siguiente jugador sin estimaciones anteriores.
-- **Selector:** regla deslizable, número gigante con contorno y sheet de color; entrada precisa con teclado.
-- **Revelación:** barras individuales de color, respuesta de cristal, corona y confetti.
+- **Selector:** pregunta, regla y controles separados; número con contorno, ajuste fino y teclado.
+- **Revelación:** respuesta independiente y tarjetas ordenadas por cercanía, con estimación, comparación, diferencia y puntos.
 - **Marcador y resultado:** puntuación acumulada, puestos compartidos en empate y podio final.
+
+Novedades 1.0.1: revisión de las nueve pantallas, corrección de la inercia y precisión de la regla, y resultados legibles incluso en empates de ocho jugadores. [Cambios completos](docs/releases/v1.0.1.md).
 
 Ejemplos: [selector de 8 jugadores](docs/screens/selector_320x640_1.3_8p.png), [revelación](docs/screens/reveal_320x640_1.3_8p.png) y [marcador](docs/screens/score_320x640_1.3_8p.png).
 

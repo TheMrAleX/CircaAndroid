@@ -1,6 +1,6 @@
 # Publicar Aproximado
 
-`release.yml` se ejecuta al enviar un tag `v*`. Requiere que el tag coincida con `versionName`. La versión inicial es 1.0.0 (código 1). Ejecuta validación de las 430 preguntas, tests, lint release, R8 y reducción de recursos. Publica `Aproximado-v1.0.0-arm64-v8a.apk` firmado y su archivo SHA256 en GitHub Releases con notas generadas.
+`release.yml` se ejecuta al enviar un tag `v*`. Requiere que el tag coincida con `versionName`. La versión actual es 1.0.1 (código 2). Ejecuta validación de las 430 preguntas, tests, lint release, R8 y reducción de recursos. Publica `Aproximado-v1.0.1-arm64-v8a.apk` firmado y su archivo SHA256 en GitHub Releases con notas generadas.
 
 ## Firma estable (recomendada)
 
@@ -18,21 +18,21 @@ Puedes generar y verificar un APK local con `python3 scripts/build_local_release
 
 Para firmar localmente, exporta `KEYSTORE_PATH` (ruta absoluta), `KEYSTORE_PASSWORD`, `KEY_ALIAS`, `KEY_PASSWORD` y ejecuta `./gradlew :app:assembleRelease`. No se usa la clave debug para release. No se versionan almacenes ni contraseñas.
 
-## Disparar la primera release (tres líneas)
+## Disparar la release (tres líneas)
 
 Desde el checkout ya commiteado en main, con Git autenticado:
 
 ```sh
 git push -u origin main
-git tag v1.0.0
-git push origin v1.0.0
+git tag v1.0.1
+git push origin v1.0.1
 ```
 
-Si el tag ya existe localmente, omite la segunda línea. Comprueba el resultado en Actions → Signed ARM64 release y en Releases. Con gh autenticado: `gh run list --workflow release.yml` y `gh release view v1.0.0`. El workflow usa `github.token` con `contents: write`; no requiere un PAT personal.
+Si el tag ya existe localmente, omite la segunda línea. Comprueba el resultado en Actions → Signed ARM64 release y en Releases. Con gh autenticado: `gh run list --workflow release.yml` y `gh release view v1.0.1`. El workflow usa `github.token` con `contents: write`; no requiere un PAT personal.
 
 ## ARMv8
 
-`ndk.abiFilters` incluye solo `arm64-v8a`. La app actual es Kotlin/DEX y no lleva bibliotecas nativas; este filtro se aplicará a cualquier dependencia nativa futura. El APK universal de bytecode se etiqueta arm64-v8a como distribución solicitada; Android puede ejecutarlo también en otras arquitecturas compatibles porque no depende de código JNI.
+`ndk.abiFilters` incluye solo `arm64-v8a`. La app usa Kotlin/DEX y una biblioteca nativa transitiva de AndroidX. El APK empaqueta únicamente `lib/arm64-v8a/libandroidx.graphics.path.so`; se distribuye para dispositivos ARM64.
 
 ## Publicación verificada: v1.0.0
 
