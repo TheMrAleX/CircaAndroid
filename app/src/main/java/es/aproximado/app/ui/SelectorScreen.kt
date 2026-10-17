@@ -27,6 +27,7 @@ import es.aproximado.app.*
 import es.aproximado.app.R
 import es.aproximado.core.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Job
 import kotlin.math.*
 
 val LocalFeedback = staticCompositionLocalOf<(Boolean)->Unit> { {} }
@@ -46,6 +47,7 @@ val LocalFeedback = staticCompositionLocalOf<(Boolean)->Unit> { {} }
     var lastTick by remember { mutableLongStateOf(0L) }
     var lastMajor by remember { mutableIntStateOf(-1) }
     val fling=remember { Animatable(0f) }
+    var flingJob by remember { mutableStateOf<Job?>(null) }
     val leaving=remember { Animatable(0f) }
     val decay=rememberSplineBasedDecay<Float>()
     val value=exact ?: RulerScale.snapped(q,position.toDouble())
@@ -57,47 +59,54 @@ val LocalFeedback = staticCompositionLocalOf<(Boolean)->Unit> { {} }
         }
     }
     fun fine(direction: Int) {
-        val raw=if(q.scale=="log") max(value*(exp((ln(q.max)-ln(q.min))/1000)-1),.001) else (q.max-q.min)/1000
-        val step=RulerScale.niceStep(raw).coerceAtLeast(if(q.answer==floor(q.answer)) 1.0 else .01)
+        flingJob?.cancel()
+        val step=RulerScale.step(q,value)
         val next=(value+direction*step).coerceIn(q.min,q.max)
         position=RulerScale.position(q,next).toFloat();exact=next;feedback(false)
     }
-    BoxWithConstraints(Modifier.fillMaxSize().background(Tokens.bg)) {
-        val sheetHeight=maxOf(if(density.fontScale>1.15) 390.dp else 320.dp,maxHeight*.42f).coerceAtMost(maxHeight-180.dp)
-        val sheetTop=maxHeight-sheetHeight
+    ScreenColumn {
+        TopBar(stringResource(R.string.selector_title,p.name,m.round+1,m.config.rounds),close=true,onAction=onExit)
+        Box(Modifier.fillMaxWidth().heightIn(max=140.dp).verticalScroll(rememberScrollState()).padding(horizontal=24.dp,vertical=12.dp)) {
+            Label(q.text,Modifier.fillMaxWidth(),18,bold=true,center=true)
+        }
         val description=stringResource(R.string.estimate_accessibility,formatNumber(value))
-        Column(Modifier.fillMaxWidth().statusBarsPadding()) {
-            TopBar(stringResource(R.string.selector_title,p.name,m.round+1,m.config.rounds),close=true,onAction=onExit)
-            Box(Modifier.fillMaxWidth().height((sheetTop-56.dp).coerceAtLeast(80.dp))
-                .semantics { contentDescription=description;setProgress { progress -> setPosition(progress);true };progressBarRangeInfo=ProgressBarRangeInfo(position,0f..1f) }
-                .draggable(rememberDraggableState { delta -> setPosition(position+delta/distance) },Orientation.Vertical,
-                    onDragStarted={ fling.stop() },onDragStopped={ velocity ->
-                        scope.launch {
-                            fling.snapTo(position);fling.updateBounds(0f,1f)
-                            fling.animateDecay(velocity/distance,decay) { setPosition(this.value) }
-                        }
-                    })) {
-                RulerCanvas(Modifier.fillMaxSize(),position*distance)
-                Label(stringResource(R.string.drag_hint),Modifier.align(Alignment.TopCenter).padding(top=24.dp,start=60.dp,end=60.dp),13,Tokens.muted,center=true)
+        Box(Modifier.weight(1f).fillMaxWidth().clipToBounds()
+            .semantics { contentDescription=description;setProgress { progress -> flingJob?.cancel();setPosition(progress);true };progressBarRangeInfo=ProgressBarRangeInfo(position,0f..1f) }
+            .draggable(rememberDraggableState { delta -> setPosition(position+delta/distance) },Orientation.Vertical,
+                onDragStarted={ flingJob?.cancel();fling.stop() },onDragStopped={ velocity ->
+                    flingJob=scope.launch {
+                        fling.snapTo(position);fling.updateBounds(0f,1f)
+                        fling.animateDecay(velocity/distance,decay) { setPosition(this.value) }
+                    }
+                })) {
+            RulerCanvas(Modifier.fillMaxSize().alpha(.35f),position*distance)
+            Column(Modifier.align(Alignment.Center).fillMaxWidth().padding(horizontal=24.dp),horizontalAlignment=Alignment.CenterHorizontally) {
+                BigNumber(formatNumber(value),style=style,maxSize=80)
+                q.unit?.let { Label(it,size=14,color=Tokens.muted,center=true) }
             }
         }
-        Column(Modifier.align(Alignment.BottomCenter).fillMaxWidth().height(sheetHeight)
-            .graphicsLayer { translationY=leaving.value*size.height }.clip(RoundedCornerShape(topStart=40.dp,topEnd=40.dp))
-            .background(style.color).navigationBarsPadding().padding(start=24.dp,end=24.dp,top=56.dp,bottom=20.dp),horizontalAlignment=Alignment.CenterHorizontally) {
-            q.unit?.let { Label(it,size=16,color=style.ink.copy(alpha=.7f),center=true) }
-            Box(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).padding(vertical=8.dp),contentAlignment=Alignment.Center) {
-                Label(q.text,size=20,color=style.ink,bold=true,center=true)
-            }
-            Row(Modifier.fillMaxWidth().padding(vertical=8.dp),horizontalArrangement=Arrangement.SpaceEvenly) {
-                RoundButton("−",stringResource(R.string.decrease),color=style.ink.copy(alpha=.15f),ink=style.ink) { fine(-1) }
-                RoundButton("⌨",stringResource(R.string.keyboard),color=style.ink.copy(alpha=.15f),ink=style.ink) { input=formatNumber(value).replace(".","");keyboard=true }
-                RoundButton("+",stringResource(R.string.increase),color=style.ink.copy(alpha=.15f),ink=style.ink) { fine(1) }
+        Column(Modifier.fillMaxWidth().graphicsLayer { translationY=leaving.value*size.height }
+            .clip(RoundedCornerShape(topStart=28.dp,topEnd=28.dp)).background(style.color)
+            .navigationBarsPadding().padding(20.dp),horizontalAlignment=Alignment.CenterHorizontally,verticalArrangement=Arrangement.spacedBy(12.dp)) {
+            Label(stringResource(R.string.drag_hint),Modifier.fillMaxWidth(),13,style.ink,center=true)
+            Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(12.dp),verticalAlignment=Alignment.CenterVertically) {
+                RoundButton("−",stringResource(R.string.decrease),color=style.ink.copy(alpha=.15f),ink=style.ink,enabled=!submitted) { fine(-1) }
+                Box(Modifier.weight(1f).heightIn(min=48.dp).clip(RoundedCornerShape(16.dp)).background(style.ink.copy(alpha=.12f))
+                    .clickable(enabled=!submitted,role=Role.Button) { flingJob?.cancel();input=formatNumber(value).replace(".","");keyboard=true }
+                    .padding(horizontal=8.dp,vertical=10.dp),contentAlignment=Alignment.Center) {
+                    Label(stringResource(R.string.keyboard),size=14,color=style.ink,bold=true,center=true)
+                }
+                RoundButton("+",stringResource(R.string.increase),color=style.ink.copy(alpha=.15f),ink=style.ink,enabled=!submitted) { fine(1) }
             }
             GameButton(stringResource(R.string.confirm),color=Color.White,ink=style.ink,enabled=!submitted) {
-                if(!submitted) { submitted=true;feedback(true);scope.launch { leaving.animateTo(1f,tween(250));actions.confirm(value) } }
+                if(!submitted) {
+                    flingJob?.cancel()
+                    val confirmed=value
+                    submitted=true;feedback(true)
+                    scope.launch { leaving.animateTo(1f,tween(250));actions.confirm(confirmed) }
+                }
             }
         }
-        BigNumber(formatNumber(value),Modifier.offset(y=sheetTop-60.dp).padding(horizontal=24.dp).graphicsLayer { translationY=leaving.value*size.height },style)
     }
     if(keyboard) {
         val parsed=input.trim().replace(" ","").replace(",",".").toDoubleOrNull()

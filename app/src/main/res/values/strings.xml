@@ -63,7 +63,7 @@
     <string name="clear_confirm">Borrar</string>
     <string name="cancel">Cancelar</string>
     <string name="about">Acerca de</string>
-    <string name="about_text">Versión 1.0.0 · Licencia MIT
+    <string name="about_text">Versión 1.0.1 · Licencia MIT
 No está afiliada a ningún juego existente</string>
     <string name="loading">Preparando las preguntas…</string>
     <string name="error_load">No se pudo abrir la base de preguntas. Vuelve a abrir la app.</string>
@@ -76,7 +76,23 @@ No está afiliada a ningún juego existente</string>
     <string name="rules">Más cerca, más puntos. Acierto exacto: +2. A menos del 1 %%: +1. Los empates comparten puesto.</string>
     <string name="color_used">Color ya utilizado</string>
     <string name="numeric_title">Escribe tu estimación</string>
-    <string name="round_points">+%1$d</string>
+    <string name="round_points">+%1$d esta ronda</string>
     <plurals name="available"><item quantity="one">%1$d pregunta disponible</item><item quantity="other">%1$d preguntas disponibles</item></plurals>
     <plurals name="points"><item quantity="one">%1$d punto</item><item quantity="other">%1$d puntos</item></plurals>
+    <string name="correct_answer">RESPUESTA CORRECTA</string>
+    <string name="round_results">Así quedó la ronda</string>
+    <string name="linear_comparison">Punto de color: estimación · Marca blanca: respuesta. Gana la menor distancia.</string>
+    <string name="log_comparison">Escala logarítmica: gana la proporción más cercana. Punto de color: estimación · Marca blanca: respuesta.</string>
+    <string name="guess_value">Estimación: %1$s</string>
+    <string name="distance_value">Diferencia: %1$s</string>
+    <plurals name="earned_points"><item quantity="one">+%1$d punto</item><item quantity="other">+%1$d puntos</item></plurals>
+    <string name="bonus_points">Bonus +%1$d incluido</string>
+    <string name="closest">Más cerca</string>
+    <string name="total_points_hint">Puntos acumulados · Los empates comparten puesto</string>
+    <string name="final_subtitle">¡Gracias por jugar! Este es el podio.</string>
+    <string name="party_caption">UN CELULAR · TODOS JUEGAN</string>
+    <string name="turn_of">TURNO %1$d DE %2$d</string>
+    <string name="experience">Durante el juego</string>
+    <string name="saved_data">Datos guardados</string>
+    <string name="history_hint">Las preguntas recientes y la partida se guardan solo en este dispositivo.</string>
 </resources>

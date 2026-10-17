@@ -62,10 +62,10 @@ import kotlin.random.Random
 }
 
 @Composable fun TopBar(title: String, back: Boolean = false, close: Boolean = false, onAction: () -> Unit = {}) {
-    Box(Modifier.fillMaxWidth().height(56.dp)) {
-        Text(title,Modifier.align(Alignment.Center).padding(horizontal = 56.dp),color = Color.White,fontSize = 16.sp,fontWeight = FontWeight.SemiBold,textAlign = TextAlign.Center,maxLines = 2)
+    Box(Modifier.fillMaxWidth().heightIn(min=64.dp)) {
+        Text(title,Modifier.align(Alignment.Center).padding(horizontal = 60.dp, vertical = 16.dp),color = Color.White,fontSize = 16.sp,fontWeight = FontWeight.SemiBold,textAlign = TextAlign.Center,maxLines = 3)
         if(back || close) RoundButton(if(back) "‹" else "×",stringResource(if(back) R.string.back else R.string.close),
-            Modifier.align(if(back) Alignment.CenterStart else Alignment.CenterEnd),Color.Transparent,onClick = onAction)
+            Modifier.padding(horizontal=8.dp).align(if(back) Alignment.CenterStart else Alignment.CenterEnd),Color.Transparent,onClick = onAction)
     }
 }
 

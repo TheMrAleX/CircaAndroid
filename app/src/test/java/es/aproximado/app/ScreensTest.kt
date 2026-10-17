@@ -34,6 +34,31 @@ class ScreensTest(private val width: Int,private val height: Int,private val sca
     @Test fun settings()=capture("settings") { SettingsScreen(state,Actions()) }
     @Test fun hugeNumber()=capture("number_huge") { BigNumber("1.400.000.000",Modifier.padding(horizontal=24.dp)) }
     @Test fun decimalNumber()=capture("number_decimal") { BigNumber("0,5",Modifier.padding(horizontal=24.dp)) }
+    @Test fun reportedOverlap()=capture("reported_overlap") {
+        val q=state.pool.first().copy(text="¿Cuántas provincias tiene Argentina?",answer=23.0,unit=null,min=1.0,max=100.0)
+        val guesses=List(players){if(it%2==0) 28.0 else 38.0}
+        RevealScreen(state.copy(pool=listOf(q),match=state.match!!.copy(guesses=listOf(guesses))),Actions())
+    }
+    @Test fun tiedResultsLowerRows()=capture("tied_results_lower") {
+        val q=state.pool.first().copy(answer=.5,unit=null,min=.001,max=100.0,scale="log")
+        val m=state.match!!.copy(config=state.config.copy(players=state.config.players.map{it.copy(name="Alejandra123")}),guesses=listOf(List(players){.5}))
+        RevealScreen(state.copy(pool=listOf(q),match=m),Actions(),listState=androidx.compose.foundation.lazy.LazyListState(2))
+    }
+    @Test fun hugeLogResults()=capture("huge_log_results") {
+        val q=state.pool.first().copy(answer=1.4e9,unit=null,min=1.0,max=1e12,scale="log")
+        RevealScreen(state.copy(pool=listOf(q),match=state.match!!.copy(guesses=listOf(List(players){1.4e9*(it+1)}))),Actions(),listState=androidx.compose.foundation.lazy.LazyListState(2))
+    }
+    @Test fun setupFilters()=capture("setup_filters") {
+        SetupScreen(state,Actions(),listState=androidx.compose.foundation.lazy.LazyListState(3))
+    }
+    @Test fun selectorHuge()=capture("selector_huge") {
+        val q=state.pool.first().copy(answer=1.4e9,min=1e8,max=2.7e9,unit=null)
+        SelectorScreen(state.copy(pool=listOf(q),match=state.match!!.copy(guesses=listOf(emptyList()))),Actions())
+    }
+    @Test fun selectorDecimal()=capture("selector_decimal") {
+        val q=state.pool.first().copy(answer=.7,min=0.0,max=1.0,unit=null)
+        SelectorScreen(state.copy(pool=listOf(q),match=state.match!!.copy(guesses=listOf(emptyList()))),Actions())
+    }
     companion object {
         @JvmStatic @Parameterized.Parameters(name="{0}x{1}@{2}-{3}p") fun params()=listOf(
             arrayOf<Any>(360,800,1f,2),arrayOf<Any>(360,800,1f,8),

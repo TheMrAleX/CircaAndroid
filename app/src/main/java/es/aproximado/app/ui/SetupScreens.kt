@@ -43,7 +43,7 @@ class Actions(
     Column(modifier.fillMaxSize().background(background).statusBarsPadding(),content=content)
 }
 @Composable fun Panel(title: String,content: @Composable ColumnScope.()->Unit) {
-    Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(28.dp)).background(Tokens.surface).padding(16.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
+    Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(28.dp)).background(Tokens.surface).border(1.dp,Color.White.copy(alpha=.06f),RoundedCornerShape(28.dp)).padding(20.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
         Label(title,size=18,bold=true);content()
     }
 }
@@ -61,14 +61,15 @@ fun emoji(category: String) = when(category) {
     var shown by remember { mutableStateOf(inspection) }
     LaunchedEffect(Unit) { shown=true }
     Box(Modifier.fillMaxSize().background(Tokens.bg)) {
-        RulerCanvas(Modifier.fillMaxSize(),offset)
-        BigNumber("42.000",Modifier.align(Alignment.TopCenter).padding(top=80.dp).alpha(.08f))
+        RulerCanvas(Modifier.fillMaxSize().alpha(.22f),offset)
+
         Column(Modifier.fillMaxSize().systemBarsPadding().verticalScroll(rememberScrollState()).padding(horizontal=20.dp,vertical=32.dp),horizontalAlignment=Alignment.CenterHorizontally,verticalArrangement=Arrangement.Center) {
             AnimatedVisibility(shown,enter=fadeIn(tween(400))+slideInVertically(spring(dampingRatio=.7f)){-40}) {
                 BigNumber(stringResource(R.string.app_name),Modifier.fillMaxWidth(),maxSize=44)
             }
-            Label(stringResource(R.string.tagline),size=13,color=Tokens.muted,center=true)
-            Spacer(Modifier.height(48.dp))
+            Label(stringResource(R.string.party_caption),Modifier.padding(bottom=8.dp),13,Tokens.players[0].inkLight,bold=true,center=true)
+            Label(stringResource(R.string.tagline),Modifier.padding(horizontal=24.dp),size=16,color=Tokens.muted,center=true)
+            Spacer(Modifier.height(32.dp))
             GameButton(stringResource(R.string.play)) { actions.screen(Screen.SETUP) }
             state.match?.takeIf { it.stage!=Screen.FINAL }?.let { m ->
                 Spacer(Modifier.height(12.dp))
@@ -81,23 +82,23 @@ fun emoji(category: String) = when(category) {
 }
 
 @Composable fun Choice(text: String,selected: Boolean,modifier: Modifier=Modifier,onClick:()->Unit) {
-    Box(modifier.heightIn(min=48.dp).clip(CircleShape).background(if(selected) Tokens.players[0].color else Tokens.high)
+    Box(modifier.heightIn(min=48.dp).clip(RoundedCornerShape(16.dp)).background(if(selected) Tokens.players[0].color else Tokens.high)
         .clickable(role=Role.RadioButton,onClick=onClick).semantics { this.selected=selected;contentDescription=text }.padding(horizontal=8.dp,vertical=10.dp),contentAlignment=Alignment.Center) {
         Label(text,size=14,bold=selected,center=true,color=if(selected) Color.White else Tokens.muted)
     }
 }
-@Composable fun SetupScreen(state: AppState,actions: Actions) {
+@Composable fun SetupScreen(state: AppState,actions: Actions,listState: androidx.compose.foundation.lazy.LazyListState = androidx.compose.foundation.lazy.rememberLazyListState()) {
     val c=state.config
     var picking by remember { mutableStateOf<Int?>(null) }
     val categories=remember(state.pool) { state.pool.map { it.category }.distinct().sorted() }
     val available=state.pool.count { (c.categories.isEmpty() || it.category in c.categories) && (c.difficulty==null || it.difficulty==c.difficulty) }
     ScreenColumn(Modifier.imePadding()) {
         TopBar(stringResource(R.string.new_game),back=true) { actions.screen(Screen.HOME) }
-        LazyColumn(Modifier.weight(1f),contentPadding=PaddingValues(20.dp),verticalArrangement=Arrangement.spacedBy(16.dp)) {
+        LazyColumn(Modifier.weight(1f),state=listState,contentPadding=PaddingValues(20.dp),verticalArrangement=Arrangement.spacedBy(16.dp)) {
             item { Panel(stringResource(R.string.players)) {
                 Row(Modifier.fillMaxWidth(),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.Center) {
                     RoundButton("−",stringResource(R.string.less_players),Modifier.size(56.dp),enabled=c.players.size>2) { actions.count(c.players.size-1) }
-                    Label(c.players.size.toString(),Modifier.padding(horizontal=32.dp),44,bold=true)
+                    Label(c.players.size.toString(),Modifier.padding(horizontal=24.dp),44,bold=true)
                     RoundButton("+",stringResource(R.string.more_players),Modifier.size(56.dp),ink=Tokens.players[0].color,enabled=c.players.size<8) { actions.count(c.players.size+1) }
                 }
                 Label(stringResource(R.string.two_eight),Modifier.fillMaxWidth(),13,Tokens.muted,center=true)
@@ -145,8 +146,9 @@ fun emoji(category: String) = when(category) {
                 if(available<c.rounds) Label(stringResource(R.string.insufficient),size=13,color=Tokens.danger)
             } }
             item { Panel(stringResource(R.string.difficulty)) {
-                Row(horizontalArrangement=Arrangement.spacedBy(4.dp)) {
-                    listOf(R.string.easy,R.string.medium,R.string.hard,R.string.mixed).forEachIndexed { i,res -> Choice(stringResource(res),c.difficulty==(i+1).takeIf { it<=3 },Modifier.weight(1f)) { actions.config { it.copy(difficulty=(i+1).takeIf { d -> d<=3 }) } } }
+                Column(verticalArrangement=Arrangement.spacedBy(8.dp)) {
+                    listOf(R.string.easy,R.string.medium,R.string.hard,R.string.mixed).chunked(2).forEachIndexed { row, labels -> Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) { labels.forEachIndexed { col,res -> val i=row*2+col; Choice(stringResource(res),c.difficulty==(i+1).takeIf { it<=3 },Modifier.weight(1f)) { actions.config { it.copy(difficulty=(i+1).takeIf { d -> d<=3 }) } } } }
+                }
                 }
             } }
         }
@@ -168,12 +170,13 @@ fun emoji(category: String) = when(category) {
 
 @Composable fun IntroScreen(state: AppState,actions: Actions) {
     val m=state.match ?: return;val q=state.question() ?: return
-    val scale=remember { Animatable(.96f) };LaunchedEffect(q.id) { scale.animateTo(1f,tween(400)) }
+    val inspection=LocalInspectionMode.current
+    val scale=remember { Animatable(if(inspection) 1f else .96f) };LaunchedEffect(q.id) { scale.animateTo(1f,tween(400)) }
     ScreenColumn {
         Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).padding(28.dp).graphicsLayer { scaleX=scale.value;scaleY=scale.value },horizontalAlignment=Alignment.CenterHorizontally,verticalArrangement=Arrangement.Center) {
             Label(stringResource(R.string.round_of,m.round+1,m.config.rounds),size=13,color=Tokens.muted,center=true)
             Spacer(Modifier.height(24.dp));ValuePill("${emoji(q.category)} ${q.category}")
-            Spacer(Modifier.height(24.dp));Label(q.text,size=28,bold=true,center=true)
+            Spacer(Modifier.height(32.dp));Label(q.text,size=26,bold=true,center=true)
             q.year?.let { Spacer(Modifier.height(12.dp));Label(stringResource(R.string.year,it),size=13,color=Tokens.muted) }
         }
         BottomActions { Label(stringResource(R.string.read_together),Modifier.fillMaxWidth(),13,Tokens.muted,center=true);GameButton(stringResource(R.string.start_round),color=Color.White,ink=Tokens.players[0].ink) { actions.advance(Screen.PASS) } }
@@ -189,7 +192,8 @@ fun emoji(category: String) = when(category) {
         Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).padding(24.dp),horizontalAlignment=Alignment.CenterHorizontally,verticalArrangement=Arrangement.Center) {
             Label(stringResource(R.string.pass_to),size=18,color=style.ink.copy(alpha=.8f),center=true)
             Spacer(Modifier.height(24.dp));PlayerAvatar(p.name,style,120.dp,true);Spacer(Modifier.height(20.dp))
-            Label(p.name,size=40,color=style.ink,bold=true,center=true)
+            Label(stringResource(R.string.turn_of,m.turn+1,m.config.players.size),Modifier.padding(bottom=12.dp),13,style.ink,center=true)
+            Label(p.name,size=36,color=style.ink,bold=true,center=true)
         }
         Column(Modifier.fillMaxWidth().padding(20.dp),verticalArrangement=Arrangement.spacedBy(16.dp)) {
             Label(stringResource(R.string.private_hint),Modifier.fillMaxWidth(),13,style.ink,center=true)
