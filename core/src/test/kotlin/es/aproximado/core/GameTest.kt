@@ -73,4 +73,38 @@ class GameTest {
             assertEquals(n,Scoring.standings(players,rounds).size)
         }
     }
+    @Test fun comparisonUsesCommonScaleAndCentersIdenticalValues() {
+        val question=q(answer=23.0)
+        val scale=ComparisonScale(question,listOf(28.0,38.0))
+        assertTrue(scale.position(23.0)<scale.position(28.0))
+        assertTrue(scale.position(28.0)<scale.position(38.0))
+        assertEquals(1f/3f,(scale.position(28.0)-scale.position(23.0))/(scale.position(38.0)-scale.position(23.0)),1e-6f)
+        for(answer in listOf(0.0,.5,1.4e9)) {
+            val equal=ComparisonScale(q(answer=answer),List(8){answer})
+            assertEquals(.5f,equal.position(answer),1e-6f)
+        }
+        val log=ComparisonScale(q(scale="log"),listOf(50.0,200.0))
+        assertEquals(log.position(100.0)-log.position(50.0),log.position(200.0)-log.position(100.0),1e-6f)
+    }
+    @Test fun rulerPrecisionDoesNotRevealAnswerAndEndpointsAreReachable() {
+        val integer=q(answer=100.0).copy(min=.5,max=999.5)
+        val fractional=integer.copy(answer=100.5)
+        for(i in 0..1000) assertEquals(RulerScale.snapped(integer,i/1000.0),RulerScale.snapped(fractional,i/1000.0),0.0)
+        assertEquals(.5,RulerScale.snapped(integer,0.0),0.0)
+        assertEquals(999.5,RulerScale.snapped(integer,1.0),0.0)
+        val fraction=q(answer=.5).copy(min=0.0,max=1.0)
+        assertEquals(.57,RulerScale.initial(integer.copy(answer=RulerScale.snapped(integer,.5))),1e-9)
+        assertEquals(.001,RulerScale.step(fraction,.5),1e-9)
+        assertEquals(.501,RulerScale.snapped(fraction,.501),1e-9)
+    }
+    @Test fun screenshotRoundAwardsTheClosestPlayerAndLabelsTotalBonus() {
+        val scores=Scoring.round(q(answer=23.0),listOf(28.0,38.0))
+        assertEquals(listOf(0,1),scores.map{it.playerId})
+        assertEquals(listOf(2,1),scores.map{it.points})
+        val tied=Scoring.round(q(answer=23.0),List(8){23.0})
+        assertTrue(tied.all{it.rank==1 && it.points==10 && it.bonus==2})
+        // Logarithmic proximity is a ratio, not the absolute difference shown as context.
+        assertEquals(1,Scoring.round(q(scale="log"),listOf(50.0,180.0)).first().playerId)
+    }
+
 }

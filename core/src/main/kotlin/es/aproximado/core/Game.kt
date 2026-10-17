@@ -68,7 +68,7 @@ object RulerScale {
     fun position(q: Question, value: Double): Double =
         (if (q.scale == "log") (ln(value.coerceAtLeast(q.min)) - ln(q.min)) / (ln(q.max) - ln(q.min)) else (value - q.min) / (q.max - q.min)).coerceIn(0.0, 1.0)
     fun initial(q: Question): Double {
-        val center = value(q, .5)
+        val center = snapped(q, .5)
         return if (abs(center - q.answer) <= max(1e-9, abs(q.answer) * 1e-9)) .57 else .5
     }
     fun niceStep(raw: Double): Double {
@@ -77,12 +77,19 @@ object RulerScale {
         val unit = raw / power
         return power * when { unit < 1.5 -> 1; unit < 3.5 -> 2; unit < 7.5 -> 5; else -> 10 }
     }
+    // Precision comes from the playable range, never from the hidden answer.
+    fun step(q: Question, value: Double): Double {
+        val mark = if (q.scale == "log") value * kotlin.math.expm1((ln(q.max) - ln(q.min)) / 1000) else (q.max - q.min) / 1000
+        return niceStep(mark.coerceAtLeast(.001))
+    }
     fun snapped(q: Question, position: Double): Double {
+        if (position <= 0) return q.min
+        if (position >= 1) return q.max
         val value = value(q, position)
-        val mark = if (q.scale == "log") max(value * (exp((ln(q.max) - ln(q.min)) / 1000) - 1), .001) else (q.max - q.min) / 1000
-        val step = niceStep(mark).coerceAtLeast(if (q.answer == floor(q.answer)) 1.0 else .01)
+        val step = step(q, value)
         return (round(value / step) * step).coerceIn(q.min, q.max)
     }
+
 }
 
 fun formatNumber(value: Double, compact: Boolean = false): String {
@@ -99,4 +106,20 @@ fun formatNumber(value: Double, compact: Boolean = false): String {
     }
     val pattern = if (divisor != 1.0) "#,##0.#" else "#,##0.###"
     return DecimalFormat(pattern, symbols).format(if (value == 0.0) 0.0 else value / divisor) + suffix
+}
+
+/** Shared comparison domain, including the answer, with room at both ends.
+ * Transform before interpolation so a logarithmic tie has equal visual distance.
+ */
+class ComparisonScale(q: Question, guesses: List<Double>) {
+    private val logarithmic = q.scale == "log"
+    private fun transform(value: Double): Double {
+        require(value.isFinite() && (!logarithmic || value > 0))
+        return if (logarithmic) ln(value) else value
+    }
+    private val values = (guesses + q.answer).map(::transform)
+    private val low = values.min()
+    private val center = low + (values.max() - low) / 2
+    private val span = (values.max() - low).coerceAtLeast(if (logarithmic) .1 else max(abs(q.answer) * .1, .01))
+    fun position(value: Double): Float = ((transform(value) - center) / (span * 1.3) + .5).toFloat().coerceIn(0f,1f)
 }
