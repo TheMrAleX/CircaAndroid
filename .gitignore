@@ -7,3 +7,6 @@ local.properties
 *.keystore
 *.hprof
 .idea/
+
+__pycache__/
+*.pyc
