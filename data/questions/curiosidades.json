@@ -73,7 +73,7 @@
     "min_plausible": 0,
     "max_plausible": 36,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
   },
@@ -86,7 +86,7 @@
     "min_plausible": 0,
     "max_plausible": 39,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
   },
@@ -99,7 +99,7 @@
     "min_plausible": 0,
     "max_plausible": 39,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
   },
@@ -112,7 +112,7 @@
     "min_plausible": 0,
     "max_plausible": 630,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
   },
@@ -138,7 +138,7 @@
     "min_plausible": 0,
     "max_plausible": 300,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
   },
@@ -164,7 +164,7 @@
     "min_plausible": 0,
     "max_plausible": 4829,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
   },
@@ -190,7 +190,7 @@
     "min_plausible": 0,
     "max_plausible": 10,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
   },
@@ -229,7 +229,7 @@
     "min_plausible": 0,
     "max_plausible": 15,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
   },
@@ -242,7 +242,7 @@
     "min_plausible": 0,
     "max_plausible": 600,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
   },
@@ -255,7 +255,7 @@
     "min_plausible": 0,
     "max_plausible": 270,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
   },
@@ -268,7 +268,7 @@
     "min_plausible": 0,
     "max_plausible": 10800,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
   },
@@ -281,7 +281,7 @@
     "min_plausible": 0,
     "max_plausible": 30,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
   },
@@ -294,7 +294,7 @@
     "min_plausible": 0,
     "max_plausible": 18,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
   },
@@ -320,7 +320,7 @@
     "min_plausible": 0,
     "max_plausible": 300,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
   },
@@ -359,7 +359,7 @@
     "min_plausible": 0,
     "max_plausible": 10,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
   },
@@ -372,7 +372,7 @@
     "min_plausible": 0,
     "max_plausible": 63,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
   },
@@ -385,7 +385,7 @@
     "min_plausible": 1000,
     "max_plausible": 100000,
     "scale": "log",
-    "difficulty": 1,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
   }

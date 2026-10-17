@@ -8,7 +8,7 @@
     "min_plausible": 1092.0,
     "max_plausible": 1792.0,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "Cronologías históricas; Britannica; archivos nacionales"
   },
@@ -21,7 +21,7 @@
     "min_plausible": 1389.0,
     "max_plausible": 2089.0,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "Cronologías históricas; Britannica; archivos nacionales"
   },
@@ -34,7 +34,7 @@
     "min_plausible": 1053.0,
     "max_plausible": 1753.0,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "Cronologías históricas; Britannica; archivos nacionales"
   },
@@ -47,7 +47,7 @@
     "min_plausible": 76.0,
     "max_plausible": 776.0,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "Cronologías históricas; Britannica; archivos nacionales"
   },
@@ -99,7 +99,7 @@
     "min_plausible": 1539.0,
     "max_plausible": 2239.0,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "Cronologías históricas; Britannica; archivos nacionales"
   },
@@ -125,7 +125,7 @@
     "min_plausible": 1589.0,
     "max_plausible": 2289.0,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "Cronologías históricas; Britannica; archivos nacionales"
   },
@@ -138,7 +138,7 @@
     "min_plausible": 1591.0,
     "max_plausible": 2291.0,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "Cronologías históricas; Britannica; archivos nacionales"
   },
@@ -151,7 +151,7 @@
     "min_plausible": 1416.0,
     "max_plausible": 2116.0,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "Cronologías históricas; Britannica; archivos nacionales"
   },
@@ -164,7 +164,7 @@
     "min_plausible": 1410.0,
     "max_plausible": 2110.0,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "Cronologías históricas; Britannica; archivos nacionales"
   },
@@ -190,7 +190,7 @@
     "min_plausible": 1422.0,
     "max_plausible": 2122.0,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "Cronologías históricas; Britannica; archivos nacionales"
   },
@@ -203,7 +203,7 @@
     "min_plausible": 1421.0,
     "max_plausible": 2121.0,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "Cronologías históricas; Britannica; archivos nacionales"
   },
@@ -229,7 +229,7 @@
     "min_plausible": 1418.0,
     "max_plausible": 2118.0,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "Cronologías históricas; Britannica; archivos nacionales"
   },
@@ -242,7 +242,7 @@
     "min_plausible": 1404.0,
     "max_plausible": 2104.0,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "Cronologías históricas; Britannica; archivos nacionales"
   },
@@ -268,7 +268,7 @@
     "min_plausible": 1424.0,
     "max_plausible": 2124.0,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "Cronologías históricas; Britannica; archivos nacionales"
   },
@@ -281,7 +281,7 @@
     "min_plausible": 815.0,
     "max_plausible": 1515.0,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "Cronologías históricas; Britannica; archivos nacionales"
   },
@@ -307,7 +307,7 @@
     "min_plausible": 1122.0,
     "max_plausible": 1822.0,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "Cronologías históricas; Britannica; archivos nacionales"
   },
@@ -320,7 +320,7 @@
     "min_plausible": 1510.0,
     "max_plausible": 2210.0,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "Cronologías históricas; Britannica; archivos nacionales"
   },
@@ -333,7 +333,7 @@
     "min_plausible": 1514.0,
     "max_plausible": 2214.0,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "Cronologías históricas; Britannica; archivos nacionales"
   },
@@ -346,7 +346,7 @@
     "min_plausible": 1469.0,
     "max_plausible": 2169.0,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "Cronologías históricas; Britannica; archivos nacionales"
   },
@@ -372,7 +372,7 @@
     "min_plausible": 1548.0,
     "max_plausible": 2248.0,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "Cronologías históricas; Britannica; archivos nacionales"
   },
@@ -385,7 +385,7 @@
     "min_plausible": 1496.0,
     "max_plausible": 2196.0,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "Cronologías históricas; Britannica; archivos nacionales"
   },
@@ -411,7 +411,7 @@
     "min_plausible": 1569.0,
     "max_plausible": 2269.0,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "Cronologías históricas; Britannica; archivos nacionales"
   },
@@ -424,7 +424,7 @@
     "min_plausible": 1503.0,
     "max_plausible": 2203.0,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "Cronologías históricas; Britannica; archivos nacionales"
   },
@@ -450,7 +450,7 @@
     "min_plausible": 1530.0,
     "max_plausible": 2230.0,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "Cronologías históricas; Britannica; archivos nacionales"
   },
@@ -515,7 +515,7 @@
     "min_plausible": 0,
     "max_plausible": 117,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "Cronologías históricas; Britannica; archivos nacionales"
   }

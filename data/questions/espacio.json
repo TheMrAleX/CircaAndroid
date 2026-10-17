@@ -8,7 +8,7 @@
     "min_plausible": 0,
     "max_plausible": 24,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 1,
     "as_of_year": 2006,
     "source_hint": "NASA Solar System Exploration; fichas planetarias NASA; IAU"
   },
@@ -21,7 +21,7 @@
     "min_plausible": 0,
     "max_plausible": 12,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "NASA Solar System Exploration; fichas planetarias NASA; IAU"
   },
@@ -34,7 +34,7 @@
     "min_plausible": 0,
     "max_plausible": 10,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "NASA Solar System Exploration; fichas planetarias NASA; IAU"
   },
@@ -60,7 +60,7 @@
     "min_plausible": 0,
     "max_plausible": 10,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "NASA Solar System Exploration; fichas planetarias NASA; IAU"
   },
@@ -86,7 +86,7 @@
     "min_plausible": 0,
     "max_plausible": 20,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "NASA Solar System Exploration; fichas planetarias NASA; IAU"
   },
@@ -99,7 +99,7 @@
     "min_plausible": 0,
     "max_plausible": 20,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "NASA Solar System Exploration; fichas planetarias NASA; IAU"
   },
@@ -125,7 +125,7 @@
     "min_plausible": 0,
     "max_plausible": 1096,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "NASA Solar System Exploration; fichas planetarias NASA; IAU"
   },
@@ -138,7 +138,7 @@
     "min_plausible": 0,
     "max_plausible": 72,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "NASA Solar System Exploration; fichas planetarias NASA; IAU"
   },
@@ -151,7 +151,7 @@
     "min_plausible": 0,
     "max_plausible": 82,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "NASA Solar System Exploration; fichas planetarias NASA; IAU"
   },
@@ -164,7 +164,7 @@
     "min_plausible": 0,
     "max_plausible": 89,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "NASA Solar System Exploration; fichas planetarias NASA; IAU"
   },
@@ -190,7 +190,7 @@
     "min_plausible": 0,
     "max_plausible": 449,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "NASA Solar System Exploration; fichas planetarias NASA; IAU"
   },
@@ -203,7 +203,7 @@
     "min_plausible": 0,
     "max_plausible": 25,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "NASA Solar System Exploration; fichas planetarias NASA; IAU"
   },
@@ -216,7 +216,7 @@
     "min_plausible": 0,
     "max_plausible": 19113,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "NASA Solar System Exploration; fichas planetarias NASA; IAU"
   },
@@ -229,7 +229,7 @@
     "min_plausible": 0,
     "max_plausible": 10425,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "NASA Solar System Exploration; fichas planetarias NASA; IAU"
   },
@@ -242,7 +242,7 @@
     "min_plausible": 0,
     "max_plausible": 20337,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "NASA Solar System Exploration; fichas planetarias NASA; IAU"
   },
@@ -268,7 +268,7 @@
     "min_plausible": 0,
     "max_plausible": 14637,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "NASA Solar System Exploration; fichas planetarias NASA; IAU"
   },
@@ -281,7 +281,7 @@
     "min_plausible": 0,
     "max_plausible": 71,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "NASA Solar System Exploration; fichas planetarias NASA; IAU"
   },
@@ -307,7 +307,7 @@
     "min_plausible": 0,
     "max_plausible": 264,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "NASA Solar System Exploration; fichas planetarias NASA; IAU"
   },
@@ -320,7 +320,7 @@
     "min_plausible": 0,
     "max_plausible": 675,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "NASA Solar System Exploration; fichas planetarias NASA; IAU"
   },
@@ -346,7 +346,7 @@
     "min_plausible": 0,
     "max_plausible": 89,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "NASA Solar System Exploration; fichas planetarias NASA; IAU"
   },
@@ -359,7 +359,7 @@
     "min_plausible": 0,
     "max_plausible": 252,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "NASA Solar System Exploration; fichas planetarias NASA; IAU"
   },
@@ -385,7 +385,7 @@
     "min_plausible": 0,
     "max_plausible": 36,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "NASA Solar System Exploration; fichas planetarias NASA; IAU"
   },
@@ -411,7 +411,7 @@
     "min_plausible": 1557.0,
     "max_plausible": 2257.0,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "NASA Solar System Exploration; fichas planetarias NASA; IAU"
   },
@@ -424,7 +424,7 @@
     "min_plausible": 1561.0,
     "max_plausible": 2261.0,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "NASA Solar System Exploration; fichas planetarias NASA; IAU"
   },
@@ -450,7 +450,7 @@
     "min_plausible": 1621.0,
     "max_plausible": 2321.0,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "NASA Solar System Exploration; fichas planetarias NASA; IAU"
   }

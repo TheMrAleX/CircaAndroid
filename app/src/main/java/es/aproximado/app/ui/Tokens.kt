@@ -14,7 +14,7 @@ object Tokens {
     val muted = Color.White.copy(alpha = .65f)
     val gold = Color(0xFFFFC83D)
     val danger = Color(0xFFFF5A4D)
-    val display = FontFamily(Font(R.font.fredoka, FontWeight.Bold), Font(R.font.fredoka, FontWeight.SemiBold))
+    val display = FontFamily(Font(R.font.fredoka_bold, FontWeight.Bold), Font(R.font.fredoka_semibold, FontWeight.SemiBold))
     val players = listOf(
         PlayerStyle(Color(0xFF2F7CF6),Color(0xFF0B2A66),Color(0xFF8DBBFF)),
         PlayerStyle(Color(0xFFF5A623),Color(0xFF5A3600),Color(0xFFFFD08A)),

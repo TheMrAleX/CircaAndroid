@@ -20,6 +20,7 @@ class GameTest {
         assertEquals(result[0].points, result[1].points)
     }
     @Test fun exactZeroAndBoundary() {
+        assertEquals(.2, Scoring.error(q(answer=.5),.6),1e-9)
         val zero = Scoring.round(q(answer = 0.0), listOf(0.0, 1.0))
         assertEquals(4, zero.first().points)
         assertEquals(0, Scoring.round(q(), listOf(99.0, 101.0)).first().bonus)

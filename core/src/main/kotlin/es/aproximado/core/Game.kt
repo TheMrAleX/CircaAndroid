@@ -21,7 +21,7 @@ object Scoring {
         return if (q.scale == "log") {
             require(guess > 0 && q.answer > 0)
             abs(ln(guess) - ln(q.answer))
-        } else abs(guess - q.answer) / max(abs(q.answer), 1.0)
+        } else abs(guess - q.answer) / (if (q.answer == 0.0) 1.0 else abs(q.answer))
     }
     fun round(q: Question, guesses: List<Double>): List<RoundScore> {
         require(guesses.size in 2..8)

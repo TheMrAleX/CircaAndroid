@@ -8,7 +8,7 @@
     "min_plausible": 0,
     "max_plausible": 10,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "IUPAC tabla periódica; BIPM SI; manuales de física y química"
   },
@@ -21,7 +21,7 @@
     "min_plausible": 0,
     "max_plausible": 10,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "IUPAC tabla periódica; BIPM SI; manuales de física y química"
   },
@@ -34,7 +34,7 @@
     "min_plausible": 0,
     "max_plausible": 10,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "IUPAC tabla periódica; BIPM SI; manuales de física y química"
   },
@@ -47,7 +47,7 @@
     "min_plausible": 0,
     "max_plausible": 12,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "IUPAC tabla periódica; BIPM SI; manuales de física y química"
   },
@@ -86,7 +86,7 @@
     "min_plausible": 0,
     "max_plausible": 21,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "IUPAC tabla periódica; BIPM SI; manuales de física y química"
   },
@@ -99,7 +99,7 @@
     "min_plausible": 0,
     "max_plausible": 24,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "IUPAC tabla periódica; BIPM SI; manuales de física y química"
   },
@@ -112,7 +112,7 @@
     "min_plausible": 0,
     "max_plausible": 27,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "IUPAC tabla periódica; BIPM SI; manuales de física y química"
   },
@@ -125,7 +125,7 @@
     "min_plausible": 0,
     "max_plausible": 30,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "IUPAC tabla periódica; BIPM SI; manuales de física y química"
   },
@@ -151,7 +151,7 @@
     "min_plausible": 0,
     "max_plausible": 36,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "IUPAC tabla periódica; BIPM SI; manuales de física y química"
   },
@@ -164,7 +164,7 @@
     "min_plausible": 0,
     "max_plausible": 39,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "IUPAC tabla periódica; BIPM SI; manuales de física y química"
   },
@@ -190,7 +190,7 @@
     "min_plausible": 0,
     "max_plausible": 45,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "IUPAC tabla periódica; BIPM SI; manuales de física y química"
   },
@@ -203,7 +203,7 @@
     "min_plausible": 0,
     "max_plausible": 48,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "IUPAC tabla periódica; BIPM SI; manuales de física y química"
   },
@@ -229,7 +229,7 @@
     "min_plausible": 0,
     "max_plausible": 54,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "IUPAC tabla periódica; BIPM SI; manuales de física y química"
   },
@@ -242,7 +242,7 @@
     "min_plausible": 0,
     "max_plausible": 57,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "IUPAC tabla periódica; BIPM SI; manuales de física y química"
   },
@@ -268,7 +268,7 @@
     "min_plausible": 0,
     "max_plausible": 78,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "IUPAC tabla periódica; BIPM SI; manuales de física y química"
   },
@@ -281,7 +281,7 @@
     "min_plausible": 0,
     "max_plausible": 87,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "IUPAC tabla periódica; BIPM SI; manuales de física y química"
   },
@@ -307,7 +307,7 @@
     "min_plausible": 0,
     "max_plausible": 237,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "IUPAC tabla periódica; BIPM SI; manuales de física y química"
   },
@@ -320,7 +320,7 @@
     "min_plausible": 0,
     "max_plausible": 240,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "IUPAC tabla periódica; BIPM SI; manuales de física y química"
   },
@@ -346,7 +346,7 @@
     "min_plausible": 0,
     "max_plausible": 276,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "IUPAC tabla periódica; BIPM SI; manuales de física y química"
   },
@@ -359,7 +359,7 @@
     "min_plausible": 0,
     "max_plausible": 354,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": 2024,
     "source_hint": "IUPAC tabla periódica; BIPM SI; manuales de física y química"
   },
@@ -372,7 +372,7 @@
     "min_plausible": 0,
     "max_plausible": 54,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "IUPAC tabla periódica; BIPM SI; manuales de física y química"
   },
@@ -385,7 +385,7 @@
     "min_plausible": 0,
     "max_plausible": 21,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "IUPAC tabla periódica; BIPM SI; manuales de física y química"
   },
@@ -398,7 +398,7 @@
     "min_plausible": 0,
     "max_plausible": 10,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "IUPAC tabla periódica; BIPM SI; manuales de física y química"
   },
@@ -411,7 +411,7 @@
     "min_plausible": 0,
     "max_plausible": 10,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "IUPAC tabla periódica; BIPM SI; manuales de física y química"
   },
@@ -424,7 +424,7 @@
     "min_plausible": 0,
     "max_plausible": 18,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "IUPAC tabla periódica; BIPM SI; manuales de física y química"
   },
@@ -437,7 +437,7 @@
     "min_plausible": 10000000,
     "max_plausible": 10000000000,
     "scale": "log",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "IUPAC tabla periódica; BIPM SI; manuales de física y química"
   },
@@ -450,7 +450,7 @@
     "min_plausible": 0,
     "max_plausible": 21,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "IUPAC tabla periódica; BIPM SI; manuales de física y química"
   },
@@ -476,7 +476,7 @@
     "min_plausible": 0,
     "max_plausible": 820,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "IUPAC tabla periódica; BIPM SI; manuales de física y química"
   },
@@ -502,7 +502,7 @@
     "min_plausible": 0,
     "max_plausible": 10,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "IUPAC tabla periódica; BIPM SI; manuales de física y química"
   },
@@ -515,7 +515,7 @@
     "min_plausible": 0,
     "max_plausible": 10,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "IUPAC tabla periódica; BIPM SI; manuales de física y química"
   }

@@ -3,6 +3,7 @@ package es.aproximado.app.ui
 
 import android.os.SystemClock
 import androidx.compose.animation.core.*
+import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.*
 import androidx.compose.foundation.layout.*

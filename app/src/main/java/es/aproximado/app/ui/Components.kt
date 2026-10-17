@@ -26,6 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import es.aproximado.app.R
+import es.aproximado.core.formatNumber
 import kotlinx.coroutines.delay
 import kotlin.math.*
 import kotlin.random.Random
@@ -37,9 +38,9 @@ import kotlin.random.Random
     val shift by animateDpAsState(if (pressed) 4.dp else 0.dp, tween(80), label = "press")
     val feedback = LocalFeedback.current
     Box(modifier.fillMaxWidth().heightIn(min = if (detail == null) 64.dp else 80.dp)
-        .alpha(if (enabled) 1f else .4f)
+        .alpha(if (enabled) 1f else .4f).semantics { contentDescription=label }
         .background(if (outline) Color.Transparent else color.copy(red = color.red * .75f,green = color.green * .75f,blue = color.blue * .75f), CircleShape)) {
-        Column(Modifier.fillMaxWidth().offset(y = shift).heightIn(min = if (detail == null) 60.dp else 76.dp)
+        Column(Modifier.fillMaxWidth().offset { IntOffset(0,shift.roundToPx()) }.heightIn(min = if (detail == null) 60.dp else 76.dp)
             .clip(CircleShape).background(if (outline) Color.Transparent else color)
             .then(if (outline) Modifier.border(2.dp, Color.White.copy(alpha = .4f),CircleShape) else Modifier)
             .clickable(interactionSource = source,indication = null,enabled = enabled,role = Role.Button) {
@@ -89,23 +90,28 @@ import kotlin.random.Random
 @Composable fun BigNumber(text: String, modifier: Modifier = Modifier, style: PlayerStyle = Tokens.players[0], maxSize: Int = 96, glass: Boolean = false) {
     val density = LocalDensity.current
     val context = LocalContext.current
-    val typeface = remember { context.resources.getFont(R.font.fredoka) }
+    val typeface = remember { context.resources.getFont(R.font.fredoka_bold) }
     val paint = remember { Paint(Paint.ANTI_ALIAS_FLAG).apply { this.typeface = typeface; strokeJoin = Paint.Join.ROUND } }
     Canvas(modifier.fillMaxWidth().height(120.dp).semantics { contentDescription = text }) {
         with(density) {
             paint.textSize = maxSize.sp.toPx()
             val available = (size.width - 12.dp.toPx()).coerceAtLeast(1f)
-            if(paint.measureText(text) > available) paint.textSize *= available/paint.measureText(text)
+            var displayText=text
+            if(paint.measureText(text)>0 && paint.textSize*available/paint.measureText(text)<36.sp.toPx()) {
+                val numeric=text.replace(".","").replace(",",".").toDoubleOrNull()
+                if(numeric!=null) displayText=formatNumber(numeric,compact=true)
+            }
+            if(paint.measureText(displayText) > available) paint.textSize *= available/paint.measureText(displayText)
             // At extreme accessibility scales the measured fit takes priority over the nominal 36sp minimum.
-            val x = (size.width - paint.measureText(text))/2
+            val x = (size.width - paint.measureText(displayText))/2
             val y = size.height/2 - (paint.ascent()+paint.descent())/2
             paint.style = Paint.Style.STROKE
             paint.strokeWidth = (if(glass) 4 else 6).dp.toPx()
             paint.color = (if(glass) Color.White.copy(alpha = .7f) else style.inkLight).toArgb()
-            drawContext.canvas.nativeCanvas.drawText(text,x,y,paint)
+            drawContext.canvas.nativeCanvas.drawText(displayText,x,y,paint)
             paint.style = Paint.Style.FILL
             paint.color = (if(glass) Color.White.copy(alpha = .25f) else style.ink).toArgb()
-            drawContext.canvas.nativeCanvas.drawText(text,x,y,paint)
+            drawContext.canvas.nativeCanvas.drawText(displayText,x,y,paint)
         }
     }
 }
@@ -153,7 +159,7 @@ import kotlin.random.Random
     Box(Modifier.size(56.dp,48.dp).semantics { contentDescription=label;stateDescription=enabledText }
         .toggleableCompat(checked,onChange),contentAlignment=Alignment.CenterStart) {
         Box(Modifier.size(52.dp,32.dp).clip(CircleShape).background(if(checked) Tokens.players[0].color else Tokens.high)) {
-            Box(Modifier.offset(x=4.dp+x,y=4.dp).size(24.dp).clip(CircleShape).background(Color.White))
+            Box(Modifier.offset { IntOffset((4.dp+x).roundToPx(),4.dp.roundToPx()) }.size(24.dp).clip(CircleShape).background(Color.White))
         }
     }
 }

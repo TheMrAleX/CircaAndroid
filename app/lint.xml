@@ -1,0 +1,6 @@
+<lint>
+    <issue id="ChromeOsAbiSupport">
+        <!-- Distribution intentionally targets ARMv8 only, per product specification. -->
+        <ignore path="build.gradle.kts" />
+    </issue>
+</lint>

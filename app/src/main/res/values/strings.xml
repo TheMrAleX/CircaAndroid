@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Aproximado</string>
     <string name="tagline">Adivina el número. Acércate más que los demás.</string>
     <string name="play">Jugar</string>
@@ -16,7 +16,6 @@
     <string name="medium">Media</string>
     <string name="hard">Difícil</string>
     <string name="mixed">Mixta</string>
-    <string name="available">%1$d preguntas disponibles</string>
     <string name="insufficient">No hay suficientes preguntas con estos filtros.</string>
     <string name="start">Empezar</string>
     <string name="back">Volver</string>
@@ -26,8 +25,7 @@
     <string name="choose_color">Elegir color de %1$s</string>
     <string name="color_number">Color %1$d</string>
     <string name="round_of">RONDA %1$d DE %2$d</string>
-    <string name="round_short">Ronda %1$d/%2$d</string>
-    <string name="resume_detail">Ronda %1$d/%2$d · %3$d jugadores</string>
+    <string name="resume_detail" tools:ignore="PluralsCandidate">Ronda %1$d/%2$d · %3$d jugadores</string>
     <string name="read_together">Todos lean la pregunta y luego pásense el celular</string>
     <string name="start_round">Empezar ronda</string>
     <string name="pass_to">Pásale el celular a</string>
@@ -58,7 +56,6 @@
     <string name="final_title">Resultado final</string>
     <string name="again">Jugar otra vez</string>
     <string name="menu">Menú</string>
-    <string name="points">%1$d puntos</string>
     <string name="sound">Sonido</string>
     <string name="vibration">Vibración</string>
     <string name="clear_history">Borrar historial y partida guardada</string>
@@ -72,22 +69,14 @@ No está afiliada a ningún juego existente</string>
     <string name="error_load">No se pudo abrir la base de preguntas. Vuelve a abrir la app.</string>
     <string name="active">Activado</string>
     <string name="inactive">Desactivado</string>
-    <string name="source">Fuente: %1$s</string>
     <string name="year">Dato de %1$d</string>
     <string name="skip_animation">Toca para ver el resultado</string>
     <string name="name_label">Nombre del jugador %1$d</string>
     <string name="estimate_accessibility">Estimación: %1$s. Desliza para ajustar o usa el teclado.</string>
     <string name="rules">Más cerca, más puntos. Acierto exacto: +2. A menos del 1 %%: +1. Los empates comparten puesto.</string>
-    <string name="delete_done">Historial borrado</string>
     <string name="color_used">Color ya utilizado</string>
-    <string name="podium">Puesto %1$d: %2$s, %3$d puntos</string>
-    <string name="no_saved">No hay partida guardada</string>
-    <string name="save_loading">Cargando partida</string>
     <string name="numeric_title">Escribe tu estimación</string>
-    <string name="screen_progress">Jugador %1$d de %2$d</string>
     <string name="round_points">+%1$d</string>
-    <string name="difference">Diferencia %1$s</string>
-    <string name="ranking_position">Puesto %1$d</string>
-    <string name="leave_reveal">Salir al menú</string>
-    <string name="close_dialog">Cerrar diálogo</string>
+    <plurals name="available"><item quantity="one">%1$d pregunta disponible</item><item quantity="other">%1$d preguntas disponibles</item></plurals>
+    <plurals name="points"><item quantity="one">%1$d punto</item><item quantity="other">%1$d puntos</item></plurals>
 </resources>

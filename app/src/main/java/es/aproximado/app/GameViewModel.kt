@@ -1,6 +1,8 @@
 package es.aproximado.app
 
 import android.app.Application
+import android.annotation.SuppressLint
+import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import es.aproximado.core.*
@@ -75,13 +77,14 @@ class GameViewModel(app: Application): AndroidViewModel(app) {
         require(players.size in 2..8 && players.map { it.style }.distinct().size==players.size && players.all { it.style in 0..7 })
         return Config(players,o.getInt("rounds"),o.getJSONArray("categories").strings().toSet(),o.getInt("difficulty").takeIf { it in 1..3 })
     }
+    @SuppressLint("ApplySharedPref") // Synchronous checkpoint only on discrete actions, never on drag.
     private fun persist() {
         val s=mutable.value
         if(s.loading) return
         val obj=JSONObject().put("config",configJson(s.config)).put("recent",JSONArray(s.recent)).put("sound",s.sound).put("vibration",s.vibration)
         s.match?.let { m -> obj.put("match",JSONObject().put("config",configJson(m.config)).put("questions",JSONArray(m.questions)).put("round",m.round).put("stage",(if(m.stage==Screen.SELECT) Screen.PASS else m.stage).name).put("guesses",JSONArray().apply { m.guesses.forEach { put(JSONArray(it)) } })) }
         // commit ensures the secret handoff survives immediate process termination; payload is only a few KB.
-        prefs.edit().putString("state",obj.toString()).commit()
+        prefs.edit(commit=true) { putString("state",obj.toString()) }
     }
     private fun restore(raw: String?): AppState {
         if(raw==null) return AppState()

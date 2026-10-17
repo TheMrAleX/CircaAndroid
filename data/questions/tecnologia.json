@@ -8,7 +8,7 @@
     "min_plausible": 0,
     "max_plausible": 24,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "RFC del IETF; IEEE; documentación de fabricantes y estándares IEC"
   },
@@ -21,7 +21,7 @@
     "min_plausible": 0,
     "max_plausible": 768,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "RFC del IETF; IEEE; documentación de fabricantes y estándares IEC"
   },
@@ -34,7 +34,7 @@
     "min_plausible": 0,
     "max_plausible": 96,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "RFC del IETF; IEEE; documentación de fabricantes y estándares IEC"
   },
@@ -47,7 +47,7 @@
     "min_plausible": 0,
     "max_plausible": 384,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "RFC del IETF; IEEE; documentación de fabricantes y estándares IEC"
   },
@@ -73,7 +73,7 @@
     "min_plausible": 0,
     "max_plausible": 144,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "RFC del IETF; IEEE; documentación de fabricantes y estándares IEC"
   },
@@ -86,7 +86,7 @@
     "min_plausible": 0,
     "max_plausible": 10,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "RFC del IETF; IEEE; documentación de fabricantes y estándares IEC"
   },
@@ -99,7 +99,7 @@
     "min_plausible": 0,
     "max_plausible": 48,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "RFC del IETF; IEEE; documentación de fabricantes y estándares IEC"
   },
@@ -125,7 +125,7 @@
     "min_plausible": 0,
     "max_plausible": 3000,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "RFC del IETF; IEEE; documentación de fabricantes y estándares IEC"
   },
@@ -151,7 +151,7 @@
     "min_plausible": 0,
     "max_plausible": 21,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "RFC del IETF; IEEE; documentación de fabricantes y estándares IEC"
   },
@@ -164,7 +164,7 @@
     "min_plausible": 0,
     "max_plausible": 240,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "RFC del IETF; IEEE; documentación de fabricantes y estándares IEC"
   },
@@ -190,7 +190,7 @@
     "min_plausible": 0,
     "max_plausible": 66,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "RFC del IETF; IEEE; documentación de fabricantes y estándares IEC"
   },
@@ -255,7 +255,7 @@
     "min_plausible": 0,
     "max_plausible": 3240,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "RFC del IETF; IEEE; documentación de fabricantes y estándares IEC"
   },
@@ -268,7 +268,7 @@
     "min_plausible": 0,
     "max_plausible": 11520,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "RFC del IETF; IEEE; documentación de fabricantes y estándares IEC"
   },
@@ -307,7 +307,7 @@
     "min_plausible": 1000000,
     "max_plausible": 1000000000,
     "scale": "log",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "RFC del IETF; IEEE; documentación de fabricantes y estándares IEC"
   },
@@ -346,7 +346,7 @@
     "min_plausible": 0,
     "max_plausible": 24,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "RFC del IETF; IEEE; documentación de fabricantes y estándares IEC"
   },
@@ -359,7 +359,7 @@
     "min_plausible": 1607.0,
     "max_plausible": 2307.0,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "RFC del IETF; IEEE; documentación de fabricantes y estándares IEC"
   },
@@ -372,7 +372,7 @@
     "min_plausible": 1608.0,
     "max_plausible": 2308.0,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "RFC del IETF; IEEE; documentación de fabricantes y estándares IEC"
   },
@@ -385,7 +385,7 @@
     "min_plausible": 1591.0,
     "max_plausible": 2291.0,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "RFC del IETF; IEEE; documentación de fabricantes y estándares IEC"
   },
@@ -398,7 +398,7 @@
     "min_plausible": 1591.0,
     "max_plausible": 2291.0,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "RFC del IETF; IEEE; documentación de fabricantes y estándares IEC"
   },
@@ -424,7 +424,7 @@
     "min_plausible": 1576.0,
     "max_plausible": 2276.0,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "RFC del IETF; IEEE; documentación de fabricantes y estándares IEC"
   },

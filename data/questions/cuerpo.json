@@ -8,7 +8,7 @@
     "min_plausible": 0,
     "max_plausible": 618,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "OpenStax Anatomy and Physiology; manuales de anatomía"
   },
@@ -21,7 +21,7 @@
     "min_plausible": 0,
     "max_plausible": 96,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "OpenStax Anatomy and Physiology; manuales de anatomía"
   },
@@ -34,7 +34,7 @@
     "min_plausible": 0,
     "max_plausible": 60,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "OpenStax Anatomy and Physiology; manuales de anatomía"
   },
@@ -47,7 +47,7 @@
     "min_plausible": 0,
     "max_plausible": 12,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "OpenStax Anatomy and Physiology; manuales de anatomía"
   },
@@ -60,7 +60,7 @@
     "min_plausible": 0,
     "max_plausible": 10,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "OpenStax Anatomy and Physiology; manuales de anatomía"
   },
@@ -73,7 +73,7 @@
     "min_plausible": 0,
     "max_plausible": 10,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "OpenStax Anatomy and Physiology; manuales de anatomía"
   },
@@ -86,7 +86,7 @@
     "min_plausible": 0,
     "max_plausible": 10,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "OpenStax Anatomy and Physiology; manuales de anatomía"
   },
@@ -99,7 +99,7 @@
     "min_plausible": 0,
     "max_plausible": 10,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "OpenStax Anatomy and Physiology; manuales de anatomía"
   },
@@ -112,7 +112,7 @@
     "min_plausible": 0,
     "max_plausible": 36,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "OpenStax Anatomy and Physiology; manuales de anatomía"
   },
@@ -125,7 +125,7 @@
     "min_plausible": 0,
     "max_plausible": 21,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "OpenStax Anatomy and Physiology; manuales de anatomía"
   },
@@ -151,7 +151,7 @@
     "min_plausible": 0,
     "max_plausible": 15,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "OpenStax Anatomy and Physiology; manuales de anatomía"
   },
@@ -164,7 +164,7 @@
     "min_plausible": 0,
     "max_plausible": 18,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "OpenStax Anatomy and Physiology; manuales de anatomía"
   },
@@ -190,7 +190,7 @@
     "min_plausible": 0,
     "max_plausible": 81,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "OpenStax Anatomy and Physiology; manuales de anatomía"
   },
@@ -203,7 +203,7 @@
     "min_plausible": 0,
     "max_plausible": 78,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "OpenStax Anatomy and Physiology; manuales de anatomía"
   },
@@ -229,7 +229,7 @@
     "min_plausible": 0,
     "max_plausible": 24,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "OpenStax Anatomy and Physiology; manuales de anatomía"
   },
@@ -242,7 +242,7 @@
     "min_plausible": 0,
     "max_plausible": 15,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "OpenStax Anatomy and Physiology; manuales de anatomía"
   },
@@ -268,7 +268,7 @@
     "min_plausible": 0,
     "max_plausible": 69,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "OpenStax Anatomy and Physiology; manuales de anatomía"
   },
@@ -294,7 +294,7 @@
     "min_plausible": 0,
     "max_plausible": 12,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "OpenStax Anatomy and Physiology; manuales de anatomía"
   },
@@ -320,7 +320,7 @@
     "min_plausible": 0,
     "max_plausible": 12,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "OpenStax Anatomy and Physiology; manuales de anatomía"
   },
@@ -333,7 +333,7 @@
     "min_plausible": 0,
     "max_plausible": 12,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "OpenStax Anatomy and Physiology; manuales de anatomía"
   },
@@ -359,7 +359,7 @@
     "min_plausible": 0,
     "max_plausible": 36,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "OpenStax Anatomy and Physiology; manuales de anatomía"
   },
@@ -385,7 +385,7 @@
     "min_plausible": 0,
     "max_plausible": 10,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "OpenStax Anatomy and Physiology; manuales de anatomía"
   }

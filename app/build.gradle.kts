@@ -1,3 +1,5 @@
+import java.net.URI
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -39,7 +41,21 @@ android {
     kotlinOptions { jvmTarget = "17" }
     buildFeatures { compose = true }
     lint { abortOnError = true }
-    testOptions { unitTests.isIncludeAndroidResources = true }
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+        unitTests.all { test ->
+            val testHome = layout.buildDirectory.dir("test-home").get().asFile.apply { mkdirs() }
+            test.systemProperty("user.home", testHome.absolutePath)
+            test.systemProperty("robolectric.dependency.repo.url", "https://repo.maven.apache.org/maven2")
+            System.getenv("HTTPS_PROXY")?.let { proxy ->
+                val uri = URI(proxy)
+                listOf("https.proxyHost", "http.proxyHost", "robolectric.dependency.proxy.host").forEach { test.systemProperty(it, uri.host) }
+                listOf("https.proxyPort", "http.proxyPort", "robolectric.dependency.proxy.port").forEach { test.systemProperty(it, uri.port.toString()) }
+                val trust = file("/etc/ssl/certs/java/cacerts")
+                if (trust.exists()) test.systemProperty("javax.net.ssl.trustStore", trust.absolutePath)
+            }
+        }
+    }
 }
 ksp { arg("room.schemaLocation", "$projectDir/schemas") }
 dependencies {
@@ -58,4 +74,6 @@ dependencies {
     ksp(libs.room.compiler)
     implementation(libs.coroutines)
     testImplementation(libs.junit)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.coroutinestest)
 }

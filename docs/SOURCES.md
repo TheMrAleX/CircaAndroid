@@ -12,3 +12,9 @@ Fuentes primarias para revisión:
 - Normativa europea de cacao/chocolate: Directiva 2000/36/CE, anexo I.
 
 Las preguntas astronómicas usan valores medios redondeados; no posiciones instantáneas. Historia usa las fechas convencionales indicadas; los datos anatómicos admiten variación individual y se formulan como estándar/normal.
+
+## Muestreo ejecutado (17 de octubre de 2026)
+
+Se descargaron por HTTPS y contrastaron 27 números atómicos con Periodic-Table-JSON (Bowserinator), los recuentos de fronteras de Brasil, Chile, Argentina, México, Perú y Portugal con mledoze/countries y la velocidad exacta de la luz con astropy/constants/codata2018.py. Todas estas comprobaciones pasaron. Son fuentes públicas de corroboración, no una auditoría completa de cada pregunta. No se redistribuyen sus datasets.
+
+Los accesos directos a NASA, BIPM y RFC Editor devolvieron HTTP 403 por la política de red del entorno; se usaron los repositorios públicos anteriores para el muestreo disponible.

@@ -14,7 +14,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.*
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.semantics.*
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -37,8 +39,8 @@ class Actions(
     Text(text,modifier,color=color,fontSize=size.sp,fontWeight=if(bold) FontWeight.ExtraBold else FontWeight.Medium,
         fontFamily=if(bold) Tokens.display else null,textAlign=if(center) TextAlign.Center else TextAlign.Start)
 }
-@Composable fun ScreenColumn(modifier: Modifier = Modifier, content: @Composable ColumnScope.()->Unit) {
-    Column(modifier.fillMaxSize().background(Tokens.bg).statusBarsPadding(),content=content)
+@Composable fun ScreenColumn(modifier: Modifier = Modifier, background: Color = Tokens.bg, content: @Composable ColumnScope.()->Unit) {
+    Column(modifier.fillMaxSize().background(background).statusBarsPadding(),content=content)
 }
 @Composable fun Panel(title: String,content: @Composable ColumnScope.()->Unit) {
     Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(28.dp)).background(Tokens.surface).padding(16.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
@@ -55,7 +57,8 @@ fun emoji(category: String) = when(category) {
 @Composable fun HomeScreen(state: AppState,actions: Actions) {
     val transition=rememberInfiniteTransition(label="home")
     val offset by transition.animateFloat(0f,-1200f,infiniteRepeatable(tween(20000,easing=LinearEasing),RepeatMode.Restart),label="ruler")
-    var shown by remember { mutableStateOf(false) }
+    val inspection=LocalInspectionMode.current
+    var shown by remember { mutableStateOf(inspection) }
     LaunchedEffect(Unit) { shown=true }
     Box(Modifier.fillMaxSize().background(Tokens.bg)) {
         RulerCanvas(Modifier.fillMaxSize(),offset)
@@ -79,7 +82,7 @@ fun emoji(category: String) = when(category) {
 
 @Composable fun Choice(text: String,selected: Boolean,modifier: Modifier=Modifier,onClick:()->Unit) {
     Box(modifier.heightIn(min=48.dp).clip(CircleShape).background(if(selected) Tokens.players[0].color else Tokens.high)
-        .clickable(role=Role.RadioButton,onClick=onClick).semantics { this.selected=selected }.padding(horizontal=8.dp,vertical=10.dp),contentAlignment=Alignment.Center) {
+        .clickable(role=Role.RadioButton,onClick=onClick).semantics { this.selected=selected;contentDescription=text }.padding(horizontal=8.dp,vertical=10.dp),contentAlignment=Alignment.Center) {
         Label(text,size=14,bold=selected,center=true,color=if(selected) Color.White else Tokens.muted)
     }
 }
@@ -88,7 +91,7 @@ fun emoji(category: String) = when(category) {
     var picking by remember { mutableStateOf<Int?>(null) }
     val categories=remember(state.pool) { state.pool.map { it.category }.distinct().sorted() }
     val available=state.pool.count { (c.categories.isEmpty() || it.category in c.categories) && (c.difficulty==null || it.difficulty==c.difficulty) }
-    ScreenColumn {
+    ScreenColumn(Modifier.imePadding()) {
         TopBar(stringResource(R.string.new_game),back=true) { actions.screen(Screen.HOME) }
         LazyColumn(Modifier.weight(1f),contentPadding=PaddingValues(20.dp),verticalArrangement=Arrangement.spacedBy(16.dp)) {
             item { Panel(stringResource(R.string.players)) {
@@ -114,7 +117,17 @@ fun emoji(category: String) = when(category) {
                     } }
                 }
             } }
-            item { Panel(stringResource(R.string.rounds)) { Row(horizontalArrangement=Arrangement.spacedBy(6.dp)) { listOf(5,10,15,20).forEach { n -> Choice(n.toString(),c.rounds==n,Modifier.weight(1f)) { actions.config { it.copy(rounds=n) } } } } }
+            item {
+                Panel(stringResource(R.string.rounds)) {
+                    Row(horizontalArrangement=Arrangement.spacedBy(6.dp)) {
+                        listOf(5,10,15,20).forEach { n ->
+                            Choice(n.toString(),c.rounds==n,Modifier.weight(1f)) {
+                                actions.config { it.copy(rounds=n) }
+                            }
+                        }
+                    }
+                }
+            }
             item { Panel(stringResource(R.string.categories)) {
                 FlowRow(horizontalArrangement=Arrangement.spacedBy(8.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
                     Choice(stringResource(R.string.all),c.categories.isEmpty()) { actions.config { it.copy(categories=emptySet()) } }
@@ -128,7 +141,7 @@ fun emoji(category: String) = when(category) {
                         }
                     }
                 }
-                Label(stringResource(R.string.available,available),size=13,color=Tokens.muted)
+                Label(androidx.compose.ui.res.pluralStringResource(R.plurals.available,available,available),size=13,color=Tokens.muted)
                 if(available<c.rounds) Label(stringResource(R.string.insufficient),size=13,color=Tokens.danger)
             } }
             item { Panel(stringResource(R.string.difficulty)) {
@@ -192,7 +205,9 @@ fun previewState(n: Int = 2): AppState {
     val config=Config((0 until n).map { Player(it,listOf("Nico","Ana","Luz","Dani","Sol","Leo","Mar","Paz")[it]) },rounds=10)
     val q=Question("demo","Geografía","¿Cuántos metros mide aproximadamente el Aconcagua sobre el nivel del mar?",6961.0,"m",100.0,20000.0,"linear",2)
     val guesses=listOf(6500.0,4000.0,8500.0,5000.0,7100.0,9000.0,3000.0,6200.0).take(n)
-    return AppState(pool=listOf(q),config=config,match=Match(config,List(10){"demo"},guesses=listOf(guesses),stage=Screen.REVEAL),loading=false)
+    val categories=listOf("Geografía","Historia","Ciencia","Cuerpo humano","Animales","Deportes","Cine y música","Tecnología","Comida","Espacio","Cultura general","Curiosidades")
+    val pool=listOf(q)+(1..429).map { q.copy(id="demo$it",category=categories[it%categories.size],difficulty=it%3+1) }
+    return AppState(pool=pool,config=config,match=Match(config,List(10){"demo"},guesses=listOf(guesses),stage=Screen.REVEAL),loading=false)
 }
 @Preview(widthDp=360,heightDp=800) @Composable fun HomePreview(@PreviewParameter(PreviewStates::class) s: AppState) = AproximadoTheme { HomeScreen(s,Actions()) }
 @Preview(widthDp=360,heightDp=800) @Composable fun SetupPreview(@PreviewParameter(PreviewStates::class) s: AppState) = AproximadoTheme { SetupScreen(s,Actions()) }

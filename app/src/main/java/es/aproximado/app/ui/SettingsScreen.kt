@@ -6,6 +6,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.*
@@ -14,8 +15,8 @@ import androidx.compose.ui.window.Dialog
 import es.aproximado.app.*
 import es.aproximado.app.R
 
-@Composable fun GameDialog(title: String,body: String? = null,primary: String,secondary: String,onPrimary: ()->Unit,onSecondary: ()->Unit) {
-    Dialog(onDismissRequest=onSecondary) {
+@Composable fun GameDialog(title: String,body: String? = null,primary: String,secondary: String,onPrimary: ()->Unit,onSecondary: ()->Unit,onDismiss: ()->Unit = onSecondary) {
+    Dialog(onDismissRequest=onDismiss) {
         Column(Modifier.fillMaxWidth().clipCompat().background(Tokens.surface).verticalScroll(rememberScrollState()).padding(24.dp),verticalArrangement=Arrangement.spacedBy(16.dp)) {
             Label(title,size=22,bold=true,center=true)
             body?.let { Label(it,color=Tokens.muted,center=true) }
@@ -24,7 +25,7 @@ import es.aproximado.app.R
         }
     }
 }
-private fun Modifier.clipCompat()=this.then(Modifier.background(Tokens.surface,RoundedCornerShape(28.dp))).then(Modifier.border(1.dp,Color.White.copy(alpha=.08f),RoundedCornerShape(28.dp)))
+private fun Modifier.clipCompat()=clip(RoundedCornerShape(28.dp)).border(1.dp,Color.White.copy(alpha=.08f),RoundedCornerShape(28.dp))
 
 @Composable fun SettingsScreen(state: AppState,actions: Actions) {
     var clearing by remember { mutableStateOf(false) }

@@ -5,6 +5,7 @@ import android.media.SoundPool
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -27,7 +28,7 @@ class MainActivity : ComponentActivity() {
     private var click: Int = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        enableEdgeToEdge(statusBarStyle=SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),navigationBarStyle=SystemBarStyle.dark(android.graphics.Color.TRANSPARENT))
         pool=SoundPool.Builder().setMaxStreams(2).setAudioAttributes(AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_GAME).setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).build()).build()
         click=pool!!.load(this,R.raw.tick,1)
         setContent {
@@ -78,5 +79,5 @@ class MainActivity : ComponentActivity() {
         }
     }
     if(exitDialog) GameDialog(stringResource(R.string.exit_title),stringResource(R.string.saved_notice),stringResource(R.string.keep_playing),stringResource(R.string.exit),
-        onPrimary={exitDialog=false},onSecondary={exitDialog=false;actions.screen(Screen.HOME)})
+        onPrimary={exitDialog=false},onSecondary={exitDialog=false;actions.screen(Screen.HOME)},onDismiss={exitDialog=false})
 }

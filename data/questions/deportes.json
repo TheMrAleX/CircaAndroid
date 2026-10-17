@@ -8,7 +8,7 @@
     "min_plausible": 0,
     "max_plausible": 33,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "Reglamentos FIFA, FIBA, ITF, World Athletics y federaciones"
   },
@@ -21,7 +21,7 @@
     "min_plausible": 0,
     "max_plausible": 270,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "Reglamentos FIFA, FIBA, ITF, World Athletics y federaciones"
   },
@@ -34,7 +34,7 @@
     "min_plausible": 0,
     "max_plausible": 33,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "Reglamentos FIFA, FIBA, ITF, World Athletics y federaciones"
   },
@@ -47,7 +47,7 @@
     "min_plausible": 0,
     "max_plausible": 22,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "Reglamentos FIFA, FIBA, ITF, World Athletics y federaciones"
   },
@@ -86,7 +86,7 @@
     "min_plausible": 0,
     "max_plausible": 120,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "Reglamentos FIFA, FIBA, ITF, World Athletics y federaciones"
   },
@@ -99,7 +99,7 @@
     "min_plausible": 0,
     "max_plausible": 10,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "Reglamentos FIFA, FIBA, ITF, World Athletics y federaciones"
   },
@@ -125,7 +125,7 @@
     "min_plausible": 0,
     "max_plausible": 915,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "Reglamentos FIFA, FIBA, ITF, World Athletics y federaciones"
   },
@@ -138,7 +138,7 @@
     "min_plausible": 0,
     "max_plausible": 18,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "Reglamentos FIFA, FIBA, ITF, World Athletics y federaciones"
   },
@@ -151,7 +151,7 @@
     "min_plausible": 0,
     "max_plausible": 75,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "Reglamentos FIFA, FIBA, ITF, World Athletics y federaciones"
   },
@@ -164,7 +164,7 @@
     "min_plausible": 0,
     "max_plausible": 10,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "Reglamentos FIFA, FIBA, ITF, World Athletics y federaciones"
   },
@@ -177,7 +177,7 @@
     "min_plausible": 0,
     "max_plausible": 21,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "Reglamentos FIFA, FIBA, ITF, World Athletics y federaciones"
   },
@@ -190,7 +190,7 @@
     "min_plausible": 0,
     "max_plausible": 45,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "Reglamentos FIFA, FIBA, ITF, World Athletics y federaciones"
   },
@@ -216,7 +216,7 @@
     "min_plausible": 0,
     "max_plausible": 21,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "Reglamentos FIFA, FIBA, ITF, World Athletics y federaciones"
   },
@@ -255,7 +255,7 @@
     "min_plausible": 0,
     "max_plausible": 27,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "Reglamentos FIFA, FIBA, ITF, World Athletics y federaciones"
   },
@@ -281,7 +281,7 @@
     "min_plausible": 0,
     "max_plausible": 12,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "Reglamentos FIFA, FIBA, ITF, World Athletics y federaciones"
   },
@@ -294,7 +294,7 @@
     "min_plausible": 0,
     "max_plausible": 33,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "Reglamentos FIFA, FIBA, ITF, World Athletics y federaciones"
   },
@@ -307,7 +307,7 @@
     "min_plausible": 1000,
     "max_plausible": 1000000,
     "scale": "log",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "Reglamentos FIFA, FIBA, ITF, World Athletics y federaciones"
   },
@@ -320,7 +320,7 @@
     "min_plausible": 0,
     "max_plausible": 1200,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "Reglamentos FIFA, FIBA, ITF, World Athletics y federaciones"
   },
@@ -346,7 +346,7 @@
     "min_plausible": 0,
     "max_plausible": 21,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "Reglamentos FIFA, FIBA, ITF, World Athletics y federaciones"
   },
@@ -359,7 +359,7 @@
     "min_plausible": 0,
     "max_plausible": 30,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "Reglamentos FIFA, FIBA, ITF, World Athletics y federaciones"
   },
@@ -372,7 +372,7 @@
     "min_plausible": 0,
     "max_plausible": 150,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "Reglamentos FIFA, FIBA, ITF, World Athletics y federaciones"
   },
@@ -385,7 +385,7 @@
     "min_plausible": 0,
     "max_plausible": 12,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "Reglamentos FIFA, FIBA, ITF, World Athletics y federaciones"
   },
@@ -398,7 +398,7 @@
     "min_plausible": 0,
     "max_plausible": 15,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "Reglamentos FIFA, FIBA, ITF, World Athletics y federaciones"
   },
@@ -411,7 +411,7 @@
     "min_plausible": 0,
     "max_plausible": 12,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "Reglamentos FIFA, FIBA, ITF, World Athletics y federaciones"
   },
@@ -424,7 +424,7 @@
     "min_plausible": 0,
     "max_plausible": 21,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "Reglamentos FIFA, FIBA, ITF, World Athletics y federaciones"
   },
@@ -437,7 +437,7 @@
     "min_plausible": 0,
     "max_plausible": 72,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "Reglamentos FIFA, FIBA, ITF, World Athletics y federaciones"
   },
@@ -450,7 +450,7 @@
     "min_plausible": 0,
     "max_plausible": 54,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "Reglamentos FIFA, FIBA, ITF, World Athletics y federaciones"
   },
@@ -463,7 +463,7 @@
     "min_plausible": 0,
     "max_plausible": 36,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "Reglamentos FIFA, FIBA, ITF, World Athletics y federaciones"
   },
@@ -489,7 +489,7 @@
     "min_plausible": 0,
     "max_plausible": 10,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "Reglamentos FIFA, FIBA, ITF, World Athletics y federaciones"
   },
@@ -502,7 +502,7 @@
     "min_plausible": 0,
     "max_plausible": 10,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "Reglamentos FIFA, FIBA, ITF, World Athletics y federaciones"
   },

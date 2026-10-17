@@ -15,6 +15,7 @@ import androidx.compose.ui.geometry.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.*
 import androidx.compose.ui.text.font.FontWeight
@@ -32,7 +33,8 @@ import kotlin.math.*
     val m=state.match ?: return;val q=state.question() ?: return
     val scores=remember(m.currentGuesses,q) { Scoring.round(q,m.currentGuesses) }
     val ordered=remember(scores) { scores.sortedBy { it.guess } }
-    val timeline=remember { Animatable(0f) };val scope=rememberCoroutineScope();val feedback=LocalFeedback.current
+    val inspection=LocalInspectionMode.current
+    val timeline=remember { Animatable(if(inspection) 3400f else 0f) };val scope=rememberCoroutineScope();val feedback=LocalFeedback.current
     LaunchedEffect(q.id) { timeline.animateTo(3400f,tween(3400,easing=LinearEasing)) }
     val time=timeline.value
     LaunchedEffect(time>=1400) { if(time>=1400) feedback(true) }
@@ -78,20 +80,30 @@ import kotlin.math.*
                 }
             }
             // Stagger adjacent narrow labels if their cards intersect; all labels stay in the chart.
-            val placements=mutableListOf<Pair<Dp,Dp>>()
+            data class Placement(val x: Dp,val y: Dp,val width: Dp,val height: Dp)
+            val placements=mutableListOf<Placement>()
             ordered.forEachIndexed { index,score ->
                 val labelWidth=if(narrow) 60.dp else (slot+8.dp).coerceAtMost(140.dp)
+                val cardHeight=if(score.rank==1) 108.dp else 80.dp
                 val x=(12.dp+slot*index+(slot-labelWidth)/2).coerceIn(2.dp,maxWidth-labelWidth-2.dp)
-                var labelY=(y(score.guess)+8.dp).coerceAtMost(maxHeight-108.dp)
-                var attempts=0
-                while(placements.any { (px,py) -> abs((px-x).value)<labelWidth.value && abs((py-labelY).value)<92 } && attempts<8) {
-                    labelY=(labelY-96.dp).coerceAtLeast(12.dp);attempts++
+                val preferred=(y(score.guess)+8.dp).coerceAtMost(maxHeight-cardHeight)
+                val answerY=y(q.answer)
+                val candidates=(0..((maxHeight-cardHeight).value.toInt().coerceAtLeast(0)) step 4).map { it.dp }
+                fun clearCards(candidate: Dp)=placements.none { old ->
+                    x<old.x+old.width+2.dp && x+labelWidth+2.dp>old.x && candidate<old.y+old.height+4.dp && candidate+cardHeight+4.dp>old.y
                 }
-                placements.add(x to labelY)
+                val calculatedY=candidates.filter { clearCards(it) && (it+cardHeight<answerY-48.dp || it>answerY+48.dp) }
+                    .minByOrNull { abs((it-preferred).value) }
+                    ?: candidates.filter { clearCards(it) }.minByOrNull { abs((it-preferred).value) }
+                    ?: preferred.coerceAtLeast(0.dp)
+                val winningIndex=ordered.indexOfFirst { it.rank==1 }
+                val topTier=(answerY+60.dp).coerceAtMost((maxHeight-188.dp).coerceAtLeast(0.dp))
+                val labelY=if(narrow) topTier+if((index-winningIndex)%2==0) 0.dp else 108.dp else calculatedY
+                placements.add(Placement(x,labelY,labelWidth,cardHeight))
                 val progress=((time-200-score.playerId*120)/900).coerceIn(0f,1f)
                 val player=m.config.players[score.playerId];val style=Tokens.players[player.style]
                 if(progress>0) Column(Modifier.offset(x=x,y=labelY).width(labelWidth).alpha(progress),horizontalAlignment=Alignment.CenterHorizontally,verticalArrangement=Arrangement.spacedBy(2.dp)) {
-                    if(time>=2800 && score.rank==1) Crown() else Spacer(Modifier.height(28.dp))
+                    if(time>=2800 && score.rank==1) Crown()
                     ValuePill(formatNumber(score.guess*progress,narrow),small=narrow)
                     if(narrow) PlayerAvatar(player.name,style,32.dp) else Label(player.name,size=12,color=style.ink,bold=true,center=true)
                 }
@@ -124,16 +136,17 @@ import kotlin.math.*
     }
 }
 
-@Composable fun ScoreRow(standing: Standing,bonus: Int = 0,compact: Boolean = false,modifier: Modifier=Modifier) {
+@Composable fun ScoreRow(standing: Standing,modifier: Modifier=Modifier,bonus: Int = 0,compact: Boolean = false) {
     val p=standing.player;val style=Tokens.players[p.style]
-    val target=remember { Animatable((standing.total-bonus).toFloat()) }
+    val inspection=LocalInspectionMode.current
+    val target=remember { Animatable((if(inspection) standing.total else standing.total-bonus).toFloat()) }
     LaunchedEffect(standing.total) { target.animateTo(standing.total.toFloat(),tween(600)) }
     Row(modifier.fillMaxWidth().heightIn(min=if(compact) 64.dp else 72.dp).clip(RoundedCornerShape(20.dp)).background(Tokens.surface),verticalAlignment=Alignment.CenterVertically) {
         Box(Modifier.width(6.dp).height(if(compact) 64.dp else 72.dp).background(style.color))
         Label(standing.rank.toString(),Modifier.padding(horizontal=8.dp),24,if(standing.rank==1) Tokens.gold else Color.White,bold=true)
         PlayerAvatar(p.name,style,if(compact) 40.dp else 48.dp)
         Column(Modifier.weight(1f).padding(horizontal=8.dp)) {
-            Text(p.name,color=Color.White,fontSize=18.sp,fontWeight=FontWeight.SemiBold,maxLines=2,overflow=TextOverflow.Clip)
+            Text(p.name,color=Color.White,fontSize=if(compact) 16.sp else 18.sp,fontWeight=FontWeight.SemiBold,maxLines=2,overflow=TextOverflow.Clip)
             if(bonus>0) Label(stringResource(R.string.round_points,bonus),size=13,color=style.inkLight,bold=true)
         }
         Label(target.value.roundToInt().toString(),Modifier.padding(end=12.dp),28,bold=true)
@@ -145,7 +158,7 @@ import kotlin.math.*
     ScreenColumn {
         TopBar(stringResource(R.string.score_title,m.round+1,m.config.rounds))
         LazyColumn(Modifier.weight(1f),contentPadding=PaddingValues(20.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
-            items(standings,key={it.player.id}) { standing -> ScoreRow(standing,rounds.lastOrNull()?.firstOrNull { it.playerId==standing.player.id }?.points ?: 0,m.config.players.size>6,Modifier.animateItem()) }
+            items(standings,key={it.player.id}) { standing -> ScoreRow(standing,Modifier.animateItem(),bonus=rounds.lastOrNull()?.firstOrNull { it.playerId==standing.player.id }?.points ?: 0,compact=m.config.players.size>6) }
         }
         BottomActions { GameButton(stringResource(if(m.round+1==m.config.rounds) R.string.final_result else R.string.next_round),color=Color.White,ink=Tokens.players[0].ink,onClick=actions.next) }
     }
@@ -158,7 +171,7 @@ import kotlin.math.*
     val ordered=if(first.size==2) listOf(first[1],first[0]) else listOf(first[1],first[0],first[2])
     Box(Modifier.fillMaxSize().background(Tokens.bg)) {
         Confetti(Modifier.fillMaxSize(),continuous=true)
-        ScreenColumn(Modifier.background(Color.Transparent)) {
+        ScreenColumn(background=Color.Transparent) {
             TopBar(stringResource(R.string.final_title))
             LazyColumn(Modifier.weight(1f),contentPadding=PaddingValues(20.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
                 item {
@@ -166,14 +179,15 @@ import kotlin.math.*
                         ordered.forEach { standing ->
                             val style=Tokens.players[standing.player.style]
                             val height=when(standing.rank) { 1->160.dp;2->120.dp;else->90.dp }
-                            val progress=remember { Animatable(0f) }
+                            val inspection=LocalInspectionMode.current
+                            val progress=remember { Animatable(if(inspection) 1f else 0f) }
                             LaunchedEffect(Unit) { delay((3-standing.rank).coerceAtLeast(0)*500L);progress.animateTo(1f,spring(dampingRatio=.7f)) }
                             Column(Modifier.weight(1f).graphicsLayer { translationY=(1-progress.value)*200 },horizontalAlignment=Alignment.CenterHorizontally) {
                                 if(standing.rank==1) Crown() else Spacer(Modifier.height(28.dp))
                                 PlayerAvatar(standing.player.name,style,56.dp)
                                 Label(standing.player.name,Modifier.padding(vertical=8.dp),16,bold=true,center=true)
                                 Box(Modifier.fillMaxWidth().height(height).clip(RoundedCornerShape(topStart=20.dp,topEnd=20.dp)).background(style.color),contentAlignment=Alignment.Center) {
-                                    Column(horizontalAlignment=Alignment.CenterHorizontally) { Label(standing.rank.toString(),size=48,color=style.ink,bold=true);Label(stringResource(R.string.points,standing.total),size=16,color=style.ink,bold=true,center=true) }
+                                    Column(horizontalAlignment=Alignment.CenterHorizontally) { Label(standing.rank.toString(),size=48,color=style.ink,bold=true);Label(androidx.compose.ui.res.pluralStringResource(R.plurals.points,standing.total,standing.total),size=16,color=style.ink,bold=true,center=true) }
                                 }
                             }
                         }

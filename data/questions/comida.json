@@ -21,7 +21,7 @@
     "min_plausible": 0,
     "max_plausible": 12,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "USDA FoodData Central; normativa alimentaria; botánica y gastronomía"
   },
@@ -34,7 +34,7 @@
     "min_plausible": 0,
     "max_plausible": 12,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "USDA FoodData Central; normativa alimentaria; botánica y gastronomía"
   },
@@ -47,7 +47,7 @@
     "min_plausible": 0,
     "max_plausible": 21,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "USDA FoodData Central; normativa alimentaria; botánica y gastronomía"
   },
@@ -60,7 +60,7 @@
     "min_plausible": 0,
     "max_plausible": 750,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "USDA FoodData Central; normativa alimentaria; botánica y gastronomía"
   },
@@ -73,7 +73,7 @@
     "min_plausible": 0,
     "max_plausible": 45,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "USDA FoodData Central; normativa alimentaria; botánica y gastronomía"
   },
@@ -99,7 +99,7 @@
     "min_plausible": 0,
     "max_plausible": 3000,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "USDA FoodData Central; normativa alimentaria; botánica y gastronomía"
   },
@@ -125,7 +125,7 @@
     "min_plausible": 0,
     "max_plausible": 18,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "USDA FoodData Central; normativa alimentaria; botánica y gastronomía"
   },
@@ -138,7 +138,7 @@
     "min_plausible": 0,
     "max_plausible": 2250,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "USDA FoodData Central; normativa alimentaria; botánica y gastronomía"
   },
@@ -151,7 +151,7 @@
     "min_plausible": 0,
     "max_plausible": 10,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "USDA FoodData Central; normativa alimentaria; botánica y gastronomía"
   },
@@ -164,7 +164,7 @@
     "min_plausible": 0,
     "max_plausible": 3000,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "USDA FoodData Central; normativa alimentaria; botánica y gastronomía"
   },
@@ -177,7 +177,7 @@
     "min_plausible": 0,
     "max_plausible": 18,
     "scale": "linear",
-    "difficulty": 3,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "USDA FoodData Central; normativa alimentaria; botánica y gastronomía"
   },
@@ -190,7 +190,7 @@
     "min_plausible": 0,
     "max_plausible": 10,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 2,
     "as_of_year": null,
     "source_hint": "USDA FoodData Central; normativa alimentaria; botánica y gastronomía"
   },
@@ -242,7 +242,7 @@
     "min_plausible": 0,
     "max_plausible": 18,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "USDA FoodData Central; normativa alimentaria; botánica y gastronomía"
   },
@@ -268,7 +268,7 @@
     "min_plausible": 0,
     "max_plausible": 10,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "USDA FoodData Central; normativa alimentaria; botánica y gastronomía"
   },
@@ -281,7 +281,7 @@
     "min_plausible": 0,
     "max_plausible": 10,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "USDA FoodData Central; normativa alimentaria; botánica y gastronomía"
   },
@@ -307,7 +307,7 @@
     "min_plausible": 0,
     "max_plausible": 30,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "USDA FoodData Central; normativa alimentaria; botánica y gastronomía"
   },
@@ -320,7 +320,7 @@
     "min_plausible": 0,
     "max_plausible": 144,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "USDA FoodData Central; normativa alimentaria; botánica y gastronomía"
   },
@@ -359,7 +359,7 @@
     "min_plausible": 0,
     "max_plausible": 10,
     "scale": "linear",
-    "difficulty": 2,
+    "difficulty": 1,
     "as_of_year": null,
     "source_hint": "USDA FoodData Central; normativa alimentaria; botánica y gastronomía"
   },
@@ -385,7 +385,7 @@
     "min_plausible": 0,
     "max_plausible": 30,
     "scale": "linear",
-    "difficulty": 1,
+    "difficulty": 3,
     "as_of_year": null,
     "source_hint": "USDA FoodData Central; normativa alimentaria; botánica y gastronomía"
   }
