@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.paparazzi)
 }
 android {
     namespace = "es.aproximado.app"
@@ -34,10 +35,11 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
-    compileOptions { sourceCompatibility = JavaVersion.VERSION_21; targetCompatibility = JavaVersion.VERSION_21 }
-    kotlinOptions { jvmTarget = "21" }
+    compileOptions { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }
+    kotlinOptions { jvmTarget = "17" }
     buildFeatures { compose = true }
     lint { abortOnError = true }
+    testOptions { unitTests.isIncludeAndroidResources = true }
 }
 ksp { arg("room.schemaLocation", "$projectDir/schemas") }
 dependencies {

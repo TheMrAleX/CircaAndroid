@@ -35,7 +35,7 @@ import kotlin.random.Random
     val source = remember { MutableInteractionSource() }
     val pressed by source.collectIsPressedAsState()
     val shift by animateDpAsState(if (pressed) 4.dp else 0.dp, tween(80), label = "press")
-    val haptic = LocalHapticFeedback.current
+    val feedback = LocalFeedback.current
     Box(modifier.fillMaxWidth().heightIn(min = if (detail == null) 64.dp else 80.dp)
         .alpha(if (enabled) 1f else .4f)
         .background(if (outline) Color.Transparent else color.copy(red = color.red * .75f,green = color.green * .75f,blue = color.blue * .75f), CircleShape)) {
@@ -43,7 +43,7 @@ import kotlin.random.Random
             .clip(CircleShape).background(if (outline) Color.Transparent else color)
             .then(if (outline) Modifier.border(2.dp, Color.White.copy(alpha = .4f),CircleShape) else Modifier)
             .clickable(interactionSource = source,indication = null,enabled = enabled,role = Role.Button) {
-                haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove); onClick()
+                feedback(false); onClick()
             }.padding(horizontal = 16.dp,vertical = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,verticalArrangement = Arrangement.Center) {
             Text(label,color = ink,fontFamily = Tokens.display,fontWeight = FontWeight.Black,fontSize = 20.sp,textAlign = TextAlign.Center)
@@ -148,8 +148,9 @@ import kotlin.random.Random
 }
 
 @Composable fun GameSwitch(checked: Boolean, label: String, onChange: () -> Unit) {
+    val enabledText = stringResource(if(checked) R.string.active else R.string.inactive)
     val x by animateDpAsState(if(checked) 20.dp else 0.dp,tween(150),label="toggle")
-    Box(Modifier.size(56.dp,48.dp).semantics { contentDescription=label;stateDescription=if(checked) "Activado" else "Desactivado" }
+    Box(Modifier.size(56.dp,48.dp).semantics { contentDescription=label;stateDescription=enabledText }
         .toggleableCompat(checked,onChange),contentAlignment=Alignment.CenterStart) {
         Box(Modifier.size(52.dp,32.dp).clip(CircleShape).background(if(checked) Tokens.players[0].color else Tokens.high)) {
             Box(Modifier.offset(x=4.dp+x,y=4.dp).size(24.dp).clip(CircleShape).background(Color.White))
