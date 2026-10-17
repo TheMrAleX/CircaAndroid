@@ -33,3 +33,22 @@ Si el tag ya existe localmente, omite la segunda línea. Comprueba el resultado 
 ## ARMv8
 
 `ndk.abiFilters` incluye solo `arm64-v8a`. La app actual es Kotlin/DEX y no lleva bibliotecas nativas; este filtro se aplicará a cualquier dependencia nativa futura. El APK universal de bytecode se etiqueta arm64-v8a como distribución solicitada; Android puede ejecutarlo también en otras arquitecturas compatibles porque no depende de código JNI.
+
+## Publicación verificada: v1.0.0
+
+Publicada el 17 de octubre de 2026 desde el commit `4b5012e` (tag `v1.0.0`):
+
+- [Release v1.0.0](https://github.com/TheMrAleX/CircaAndroid/releases/tag/v1.0.0)
+- [APK ARM64 firmado](https://github.com/TheMrAleX/CircaAndroid/releases/download/v1.0.0/Aproximado-v1.0.0-arm64-v8a.apk)
+- [Workflow release correcto](https://github.com/TheMrAleX/CircaAndroid/actions/runs/39070610379)
+- [CI correcto](https://github.com/TheMrAleX/CircaAndroid/actions/runs/39070609124)
+
+Se descargaron el APK y su SHA256 desde los assets publicados y se contrastaron. `apksigner verify` pasó (firma v2). El APK contiene 430 preguntas, SQLite íntegra, solo bibliotecas nativas ARM64 y ningún permiso INTERNET. Certificado publicado: `CN=Aproximado, O=Offline Games, C=ES`. Conserva una clave estable mediante las secrets descritas arriba para futuras actualizaciones.
+
+SHA256 del APK publicado:
+
+```text
+7fb46502e3a3437cb392b3a73ab016d7bf7c470ab2c9289c72fa5d6c6de8e6d4
+```
+
+La compilación local con firma temporal genera un SHA diferente: no se debe comparar con el hash del APK de GitHub. Usa el archivo .sha256 adjunto al mismo APK.

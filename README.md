@@ -2,6 +2,8 @@
 
 Juego nativo Android de trivia numérica para **2–8 personas** que se pasan un teléfono. 430 preguntas en español, 12 categorías y funcionamiento **100 % offline**: sin permiso de Internet, anuncios ni analytics.
 
+**[Descargar APK firmado v1.0.0](https://github.com/TheMrAleX/CircaAndroid/releases/download/v1.0.0/Aproximado-v1.0.0-arm64-v8a.apk)** · [Release y SHA256](https://github.com/TheMrAleX/CircaAndroid/releases/tag/v1.0.0)
+
 ## Cómo jugar
 
 1. Elige jugadores, nombres, colores distintos, 5/10/15/20 rondas, categorías y dificultad.

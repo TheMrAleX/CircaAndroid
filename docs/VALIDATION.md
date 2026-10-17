@@ -31,3 +31,7 @@ Para la máquina cloud, `bash scripts/cloud_setup.sh` activa JDK/SDK, respeta el
 - Script cloud completo ejecutado con éxito; install_script/start_skill guardados como borrador. Publicación del entorno y restauración en una tarea nueva no verificadas.
 - main enviada correctamente mediante Git. La API api.github.com devuelve Forbidden desde esta máquina; la página web pública de Actions sí es accesible. Publicación y estado remoto se registran en RELEASING.md después de enviar el tag.
 
+
+## Evidencia remota final
+
+CI #39070609124 y release #39070610379 completadas con éxito para `4b5012e`. Se verificó que [v1.0.0](https://github.com/TheMrAleX/CircaAndroid/releases/tag/v1.0.0) adjunta APK y SHA256. La copia descargada pasó firma v2, checksum `7fb46502e3a3437cb392b3a73ab016d7bf7c470ab2c9289c72fa5d6c6de8e6d4`, recuento 430, integridad SQLite y ABI ARM64 exclusivo. Los primeros intentos fallaron antes de compilar en la acción externa de preparación del SDK; la corrección usa el SDK del runner Ubuntu 24.04 y las ejecuciones posteriores pasaron. No hay bloqueos restantes para la entrega del APK.
