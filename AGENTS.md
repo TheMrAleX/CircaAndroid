@@ -8,7 +8,7 @@ Trabaja autónomamente: elige opciones razonables sin preguntar y registra decis
 - [x] 2 Motor y tests
 - [x] 3 Sistema visual y pantallas
 - [x] 4 Calidad: 10 tests de motor, 4 de integración y 44 renders; lint sin incidencias; build debug
-- [ ] 5 Release
-- [ ] 6 Documentación
+- [x] 5 Release: firma local ARM64/R8 verificada; workflow por tag configurado; estado remoto en RELEASING.md
+- [x] 6 Documentación: README, DATA, RELEASING, DECISIONS y evidencias/capturas
 
 Cada tarea cloud ya está aislada; utilizar este checkout, no crear worktrees salvo petición expresa.
