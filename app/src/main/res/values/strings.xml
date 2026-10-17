@@ -46,10 +46,8 @@
     <string name="exit">Salir</string>
     <string name="saved_notice">Tu partida queda guardada.</string>
     <string name="answer_title">Respuesta · Ronda %1$d/%2$d</string>
-    <string name="answer">Respuesta</string>
     <string name="continue_game">Continuar</string>
     <string name="winner">Ganador de la ronda</string>
-    <string name="nailed">¡Clavado!</string>
     <string name="score_title">Marcador · Ronda %1$d/%2$d</string>
     <string name="next_round">Siguiente ronda</string>
     <string name="final_result">Ver resultado final</string>
@@ -70,13 +68,13 @@ No está afiliada a ningún juego existente</string>
     <string name="active">Activado</string>
     <string name="inactive">Desactivado</string>
     <string name="year">Dato de %1$d</string>
-    <string name="skip_animation">Toca para ver el resultado</string>
     <string name="name_label">Nombre del jugador %1$d</string>
     <string name="estimate_accessibility">Estimación: %1$s. Desliza para ajustar o usa el teclado.</string>
     <string name="rules">Más cerca, más puntos. Acierto exacto: +2. A menos del 1 %%: +1. Los empates comparten puesto.</string>
     <string name="color_used">Color ya utilizado</string>
     <string name="numeric_title">Escribe tu estimación</string>
-    <string name="round_points">+%1$d esta ronda</string>
+    <!-- «esta ronda» y «bonus incluido» no varían con la cantidad. -->
+    <string name="round_points" tools:ignore="PluralsCandidate">+%1$d esta ronda</string>
     <plurals name="available"><item quantity="one">%1$d pregunta disponible</item><item quantity="other">%1$d preguntas disponibles</item></plurals>
     <plurals name="points"><item quantity="one">%1$d punto</item><item quantity="other">%1$d puntos</item></plurals>
     <string name="correct_answer">RESPUESTA CORRECTA</string>
@@ -86,7 +84,7 @@ No está afiliada a ningún juego existente</string>
     <string name="guess_value">Estimación: %1$s</string>
     <string name="distance_value">Diferencia: %1$s</string>
     <plurals name="earned_points"><item quantity="one">+%1$d punto</item><item quantity="other">+%1$d puntos</item></plurals>
-    <string name="bonus_points">Bonus +%1$d incluido</string>
+    <string name="bonus_points" tools:ignore="PluralsCandidate">Bonus +%1$d incluido</string>
     <string name="closest">Más cerca</string>
     <string name="total_points_hint">Puntos acumulados · Los empates comparten puesto</string>
     <string name="final_subtitle">¡Gracias por jugar! Este es el podio.</string>
