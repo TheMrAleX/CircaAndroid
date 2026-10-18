@@ -104,3 +104,9 @@ Además de la fase fija de previews, WaitingMotionTest ejecuta el reloj real con
 `:core:test :app:verifyPaparazziDebug :app:lintDebug :app:assembleDebug` correcto; lint debug sin incidencias. El usuario informó que 1.0.5 funciona correctamente en su prueba física. Este entorno no realizó nuevas pruebas en teléfonos para 1.0.6.
 
 Build release local 1.0.6 con R8 y firma v2 correcto; lint release sin incidencias.
+
+## Publicación 1.0.6 verificada
+
+CI `39153767334` y release `39153772943` correctos. APK oficial descargado: SHA256 `4df4d328df6337c8efefe3a79db566d47a120b80913c3ba7ab3f91316d711b55`, firma v2 RSA3072, versión 1.0.6/código 7, ARM64 exclusivo y catálogo SQLite 3 íntegro con 400 filas idénticas a los JSON. Sin fixtures ni animación APNG de prueba empaquetadas. La firma cambió respecto a 1.0.5 y la consecuencia de instalación está documentada.
+
+También se ejecutaron tres repeticiones limpias de los 28 tests de motor/protocolo, correctas. La validación animada usa renderizado automatizado; no mide fps físicos.

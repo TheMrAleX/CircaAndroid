@@ -51,8 +51,8 @@ La petición de rediseño 1.0.1 sustituye las posiciones rígidas de la spec ori
 - [x] UI e integración: 173 casos (28 motor/protocolo, 9 Android, 136 visuales), comparación visual correcta; lint debug sin incidencias y APK debug compilado. Build release/R8 firmado y lint release correctos.
 - [x] v1.0.5 publicada; CI y release remotos correctos; APK oficial descargado y verificado (SHA256, firma v2, ARM64, servicio LAN y catálogo íntegro). Pruebas físicas Wi-Fi/hotspot pendientes por falta de dispositivos.
 
-## Revisión 1.0.6 en curso
+## Revisión 1.0.6
 - [x] Espera LAN con anillo giratorio, EaseInOutCubic y contador accesible.
 - [x] 174 casos correctos: 28 motor/protocolo, 9 Android, 136 capturas y 1 ciclo animado de 23 fotogramas. Comparación visual correcta; lint debug y build debug correctos.
-- [ ] Release publicada y APK verificado.
+- [x] Release 1.0.6 publicada; CI/release correctos, APK oficial descargado y verificado (SHA256, firma v2, versión 7, ARM64 y 400 preguntas).
 El usuario informó que 1.0.5 funciona correctamente en su prueba; las pruebas físicas disponibles en este entorno siguen siendo ninguna.

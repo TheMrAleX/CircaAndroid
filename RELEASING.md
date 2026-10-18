@@ -138,3 +138,20 @@ c05771068822dfcaf6f3dd3e94815dab31caecfc811a3ce56fd5fdfe50ba63a6
 Certificado SHA256: `fd0cefc39cec406fd52c9e579eff943fb2d6f9b65810e2a3dfe0d0004dc2616c`. Es diferente de 1.0.4: hay que desinstalar la anterior y se pierden los datos locales. Una firma estable mediante las secrets descritas al inicio permite actualizaciones futuras compatibles; no recupera la clave temporal anterior.
 
 Esta versión añade INTERNET porque Android lo exige para sockets LAN; no usa servidores externos. Las comprobaciones automatizadas de sockets/Android no equivalen a probar radios Wi-Fi, hotspot ni políticas de ahorro en teléfonos físicos. Véase LAN.md.
+
+## Publicación verificada: v1.0.6
+
+Publicada el 18 de octubre de 2026 desde `7b0925a` (versionCode 7):
+
+- [Release v1.0.6](https://github.com/TheMrAleX/CircaAndroid/releases/tag/v1.0.6)
+- [APK ARM64 firmado](https://github.com/TheMrAleX/CircaAndroid/releases/download/v1.0.6/Aproximado-v1.0.6-arm64-v8a.apk)
+- [CI correcto](https://github.com/TheMrAleX/CircaAndroid/actions/runs/39153767334)
+- [Release correcta](https://github.com/TheMrAleX/CircaAndroid/actions/runs/39153772943)
+
+APK oficial descargado: versión 1.0.6/código 7, firma v2 RSA3072, ARM64 exclusivo, SQLite 3 íntegra y coincidencia completa de las 400 filas con los JSON. Las fixtures, keystores y animación APNG de tests no se empaquetan. SHA256:
+
+```text
+4df4d328df6337c8efefe3a79db566d47a120b80913c3ba7ab3f91316d711b55
+```
+
+Certificado SHA256: `796d4fa9761a60176edb757fb650bf86d0401b906593d19114dacc877d0be113`. Difiere del de 1.0.5: Android exige desinstalar la anterior y se pierden los datos locales. Configurar una firma estable mediante las secrets descritas al inicio para futuras actualizaciones compatibles; no recupera la clave temporal anterior.

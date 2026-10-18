@@ -96,3 +96,5 @@
 - Leer los estados animados en graphicsLayer, sin layout ni tráfico por frame. Compose gestiona el reloj y la escala de animaciones; no añadir timers, dependencias ni cambios de protocolo. Congelar solo la fase de previews/Paparazzi para comparación determinista. La semántica anuncia espera indeterminada y el contador usa liveRegion polite solo al cambiar las confirmaciones.
 
 - Verificar el movimiento con el reloj de animación real en Paparazzi (LocalInspectionMode=false), además de las cuatro capturas de espera: ciclo de 2,2 s a 10 fps, 23 fotogramas y 22 imágenes distintas. Guardar la animación APNG como evidencia y comparar también su referencia en CI. Es comprobación funcional de animación, no medición de fps en hardware físico.
+
+- Publicar tag v1.0.6 en `7b0925a` y verificar CI/release remotos y APK oficial descargado. Firma temporal diferente de 1.0.5: documentar desinstalación/pérdida de datos. Se observó un CI histórico posterior a la documentación de 1.0.5 fallido, sin detalle de logs público (404); no atribuir una causa sin evidencia. Tres ejecuciones limpias del motor/protocolo y el CI completo de 1.0.6 pasaron.
