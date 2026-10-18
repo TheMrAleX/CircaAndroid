@@ -2,15 +2,15 @@
 
 Juego nativo Android de trivia numérica para **2–8 personas** que se pasan un teléfono. 430 preguntas en español, 12 categorías y funcionamiento **100 % offline**: sin permiso de Internet, anuncios ni analytics.
 
-**[Descargar APK firmado v1.0.2](https://github.com/TheMrAleX/CircaAndroid/releases/download/v1.0.2/Aproximado-v1.0.2-arm64-v8a.apk)** · [Release y SHA256](https://github.com/TheMrAleX/CircaAndroid/releases/tag/v1.0.2)
+**[Descargar APK firmado v1.0.3](https://github.com/TheMrAleX/CircaAndroid/releases/download/v1.0.3/Aproximado-v1.0.3-arm64-v8a.apk)** · [Release y SHA256](https://github.com/TheMrAleX/CircaAndroid/releases/tag/v1.0.3)
 
-**Instalación sobre 1.0.1:** esta release usa otra firma y requiere desinstalar la anterior; se perderán la partida y el historial locales. [Detalle de firma y actualizaciones](RELEASING.md).
+**Firma de actualizaciones:** las releases con firmas distintas requieren desinstalar la anterior; se perderán la partida y el historial locales. [Detalle de firma y actualizaciones](RELEASING.md).
 
 ## Cómo jugar
 
 1. Elige jugadores, nombres, colores distintos, 5/10/15/20 rondas, categorías y dificultad.
 2. Todos leen la pregunta. Pasa el teléfono a la persona indicada.
-3. Cada persona ajusta su estimación arrastrando la regla vertical, con los botones finos o con el teclado numérico. Confirma sin enseñar la pantalla.
+3. Cada persona ajusta su estimación arrastrando el panel sobre la regla fija, con los botones finos o con el teclado numérico. Los conteos admiten solo enteros; las pocas medidas que lo necesitan indican su precisión decimal. Confirma sin enseñar la pantalla.
 4. Al terminar todos, aparecen la gráfica de barras y la respuesta real, con una leyenda de estimaciones y puntos. Más cerca da más puntos; las escalas logarítmicas comparan proporciones. Exacto: +2; a menos del 1 %: +1. Los empates comparten puesto y puntos.
 5. Consulta el marcador y termina en el podio. Puedes salir y continuar una partida guardada. El selector bloquea capturas y la vista de recientes.
 
@@ -23,7 +23,7 @@ Juego nativo Android de trivia numérica para **2–8 personas** que se pasan un
 - **Revelación:** gráfica vertical de barras por estimación, línea de respuesta real, corona y leyenda de puntos.
 - **Marcador y resultado:** puntuación acumulada, puestos compartidos en empate y podio final.
 
-Novedades 1.0.2: vuelve la gráfica como vista principal; el panel del selector se mueve sobre una regla fija; se retira el aviso de no mirar otra pantalla; los decimales y el tamaño del número se mantienen estables al deslizar. [Cambios completos](docs/releases/v1.0.2.md).
+Novedades 1.0.3: 412 preguntas usan enteros y solo 18 medidas admiten decimales explícitos. El teclado y el selector respetan esa precisión. La gráfica lineal parte de cero y muestra el eje numérico para no exagerar diferencias pequeñas; la logarítmica conserva el dominio de la pregunta. Migración de la DB sin reiniciar datos. [Cambios completos](docs/releases/v1.0.3.md).
 
 Ejemplos: [selector de 8 jugadores](docs/screens/selector_320x640_1.3_8p.png), [revelación](docs/screens/reveal_320x640_1.3_8p.png) y [marcador](docs/screens/score_320x640_1.3_8p.png).
 

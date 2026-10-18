@@ -28,3 +28,12 @@ La petición de rediseño 1.0.1 sustituye las posiciones rígidas de la spec ori
 - [x] Aviso de privacidad retirado; decimales y tamaño del número estables.
 - [x] 99 casos: 15 tests de motor, 4 de integración y 80 capturas comparadas; lint debug sin incidencias y APK debug compilado.
 - [x] Release v1.0.2 publicada; CI y workflow correctos; APK oficial descargado y verificado (SHA256, firma v2, ARM64, versión 3 y 430 preguntas).
+
+## Revisión 1.0.3
+- [x] `decimal_places` explícito en JSON/Room: 412 preguntas enteras, 18 medidas con 1–3 decimales.
+- [x] Restricción común en regla, ajuste fino, teclado y confirmación; sin inferir precisión desde la respuesta durante el juego.
+- [x] Gráfica lineal desde cero con alturas proporcionales y eje visible; dominio estable en logarítmicas.
+- [x] Room 2 con migración 1→2 probada sobre DB real de 1.0.2, sin borrar preguntas ni preferencias.
+- [x] 111 casos (17 motor, 6 integración y 88 visuales), lint debug y build debug correctos.
+- [x] Comparación de las 88 referencias correcta.
+- [ ] APK release firmado y verificación remota de v1.0.3.
