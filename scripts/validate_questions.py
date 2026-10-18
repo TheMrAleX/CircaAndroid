@@ -32,7 +32,7 @@ def load_questions():
             assert type(q['difficulty']) is int and q['difficulty'] in (1,2,3), q['id']
             assert q['as_of_year'] is None or (type(q['as_of_year']) is int and 1 <= q['as_of_year'] <= 2100), q['id']
             assert q['unit'] is None or isinstance(q['unit'],str), q['id']
-            assert type(q['decimal_places']) is int and 0 <= q['decimal_places'] <= 3, q['id']
+            assert type(q['decimal_places']) is int and 0 <= q['decimal_places'] <= 6, q['id']
             for key in ('answer','min_plausible','max_plausible'):
                 assert Decimal(str(q[key])).normalize().as_tuple().exponent >= -q['decimal_places'], f'{q["id"]}: {key} exceeds decimal_places'
             questions.append(q)

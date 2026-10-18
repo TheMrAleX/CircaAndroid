@@ -18,3 +18,9 @@ Las preguntas astronómicas usan valores medios redondeados; no posiciones insta
 Se descargaron por HTTPS y contrastaron 27 números atómicos con Periodic-Table-JSON (Bowserinator), los recuentos de fronteras de Brasil, Chile, Argentina, México, Perú y Portugal con mledoze/countries y la velocidad exacta de la luz con astropy/constants/codata2018.py. Todas estas comprobaciones pasaron. Son fuentes públicas de corroboración, no una auditoría completa de cada pregunta. No se redistribuyen sus datasets.
 
 Los accesos directos a NASA, BIPM y RFC Editor devolvieron HTTP 403 por la política de red del entorno; se usaron los repositorios públicos anteriores para el muestreo disponible.
+
+## Catálogo nuevo 1.0.4 (18 de octubre de 2026)
+
+Sustituye el conjunto activo anterior por 400 preguntas generales. El muestreo histórico de arriba describe el catálogo anterior y no acredita las 400 filas nuevas. Se conserva la precisión de las referencias: NOAA para profundidad oceánica y composición del aire; anuncios Nepal/China para Everest; institutos geográficos para superficies; NASA para fichas planetarias; BIPM/NIST para constantes y conversiones; USDA FoodData Central/SR Legacy para alimentos; OMS para recomendaciones; reglamentos deportivos para dimensiones y recuentos; BCE e ISO para objetos cotidianos.
+
+En esta revisión los accesos directos a NOAA, Vaticano y Wikipedia devolvieron HTTP 403. No se declara un contraste web individual completo. Las filas incluyen pistas de fuentes conocidas para revisión posterior. Los valores astronómicos son referencias medias publicadas, con la precisión indicada por la fuente; no se han reducido para acercarlos a números fáciles. Las recomendaciones y estimaciones variables se identifican como tales. Los conteos permanecen enteros.
