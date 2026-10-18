@@ -40,7 +40,7 @@ class ScreensTest(private val width: Int,private val height: Int,private val sca
         RevealScreen(state.copy(pool=listOf(q),match=state.match!!.copy(guesses=listOf(guesses))),Actions())
     }
     @Test fun tiedResultsLowerRows()=capture("tied_results_lower") {
-        val q=state.pool.first().copy(answer=.5,unit=null,min=.001,max=100.0,scale="log")
+        val q=state.pool.first().copy(answer=.5,unit=null,min=.001,max=100.0,scale="log",decimalPlaces=3)
         val m=state.match!!.copy(config=state.config.copy(players=state.config.players.map{it.copy(name="Alejandra123")}),guesses=listOf(List(players){.5}))
         RevealScreen(state.copy(pool=listOf(q),match=m),Actions())
     }
@@ -56,11 +56,11 @@ class ScreensTest(private val width: Int,private val height: Int,private val sca
         SelectorScreen(state.copy(pool=listOf(q),match=state.match!!.copy(guesses=listOf(emptyList()))),Actions())
     }
     @Test fun selectorDecimal()=capture("selector_decimal") {
-        val q=state.pool.first().copy(answer=7.0,min=0.0,max=10.0,unit=null)
+        val q=state.pool.first().copy(answer=7.0,min=0.0,max=10.0,unit=null,decimalPlaces=2)
         SelectorScreen(state.copy(pool=listOf(q),match=state.match!!.copy(guesses=listOf(emptyList()))),Actions(),initialPosition=.332)
     }
     @Test fun selectorDecimalTrailingZero()=capture("selector_decimal_zero") {
-        val q=state.pool.first().copy(answer=7.0,min=0.0,max=10.0,unit=null)
+        val q=state.pool.first().copy(answer=7.0,min=0.0,max=10.0,unit=null,decimalPlaces=2)
         SelectorScreen(state.copy(pool=listOf(q),match=state.match!!.copy(guesses=listOf(emptyList()))),Actions(),initialPosition=.34)
     }
     @Test fun selectorMinimum()=capture("selector_minimum") {
@@ -68,6 +68,14 @@ class ScreensTest(private val width: Int,private val height: Int,private val sca
     }
     @Test fun selectorMaximum()=capture("selector_maximum") {
         SelectorScreen(state.copy(match=state.match!!.copy(guesses=listOf(emptyList()))),Actions(),initialPosition=1.0)
+    }
+    @Test fun closeEstimates()=capture("close_estimates") {
+        val q=state.pool.first().copy(text="¿Cuántos metros mide esta longitud?",answer=10.0,min=0.0,max=30.0,unit="m",decimalPlaces=2)
+        RevealScreen(state.copy(pool=listOf(q),match=state.match!!.copy(guesses=listOf(List(players){if(it%2==0) 9.99 else 8.99}))),Actions())
+    }
+    @Test fun zodiacIntegers()=capture("zodiac_integers") {
+        val q=state.pool.first().copy(text="¿Cuántos signos tiene el zodiaco occidental tradicional?",answer=12.0,min=0.0,max=36.0,unit=null,decimalPlaces=0)
+        SelectorScreen(state.copy(pool=listOf(q),match=state.match!!.copy(guesses=listOf(emptyList()))),Actions(),initialPosition=.333)
     }
     companion object {
         @JvmStatic @Parameterized.Parameters(name="{0}x{1}@{2}-{3}p") fun params()=listOf(

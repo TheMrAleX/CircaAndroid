@@ -119,7 +119,7 @@ fun formatNumber(value: Double, compact: Boolean = false, fractionDigits: Int? =
 }
 
 /** Proportional linear bars start at zero. Log charts retain the question's domain. */
-class ComparisonScale(q: Question, guesses: List<Double>) {
+class ComparisonScale(private val q: Question, guesses: List<Double>) {
     private val logarithmic = q.scale == "log"
     private fun transform(value: Double): Double {
         require(value.isFinite() && value >= 0 && (!logarithmic || value > 0))
@@ -129,13 +129,13 @@ class ComparisonScale(q: Question, guesses: List<Double>) {
     val minimum: Double = if(logarithmic) min(q.min,values.min()) else 0.0
     val maximum: Double = if(logarithmic) max(q.max,values.max()) else run {
         val upper=values.max().coerceAtLeast(10.0.pow(-q.decimalPlaces))*1.15
-        val tick=RulerScale.niceStep(upper/4)
+        val tick=RulerScale.niceStep(upper/4).coerceAtLeast(10.0.pow(-q.decimalPlaces))
         ceil(upper/tick)*tick
     }
     private val low=transform(minimum)
     private val span=transform(maximum)-low
     fun position(value: Double): Float = ((transform(value)-low)/span).toFloat().coerceIn(0f,1f)
-    val ticks: List<Double> get() = listOf(minimum,if(logarithmic) exp(low+span/2) else maximum/2,maximum)
+    val ticks: List<Double> get() = listOf(minimum,EstimateInput.round(q,if(logarithmic) exp(low+span/2) else maximum/2),maximum).distinct()
 }
 
 object EstimateInput {

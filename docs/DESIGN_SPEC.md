@@ -156,3 +156,7 @@ CONTROL DE CALIDAD VISUAL (hazlo antes de cerrar la fase)
 ## Corrección del usuario para 1.0.2 (prioritaria sobre las revisiones previas)
 
 La revelación debe conservar la gráfica vertical de barras. La regla del selector debe quedar fija; el panel del color del jugador y el número se mueven arriba y abajo en tiempo real. Eliminar el aviso de no mirar la pantalla ajena. Estabilizar los decimales y la tipografía al cambiar el número, incluyendo 3,32 → 3,40. Conservar controles accesibles y no solapar etiquetas con 2–8 jugadores.
+
+## Corrección del usuario para 1.0.3
+
+Los conteos usan enteros; solo unas pocas medidas admiten decimales mediante metadatos explícitos. La gráfica no debe exagerar la separación de 9,99 y 8,99: las barras lineales parten de cero con alturas proporcionales y eje numérico visible. Las escalas logarítmicas conservan el dominio de la pregunta.

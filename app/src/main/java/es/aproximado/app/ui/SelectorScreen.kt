@@ -51,9 +51,8 @@ val LocalFeedback = staticCompositionLocalOf<(Boolean)->Unit> { {} }
     val leaving=remember { Animatable(0f) }
     val decay=rememberSplineBasedDecay<Float>()
     val value=exact ?: RulerScale.snapped(q,position.toDouble())
-    var decimalPlaces by remember(q.id,m.turn) { mutableIntStateOf(RulerScale.fractionDigits(q)) }
-    val display=formatEstimate(q,value,decimalPlaces)
-    val reference=remember(q,decimalPlaces) { formatEstimate(q,q.max,decimalPlaces).replace(Regex("[0-9]"),"8") }
+    val display=formatEstimate(q,value)
+    val reference=remember(q) { formatEstimate(q,q.max).replace(Regex("[0-9]"),"8") }
     var controlsHeight by remember { mutableIntStateOf(0) }
     fun setPosition(next: Float) {
         if(submitted) return
@@ -65,8 +64,8 @@ val LocalFeedback = staticCompositionLocalOf<(Boolean)->Unit> { {} }
     }
     fun fine(direction: Int) {
         flingJob?.cancel()
-        val step=RulerScale.step(q,value)
-        val next=(value+direction*step).coerceIn(q.min,q.max)
+        val step=EstimateInput.fineStep(q)
+        val next=EstimateInput.round(q,(value+direction*step).coerceIn(q.min,q.max))
         position=RulerScale.position(q,next).toFloat();exact=next;feedback(false)
     }
     ScreenColumn {
@@ -130,19 +129,19 @@ val LocalFeedback = staticCompositionLocalOf<(Boolean)->Unit> { {} }
     }
     if(keyboard) {
         val parsed=input.trim().replace(" ","").replace(",",".").toDoubleOrNull()
-        val enteredPlaces=parsed?.takeIf { it.isFinite() }?.let { java.math.BigDecimal.valueOf(it).stripTrailingZeros().scale().coerceAtLeast(0) } ?: 0
-        val valid=parsed!=null && parsed.isFinite() && parsed in q.min..q.max && enteredPlaces<=6
+        val valid=parsed!=null && EstimateInput.accepts(q,parsed)
         ModalBottomSheet(onDismissRequest={keyboard=false},containerColor=Tokens.surface,shape=RoundedCornerShape(topStart=28.dp,topEnd=28.dp)) {
             Column(Modifier.fillMaxWidth().imePadding().verticalScroll(rememberScrollState()).padding(24.dp),verticalArrangement=Arrangement.spacedBy(16.dp)) {
                 Label(stringResource(R.string.numeric_title),size=22,bold=true)
                 val estimateLabel=stringResource(R.string.number_hint)
                 BasicTextField(input,{input=it.take(24)},Modifier.fillMaxWidth().heightIn(min=64.dp).semantics { contentDescription=estimateLabel },singleLine=true,
                     textStyle=TextStyle(color=Color.White,fontSize=44.sp,fontWeight=FontWeight.Black,fontFamily=Tokens.display),
-                    keyboardOptions=KeyboardOptions(keyboardType=KeyboardType.Decimal),cursorBrush=SolidColor(style.color))
+                    keyboardOptions=KeyboardOptions(keyboardType=if(q.decimalPlaces==0) KeyboardType.Number else KeyboardType.Decimal),cursorBrush=SolidColor(style.color))
                 Label(stringResource(R.string.number_range,formatNumber(q.min),formatNumber(q.max)),size=13,color=Tokens.muted)
+                Label(if(q.decimalPlaces==0) stringResource(R.string.integer_only) else androidx.compose.ui.res.pluralStringResource(R.plurals.decimal_precision,q.decimalPlaces,q.decimalPlaces),size=13,color=Tokens.muted)
                 if(!valid) Label(stringResource(R.string.invalid_number),size=13,color=Tokens.danger)
                 GameButton(stringResource(R.string.accept),enabled=valid,color=style.color,ink=style.ink) {
-                    if(valid) { decimalPlaces=maxOf(decimalPlaces,enteredPlaces);exact=parsed;position=RulerScale.position(q,parsed!!).toFloat();keyboard=false }
+                    if(valid) { exact=parsed;position=RulerScale.position(q,parsed!!).toFloat();keyboard=false }
                 }
             }
         }

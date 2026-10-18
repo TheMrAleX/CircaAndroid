@@ -57,7 +57,8 @@ import kotlin.math.*
         BoxWithConstraints(Modifier.weight(1f).fillMaxWidth().padding(horizontal=12.dp).clipToBounds()
             .clickable(onClickLabel=stringResource(R.string.show_result)) { scope.launch { progress.snapTo(1f) } }) {
             val density=LocalDensity.current
-            val slot=maxWidth/scores.size
+            val axisWidth=56.dp
+            val slot=(maxWidth-axisWidth)/scores.size
             val top=32.dp
             val bottom=(maxHeight-32.dp).coerceAtLeast(top+1.dp)
             val plotHeight=bottom-top
@@ -65,9 +66,13 @@ import kotlin.math.*
             RulerCanvas(Modifier.fillMaxSize().alpha(.3f))
             Canvas(Modifier.fillMaxSize()) {
                 val baseline=with(density) { bottom.toPx() }
+                scale.ticks.forEach { tick ->
+                    val tickY=with(density) { y(tick).toPx() }
+                    drawLine(Color.White.copy(alpha=.12f),Offset(with(density) { axisWidth.toPx() },tickY),Offset(size.width,tickY),1.dp.toPx())
+                }
                 scores.forEachIndexed { index,score ->
                     val style=Tokens.players[m.config.players[score.playerId].style]
-                    val x=with(density) { (slot*index+3.dp).toPx() }
+                    val x=with(density) { (axisWidth+slot*index+3.dp).toPx() }
                     val width=with(density) { (slot-6.dp).toPx() }
                     val target=with(density) { y(score.guess).toPx() }
                     val barTop=baseline+(target-baseline)*progress.value
@@ -76,17 +81,21 @@ import kotlin.math.*
                     if(score.rank==1) drawRoundRect(Tokens.gold,Offset(x,barTop),Size(width,height),CornerRadius(14.dp.toPx()),style=Stroke(2.dp.toPx()))
                 }
                 val answerY=with(density) { y(q.answer).toPx() }
-                drawLine(Color.White,Offset(0f,answerY),Offset(size.width,answerY),2.dp.toPx(),pathEffect=PathEffect.dashPathEffect(floatArrayOf(12.dp.toPx(),8.dp.toPx())))
+                drawLine(Color.White,Offset(with(density) { axisWidth.toPx() },answerY),Offset(size.width,answerY),2.dp.toPx(),pathEffect=PathEffect.dashPathEffect(floatArrayOf(12.dp.toPx(),8.dp.toPx())))
             }
+            scale.ticks.drop(1).forEach { tick ->
+                Label(formatNumber(tick,true).replace(" ",""),Modifier.offset(y=(y(tick)-8.dp).coerceAtLeast(0.dp)).width(axisWidth).background(Tokens.bg).padding(end=4.dp),11,Tokens.muted)
+            }
+            Label(formatNumber(scale.minimum,true).replace(" ",""),Modifier.offset(y=bottom+4.dp).width(axisWidth).background(Tokens.bg),13,Tokens.muted)
             scores.forEachIndexed { index,score ->
-                if(score.rank==1) Box(Modifier.offset(x=slot*index,y=(y(score.guess)-30.dp).coerceAtLeast(0.dp)).width(slot),contentAlignment=Alignment.Center) { Crown(Modifier.size(24.dp)) }
+                if(score.rank==1) Box(Modifier.offset(x=axisWidth+slot*index,y=(y(score.guess)-30.dp).coerceAtLeast(0.dp)).width(slot),contentAlignment=Alignment.Center) { Crown(Modifier.size(24.dp)) }
                 if(scores.size<=4 && progress.value>=.95f) {
                     val labelY=(y(score.guess)+8.dp).coerceAtMost((bottom-44.dp).coerceAtLeast(0.dp))
-                    Box(Modifier.offset(x=slot*index,y=labelY).width(slot).padding(horizontal=4.dp),contentAlignment=Alignment.Center) {
+                    Box(Modifier.offset(x=axisWidth+slot*index,y=labelY).width(slot).padding(horizontal=4.dp),contentAlignment=Alignment.Center) {
                         ValuePill(formatNumber(score.guess,true),small=scores.size>2)
                     }
                 }
-                Box(Modifier.offset(x=slot*index,y=bottom+4.dp).width(slot),contentAlignment=Alignment.Center) {
+                Box(Modifier.offset(x=axisWidth+slot*index,y=bottom+4.dp).width(slot),contentAlignment=Alignment.Center) {
                     Label((score.playerId+1).toString(),size=13,color=Tokens.players[m.config.players[score.playerId].style].inkLight,bold=true)
                 }
             }

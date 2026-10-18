@@ -39,7 +39,7 @@
     <string name="accept">Aceptar</string>
     <string name="number_hint">Tu estimación</string>
     <string name="number_range">Entre %1$s y %2$s</string>
-    <string name="invalid_number">Introduce un número válido dentro del rango, con hasta 6 decimales.</string>
+    <string name="invalid_number">Introduce un número válido dentro del rango y con la precisión indicada.</string>
     <string name="exit_title">¿Salir de la partida?</string>
     <string name="keep_playing">Seguir jugando</string>
     <string name="exit">Salir</string>
@@ -60,7 +60,7 @@
     <string name="clear_confirm">Borrar</string>
     <string name="cancel">Cancelar</string>
     <string name="about">Acerca de</string>
-    <string name="about_text">Versión 1.0.2 · Licencia MIT
+    <string name="about_text">Versión 1.0.3 · Licencia MIT
 No está afiliada a ningún juego existente</string>
     <string name="loading">Preparando las preguntas…</string>
     <string name="error_load">No se pudo abrir la base de preguntas. Vuelve a abrir la app.</string>
@@ -89,4 +89,6 @@ No está afiliada a ningún juego existente</string>
     <string name="show_result">Mostrar resultado</string>
     <string name="bar_player">%1$d · %2$s</string>
     <string name="log_scale">Logarítmica</string>
+    <string name="integer_only">Solo números enteros</string>
+    <plurals name="decimal_precision"><item quantity="one">Hasta %1$d decimal</item><item quantity="other">Hasta %1$d decimales</item></plurals>
 </resources>

@@ -173,6 +173,8 @@ class GameTest {
         assertTrue(ComparisonScale(question.copy(answer=0.0),List(8){0.0}).maximum>0)
         val tiny=ComparisonScale(question.copy(answer=.005,decimalPlaces=3),listOf(.004,.005))
         assertTrue(tiny.maximum<.01)
+        val counts=ComparisonScale(question.copy(answer=4.0,decimalPlaces=0),listOf(3.0,4.0))
+        assertTrue(counts.ticks.all { it==kotlin.math.floor(it) })
         assertEquals(1.25,(tiny.position(.005)/tiny.position(.004)).toDouble(),1e-6)
     }
 
