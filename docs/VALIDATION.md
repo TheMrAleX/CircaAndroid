@@ -65,3 +65,9 @@ Se compararon las firmas oficiales de 1.0.1 y 1.0.2: difieren, por lo que la ins
 Se añadieron comprobaciones del zodiaco (sin decimales), restricciones en todos los caminos de entrada, migración de una DB v1 real y comparación completa con el asset v2. Las 430 preguntas se validan con precisión explícita: 412 enteras y 18 medidas de 1–3 decimales.
 
 La regresión 9,99/8,99 comprueba la relación de alturas 9,99/8,99 y una separación menor del 10% del gráfico. Se revisaron capturas de ese caso y del zodiaco, también con 8 jugadores y fuente al 130%. La gráfica lineal tiene origen cero; las marcas del eje respetan la precisión. La logarítmica usa los extremos de la pregunta, sin autozoom. No se modifican las reglas de puntuación ni se reescriben estimaciones históricas.
+
+## Evidencia remota 1.0.3 (18 de octubre de 2026)
+
+CI `39093624442` y release `39093675819` terminaron correctamente para `bd071e8`. Se descargaron el APK y SHA256 oficiales; checksum `7c83874ab90fb5d412665b91a28c31f1236c76087821aae1ba21a549e15fa435`. Se verificaron firma v2, versión 1.0.3/código 4, ABI ARM64 exclusivo, ausencia de INTERNET, integridad SQLite, esquema 2 y distribución de precisión 412/6/10/2 para 0/1/2/3 decimales. El APK incluye la migración y excluye la DB fixture de pruebas. Informes locales: 17 tests de motor y 94 de app (6 de integración + 88 visuales), sin fallos ni omitidos; comparación de las 88 referencias y lint debug/release correctos.
+
+Las firmas oficiales de 1.0.2 y 1.0.3 difieren. La instalación pública requiere desinstalar la anterior y borra sus datos locales; la migración de Room probada solo puede preservar datos en una actualización firmada con clave compatible. Detalle en RELEASING.md. Sin prueba física ni medición de FPS.

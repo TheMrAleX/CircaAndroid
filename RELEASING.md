@@ -85,3 +85,20 @@ a01186cdca1428fb36bc84aad163937593c5b3727ac4969d97259054fb29e732
 ```
 
 Certificado SHA256: `77dde14adbea29eee3916cd2496a400cfff746d6bad3f9352a9ef8c2f8c000d6`. Es distinto del de v1.0.1: la firma temporal vuelve a requerir desinstalar la versión anterior, con pérdida de partida, configuración e historial locales. No se dispone de la clave temporal anterior para producir una actualización compatible. Para futuras versiones, configurar una clave estable mediante las secrets indicadas al inicio.
+
+## Publicación verificada: v1.0.3
+
+Publicada el 18 de octubre de 2026 desde `bd071e8` (versionCode 4):
+
+- [Release v1.0.3](https://github.com/TheMrAleX/CircaAndroid/releases/tag/v1.0.3)
+- [APK ARM64 firmado](https://github.com/TheMrAleX/CircaAndroid/releases/download/v1.0.3/Aproximado-v1.0.3-arm64-v8a.apk)
+- [CI correcto](https://github.com/TheMrAleX/CircaAndroid/actions/runs/39093624442)
+- [Release correcta](https://github.com/TheMrAleX/CircaAndroid/actions/runs/39093675819)
+
+El APK oficial descargado verifica firma v2, ARM64 exclusivo, versión 1.0.3/código 4, SQLite esquema 2 íntegra con 430 preguntas (412 enteras, 6 de un decimal, 10 de dos y 2 de tres), migración SQL empaquetada y ausencia de INTERNET. La fixture v1 de los tests no se empaqueta. SHA256:
+
+```text
+7c83874ab90fb5d412665b91a28c31f1236c76087821aae1ba21a549e15fa435
+```
+
+Certificado SHA256: `67207e3529bb31bd8bca2c1de1e62f6e2a4b82c82e0e9eecdcd7de92a939c362`. Es distinto del de 1.0.2, por lo que Android requiere desinstalar la anterior, perdiendo los datos locales. La migración de Room conserva datos cuando se instala una actualización con firma compatible; no evita la restricción de firmas de Android. Para futuras versiones compatibles, usar las secrets de una clave estable descritas al inicio.

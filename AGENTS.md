@@ -36,4 +36,4 @@ La petición de rediseño 1.0.1 sustituye las posiciones rígidas de la spec ori
 - [x] Room 2 con migración 1→2 probada sobre DB real de 1.0.2, sin borrar preguntas ni preferencias.
 - [x] 111 casos (17 motor, 6 integración y 88 visuales), lint debug y build debug correctos.
 - [x] Comparación de las 88 referencias correcta.
-- [ ] APK release firmado y verificación remota de v1.0.3.
+- [x] Release v1.0.3 publicada; CI y release correctos; APK oficial descargado y verificado (firma v2, SHA256, ARM64 y DB v2 con 412 enteras/18 decimales).
