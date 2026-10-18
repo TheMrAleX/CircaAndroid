@@ -1,4 +1,4 @@
-# Validación de Aproximado 1.0.5
+# Validación de Aproximado 1.0.6
 
 ## Alcance
 
@@ -94,3 +94,13 @@ Build release local 1.0.5 con R8, recursos reducidos y firma v2 correcto; lint r
 ## Publicación 1.0.5 verificada
 
 CI `39147800217` y release `39147825478` correctos. APK oficial descargado: SHA256 `c05771068822dfcaf6f3dd3e94815dab31caecfc811a3ce56fd5fdfe50ba63a6`, firma v2 RSA3072, versión 1.0.5/código 6 y ARM64 exclusivo. Catálogo SQLite 3 íntegro y coincidencia completa de sus 400 filas con los JSON. Manifest con servicio LAN connectedDevice no exportado, permisos normales LAN/foreground/wake lock y notificaciones opcionales; sin permisos de ubicación ni escaneo. Firma distinta de 1.0.4 y necesidad de desinstalar documentadas en README/RELEASING. Las pruebas físicas descritas en LAN.md siguen pendientes por falta de dispositivos.
+
+## Espera animada 1.0.6
+
+174 casos correctos: 28 de motor/protocolo, 9 Android, 136 capturas y 1 prueba de animación. Se revisó la espera en 320×640/fontScale 1.3 con ocho jugadores: título, contador y controles visibles; roster desplazable. Anillo propio alrededor del avatar, giro EaseInOutCubic de 2200 ms y pulsación de 1100 ms, actualizados solo en graphicsLayer.
+
+Además de la fase fija de previews, WaitingMotionTest ejecuta el reloj real con LocalInspectionMode=false: 0–2200 ms a 10 fps, 23 fotogramas APNG y 22 imágenes distintas. Se revisaron fases de inicio/mitad y se comparó la referencia animada con verifyPaparazziDebug. Evidencia en docs/screens/waiting_orbit.png. No es una medición de rendimiento en hardware físico.
+
+`:core:test :app:verifyPaparazziDebug :app:lintDebug :app:assembleDebug` correcto; lint debug sin incidencias. El usuario informó que 1.0.5 funciona correctamente en su prueba física. Este entorno no realizó nuevas pruebas en teléfonos para 1.0.6.
+
+Build release local 1.0.6 con R8 y firma v2 correcto; lint release sin incidencias.

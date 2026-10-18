@@ -2,9 +2,9 @@
 
 Juego nativo Android de trivia numérica para **2–8 personas**: pasando un teléfono o con un teléfono por jugador en **LAN por Wi-Fi/hotspot**. 400 preguntas en español y 12 categorías, sin servidores externos, anuncios ni analytics. No requiere acceso a Internet.
 
-**[Descargar APK firmado v1.0.5](https://github.com/TheMrAleX/CircaAndroid/releases/download/v1.0.5/Aproximado-v1.0.5-arm64-v8a.apk)** · [Release y SHA256](https://github.com/TheMrAleX/CircaAndroid/releases/tag/v1.0.5)
+**[Descargar APK firmado v1.0.6](https://github.com/TheMrAleX/CircaAndroid/releases/download/v1.0.6/Aproximado-v1.0.6-arm64-v8a.apk)** · [Release y SHA256](https://github.com/TheMrAleX/CircaAndroid/releases/tag/v1.0.6)
 
-**Firma y actualizaciones:** la firma de 1.0.5 difiere de 1.0.4. Android requiere desinstalar la anterior; se perderán los datos locales. [Detalle de firma](RELEASING.md).
+**Firma y actualizaciones:** consulta las notas de la release: si cambia la firma, Android requiere desinstalar la anterior y se pierden los datos locales. [Detalle de firma](RELEASING.md).
 
 ## LAN por Wi-Fi o hotspot
 
@@ -30,7 +30,7 @@ Si termina el proceso del anfitrión, la sala termina y hay que crear otra. Algu
 - **Revelación:** gráfica vertical de barras por estimación, línea de respuesta real, corona y leyenda de puntos.
 - **Marcador y resultado:** puntuación acumulada, puestos compartidos en empate y podio final.
 
-Novedades 1.0.5: modo LAN nativo con salas, descubrimiento local, entrada manual, anfitrión autoritativo, respuestas privadas simultáneas, reconexión y servicio de sesión activa. Se conserva el catálogo renovado de 400 preguntas, las cifras publicadas y el juego de un teléfono. [Cambios completos](docs/releases/v1.0.5.md).
+Novedades 1.0.6: pantalla LAN «Esperando resultados…» con anillo del color del jugador, giro EaseInOutCubic y pulsación suave. Se mantiene el contador real de confirmaciones y la revelación automática cuando todos terminan. [Vista previa animada](docs/screens/waiting_orbit.png) · [Cambios completos](docs/releases/v1.0.6.md).
 
 Ejemplos LAN: [crear sala](docs/screens/lan_entry_320x640_1.3_8p.png), [unirse](docs/screens/lan_join_form_320x640_1.3_8p.png) y [espera](docs/screens/lan_waiting_320x640_1.3_8p.png).
 
