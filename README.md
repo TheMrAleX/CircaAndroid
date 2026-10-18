@@ -22,7 +22,7 @@ Juego nativo Android de trivia numérica para **2–8 personas** que se pasan un
 - **Revelación:** gráfica vertical de barras por estimación, línea de respuesta real, corona y leyenda de puntos.
 - **Marcador y resultado:** puntuación acumulada, puestos compartidos en empate y podio final.
 
-Novedades 1.0.4: banco renovado de 400 preguntas reconocibles en 12 categorías, con las cifras de referencia a su precisión publicada: sin redondeos para facilitar aciertos. 351 valores enteros y 49 medidas con decimales. Cambio directo entre jugadores y cabecera integrada. Las partidas antiguas conservan sus preguntas al migrar la DB; las nuevas usan exclusivamente el catálogo nuevo. [Cambios completos](docs/releases/v1.0.4.md).
+Novedades 1.0.4: banco renovado de 400 preguntas reconocibles en 12 categorías, con las cifras de referencia a su precisión publicada: sin redondeos para facilitar aciertos. 350 valores enteros y 50 medidas con decimales. Cambio directo entre jugadores y cabecera integrada. Las partidas antiguas conservan sus preguntas al migrar la DB; las nuevas usan exclusivamente el catálogo nuevo. [Cambios completos](docs/releases/v1.0.4.md).
 
 Ejemplos: [selector de 8 jugadores](docs/screens/selector_320x640_1.3_8p.png), [revelación](docs/screens/reveal_320x640_1.3_8p.png) y [marcador](docs/screens/score_320x640_1.3_8p.png).
 

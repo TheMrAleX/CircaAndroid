@@ -84,8 +84,8 @@ class OfflineGameTest {
         val initial=loaded()
         val zodiac=initial.state.value.pool.first { it.id=="v104_cultura_001" }
         assertEquals(0,zodiac.decimalPlaces)
-        assertEquals(351,initial.state.value.pool.count { it.decimalPlaces==0 })
-        assertEquals(49,initial.state.value.pool.count { it.decimalPlaces>0 })
+        assertEquals(350,initial.state.value.pool.count { it.decimalPlaces==0 })
+        assertEquals(50,initial.state.value.pool.count { it.decimalPlaces>0 })
         initial.configure { it.copy(rounds=5) };initial.start()
         val prefs=app.getSharedPreferences("aproximado",0)
         val state=org.json.JSONObject(prefs.getString("state",null)!!)

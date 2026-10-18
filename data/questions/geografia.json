@@ -30,15 +30,15 @@
   {
     "id": "v104_geografia_003",
     "category": "Geografía",
-    "text_es": "¿Cuántas hectáreas ocupa aproximadamente la Ciudad del Vaticano, el país más pequeño?",
-    "answer": 44.0,
+    "text_es": "¿Cuántas hectáreas atribuye el Vaticano a su territorio en su descripción oficial?",
+    "answer": 44,
     "unit": "ha",
     "min_plausible": 0,
     "max_plausible": 132,
     "scale": "linear",
     "difficulty": 2,
     "as_of_year": null,
-    "source_hint": "Estado de la Ciudad del Vaticano: superficie de referencia 44 hectáreas",
+    "source_hint": "Estado de la Ciudad del Vaticano: descripción oficial del territorio, 44 hectáreas",
     "decimal_places": 0
   },
   {

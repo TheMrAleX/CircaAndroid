@@ -142,16 +142,16 @@
   {
     "id": "v104_espacio_011",
     "category": "Espacio",
-    "text_es": "¿Cuántos kilómetros mide el diámetro ecuatorial terrestre según la ficha de referencia NASA?",
-    "answer": 12756.0,
+    "text_es": "¿Cuántos kilómetros mide el diámetro ecuatorial terrestre en la ficha de referencia NASA?",
+    "answer": 12756.2,
     "unit": "km",
     "min_plausible": 0,
     "max_plausible": 38268,
     "scale": "linear",
     "difficulty": 2,
     "as_of_year": null,
-    "source_hint": "NASA Solar System Exploration; ESA; IAU; archivos Apollo",
-    "decimal_places": 0
+    "source_hint": "NASA Earth Fact Sheet: radio ecuatorial 6378.1 km, diámetro ecuatorial 12756.2 km",
+    "decimal_places": 1
   },
   {
     "id": "v104_espacio_012",
@@ -170,15 +170,15 @@
   {
     "id": "v104_espacio_013",
     "category": "Espacio",
-    "text_es": "¿Cuántos kilómetros mide el diámetro del Sol según la ficha de referencia NASA?",
-    "answer": 1392700.0,
+    "text_es": "¿Cuántos kilómetros mide el diámetro nominal del Sol según la Unión Astronómica Internacional?",
+    "answer": 1391400,
     "unit": "km",
     "min_plausible": 10000,
     "max_plausible": 100000000,
     "scale": "log",
     "difficulty": 2,
     "as_of_year": null,
-    "source_hint": "NASA Solar System Exploration; ESA; IAU; archivos Apollo",
+    "source_hint": "IAU 2015 Resolution B3: radio solar nominal 695700 km; diámetro nominal 1391400 km",
     "decimal_places": 0
   },
   {
@@ -212,15 +212,15 @@
   {
     "id": "v104_espacio_016",
     "category": "Espacio",
-    "text_es": "¿Cuántos millones de años tiene el universo según los resultados de Planck de 2018?",
-    "answer": 13787.0,
+    "text_es": "¿Cuántos millones de años tiene el universo en los resultados Planck 2018 combinados con BAO?",
+    "answer": 13787,
     "unit": "millones de años",
     "min_plausible": 0,
     "max_plausible": 41361,
     "scale": "linear",
     "difficulty": 2,
     "as_of_year": 2018,
-    "source_hint": "Planck Collaboration 2018, resultados cosmológicos: edad central 13.787 mil millones de años",
+    "source_hint": "Planck 2018 VI, tabla 2, TT,TE,EE+lowE+lensing+BAO: edad 13.787 ± 0.020 mil millones de años",
     "decimal_places": 0
   },
   {
@@ -268,29 +268,29 @@
   {
     "id": "v104_espacio_020",
     "category": "Espacio",
-    "text_es": "¿Cuántos años terrestres dura una vuelta de Júpiter al Sol, con dos decimales?",
-    "answer": 11.86,
-    "unit": "años",
+    "text_es": "¿Cuántos días terrestres dura una vuelta de Júpiter al Sol en la referencia NASA?",
+    "answer": 4332.589,
+    "unit": "días",
     "min_plausible": 0,
-    "max_plausible": 36,
+    "max_plausible": 15000,
     "scale": "linear",
     "difficulty": 2,
     "as_of_year": null,
-    "source_hint": "NASA Solar System Exploration; ESA; IAU; archivos Apollo",
-    "decimal_places": 2
+    "source_hint": "NASA Jupiter Fact Sheet: período orbital sideral 4332.589 días",
+    "decimal_places": 3
   },
   {
     "id": "v104_espacio_021",
     "category": "Espacio",
-    "text_es": "¿Cuántos años terrestres dura una vuelta de Saturno al Sol, con dos decimales?",
-    "answer": 29.46,
-    "unit": "años",
+    "text_es": "¿Cuántos días terrestres dura una vuelta de Saturno al Sol en la referencia NASA?",
+    "answer": 10759.22,
+    "unit": "días",
     "min_plausible": 0,
-    "max_plausible": 89,
+    "max_plausible": 35000,
     "scale": "linear",
     "difficulty": 3,
     "as_of_year": null,
-    "source_hint": "NASA Solar System Exploration; ESA; IAU; archivos Apollo",
+    "source_hint": "NASA Saturn Fact Sheet: período orbital sideral 10759.22 días",
     "decimal_places": 2
   },
   {

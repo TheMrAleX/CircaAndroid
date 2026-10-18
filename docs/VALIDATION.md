@@ -1,12 +1,14 @@
-# Validación de Aproximado 1.0.3
+# Validación de Aproximado 1.0.4
 
 ## Alcance
 
-- 430 preguntas en 12 categorías; JSON estricto e integridad SQLite.
+- 400 preguntas nuevas en 12 categorías (350 enteras y 50 con decimales publicados); JSON estricto e integridad SQLite.
 - Motor Kotlin: ranking lineal/log, empates, bonus exacto y <1%, cero y fracciones, formato español, selección sin repetir y memoria reciente, partidas completas de 2 y 8 jugadores.
-- Integración Robolectric con Room real: apertura del asset, partidas completas de cinco rondas con 2/8 jugadores, restauración del proceso detrás del pase privado, límites de configuración y estado corrupto.
-- Paparazzi: 88 casos: las nueve pantallas, formatos extremos, extremos de la regla, decimales estables, filtros, empates, signos zodiacales enteros y el caso 9,99/8,99 en cuatro configuraciones. 360×800 con 2/8 jugadores; 320×640 con 8 jugadores y fontScale 1.3; 411×914 con 2 jugadores y fontScale 1.3. Se revisaron selector, revelación, marcador, podio, intro, configuración y formatos enormes/decimales. Las listas se desplazan para acceder a todos los jugadores en pantallas pequeñas.
+- Integración Robolectric con Room real: apertura del asset, partidas completas de cinco rondas con 2/8 jugadores, restauración directa en el selector del siguiente jugador, límites de configuración y estado corrupto.
+- Paparazzi: 100 casos: las ocho pantallas vigentes, formatos extremos, extremos de la regla, decimales estables, filtros, empates, signos zodiacales enteros, cabecera del siguiente jugador, medidas con cinco decimales, respuesta completa y el caso 9,99/8,99 en cuatro configuraciones. 360×800 con 2/8 jugadores; 320×640 con 8 jugadores y fontScale 1.3; 411×914 con 2 jugadores y fontScale 1.3. Se revisaron selector, revelación, marcador, podio, intro, configuración y formatos enormes/decimales. Las listas se desplazan para acceder a todos los jugadores en pantallas pequeñas.
 - Sin emulador ni dispositivo físico: no se afirma una medición de rendimiento, prueba de gestos táctiles en hardware ni inspección real de recientes. La protección se implementa con FLAG_SECURE exclusivamente en el selector y con eliminación inmediata de la pantalla al pasar turno.
+
+La revisión 1.0.4 ejecutó 126 casos sin fallos, errores ni omisiones: 18 de motor, 8 de integración y 100 visuales. Se compararon las 100 referencias tras revisarlas; lint debug y build debug correctos. Las migraciones 1→2→3 y 2→3 se ejecutaron sobre bases reales de las versiones anteriores, con 400 preguntas activas y 430 archivadas, conservando las precisiones de las partidas antiguas. Se verificaron el bloqueo de confirmaciones tardías y la normalización de guardados PASS antiguos.
 
 Los renders fuerzan el estado final de las animaciones mediante LocalInspectionMode; comprueban composición y geometría, no el tiempo de cada secuencia. Las pruebas de integración ejecutan el motor y los checkpoints reales sin esa sustitución.
 

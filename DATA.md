@@ -1,6 +1,6 @@
 # Preguntas offline
 
-El catálogo activo de 1.0.4 contiene **400 preguntas en 12 categorías**: 351 conteos/valores enteros y 49 medidas con decimales. Cada categoría tiene al menos 25. Los JSON son la fuente de verdad; `questions.db` es el asset SQLite que abre Room mediante `createFromAsset`.
+El catálogo activo de 1.0.4 contiene **400 preguntas en 12 categorías**: 350 conteos/valores enteros y 50 medidas con decimales. Cada categoría tiene al menos 25. Los JSON son la fuente de verdad; `questions.db` es el asset SQLite que abre Room mediante `createFromAsset`.
 
 Añade objetos en `data/questions/<categoria>.json`. Campos: `id` único y estable, `category`, `text_es`, `answer` numérico, `unit` (texto o null), `min_plausible`, `max_plausible`, `scale` (`linear`/`log`), `difficulty` (1–3), `as_of_year` (año o null), `source_hint`, `decimal_places` (0–6).
 
