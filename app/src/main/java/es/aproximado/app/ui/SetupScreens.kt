@@ -196,7 +196,6 @@ fun emoji(category: String) = when(category) {
             Label(p.name,size=36,color=style.ink,bold=true,center=true)
         }
         Column(Modifier.fillMaxWidth().padding(20.dp),verticalArrangement=Arrangement.spacedBy(16.dp)) {
-            Label(stringResource(R.string.private_hint),Modifier.fillMaxWidth(),13,style.ink,center=true)
             GameButton(stringResource(R.string.ready),color=Color.White,ink=style.ink) { actions.advance(Screen.SELECT) }
         }
     }

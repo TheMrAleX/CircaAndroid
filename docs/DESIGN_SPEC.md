@@ -152,3 +152,7 @@ CONTROL DE CALIDAD VISUAL (hazlo antes de cerrar la fase)
 - El número gigante nunca se sale de pantalla (probado con 1.400.000.000 y con 0,5).
 - Ninguna pantalla muestra la estimación de un jugador a otro antes de la Revelación (el pase de turno limpia la pantalla anterior; la pantalla del selector no aparece en la vista de apps recientes: aplica FLAG_SECURE solo en esa pantalla si no afecta al resto).
 - Anota en DECISIONS.md cualquier desvío de esta spec y por qué.
+
+## Corrección del usuario para 1.0.2 (prioritaria sobre las revisiones previas)
+
+La revelación debe conservar la gráfica vertical de barras. La regla del selector debe quedar fija; el panel del color del jugador y el número se mueven arriba y abajo en tiempo real. Eliminar el aviso de no mirar la pantalla ajena. Estabilizar los decimales y la tipografía al cambiar el número, incluyendo 3,32 → 3,40. Conservar controles accesibles y no solapar etiquetas con 2–8 jugadores.

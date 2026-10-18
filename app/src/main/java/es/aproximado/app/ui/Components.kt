@@ -87,7 +87,7 @@ import kotlin.random.Random
     }
 }
 
-@Composable fun BigNumber(text: String, modifier: Modifier = Modifier, style: PlayerStyle = Tokens.players[0], maxSize: Int = 96, glass: Boolean = false) {
+@Composable fun BigNumber(text: String, modifier: Modifier = Modifier, style: PlayerStyle = Tokens.players[0], maxSize: Int = 96, glass: Boolean = false, referenceText: String? = null) {
     val density = LocalDensity.current
     val context = LocalContext.current
     val typeface = remember { context.resources.getFont(R.font.fredoka_bold) }
@@ -97,11 +97,17 @@ import kotlin.random.Random
             paint.textSize = maxSize.sp.toPx()
             val available = (size.width - 12.dp.toPx()).coerceAtLeast(1f)
             var displayText=text
-            if(paint.measureText(text)>0 && paint.textSize*available/paint.measureText(text)<36.sp.toPx()) {
+            var sizingText=referenceText ?: text
+            if(paint.measureText(sizingText)>0 && paint.textSize*available/paint.measureText(sizingText)<36.sp.toPx()) {
                 val numeric=text.replace(".","").replace(",",".").toDoubleOrNull()
-                if(numeric!=null) displayText=formatNumber(numeric,compact=true)
+                if(numeric!=null) {
+                    displayText=formatNumber(numeric,compact=true)
+                    val reference=sizingText.replace(".","").replace(",",".").toDoubleOrNull()
+                    sizingText=if(reference!=null) formatNumber(reference,compact=true) else displayText
+                }
             }
-            if(paint.measureText(displayText) > available) paint.textSize *= available/paint.measureText(displayText)
+            val measured=max(paint.measureText(displayText),paint.measureText(sizingText))
+            if(measured > available) paint.textSize *= available/measured
             // At extreme accessibility scales the measured fit takes priority over the nominal 36sp minimum.
             val x = (size.width - paint.measureText(displayText))/2
             val y = size.height/2 - (paint.ascent()+paint.descent())/2

@@ -40,3 +40,12 @@
 - v1.0.1 incrementa versionCode a 2. El script local toma el nombre del APK de Gradle. El workflow publica notas de esta versión y avisa explícitamente si utilizó firma temporal; sin la clave original no se promete actualización encima de v1.0.0.
 
 - Se verificaron ambas firmas oficiales: v1.0.1 no puede actualizar directamente el APK v1.0.0. Se documenta reinstalación y pérdida de partida/historial; no se distribuyen ni conservan claves temporales en el repositorio.
+
+## Revisión 1.0.2 — gráfica y panel móvil
+- La corrección del usuario revierte la decisión de sustituir la gráfica por tarjetas: la revelación vuelve a una gráfica vertical de barras por jugador, con respuesta real como línea horizontal, coronas y colores originales del proyecto. La leyenda conserva las estimaciones y puntos sin apilar etiquetas. Con 5–8 jugadores, las estimaciones en formato compacto y los puntos se consultan en la leyenda desplazable; las ocho barras permanecen visibles.
+- La regla del selector es fija. El borde superior del panel de color y el número se desplazan juntos: subir el panel aumenta la estimación y bajarlo la reduce. El recorrido útil se calcula con el espacio real disponible y la altura de controles, incluyendo insets y fuente grande. Ajuste fino, teclado e inercia conservan límites y confirmación del valor mostrado.
+- Se retira el aviso «Que nadie más mire la pantalla», conforme a la opción principal solicitada; no se añade un ajuste adicional. Se mantienen el pase de turno y la protección técnica del selector.
+- Durante el arrastre se conserva una precisión decimal por pregunta y una referencia tipográfica para todo el rango: 3,32 → 3,40 no cambia el número de decimales ni el tamaño de letra. No se usa la respuesta oculta para decidir esta precisión.
+
+- Se admite escritura de hasta seis decimales; al introducir más precisión que la de la regla, se conserva esa precisión durante el resto del turno para no mostrar un valor redondeado diferente del confirmado. Los extremos siguen siendo alcanzables y la inercia se detiene al abrir teclado, ajustar o confirmar.
+- Se acorta el encabezado a «Respuesta · X/Y» para evitar una fila adicional en 320 dp con fuente grande. La leyenda se ensancha al aumentar la fuente; permanece desplazable horizontalmente y las barras de los ocho jugadores siempre se ven a la vez.

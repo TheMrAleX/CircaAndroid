@@ -29,72 +29,83 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.*
 
-/** Each result owns its labels and track: no floating text or overlapping columns. */
-@Composable fun RevealScreen(state: AppState, actions: Actions, listState: androidx.compose.foundation.lazy.LazyListState = androidx.compose.foundation.lazy.rememberLazyListState(), onExit: () -> Unit = {}) {
-    val m = state.match ?: return
-    val q = state.question() ?: return
-    val scores = remember(m.currentGuesses, q) { Scoring.round(q, m.currentGuesses) }
-    val scale = remember(q, m.currentGuesses) { ComparisonScale(q, m.currentGuesses) }
-    val feedback = LocalFeedback.current
-    LaunchedEffect(q.id) { feedback(true) }
+/** A shared vertical chart remains the main result view for two to eight players. */
+@Composable fun RevealScreen(state: AppState, actions: Actions, onExit: () -> Unit = {}) {
+    val m=state.match ?: return
+    val q=state.question() ?: return
+    val scores=remember(m.currentGuesses,q) { Scoring.round(q,m.currentGuesses).sortedBy { it.guess } }
+    val scale=remember(q,m.currentGuesses) { ComparisonScale(q,m.currentGuesses) }
+    val inspection=LocalInspectionMode.current
+    val legendWidth=if(LocalDensity.current.fontScale>1.15f) 192.dp else 148.dp
+    val progress=remember(q.id) { Animatable(if(inspection) 1f else 0f) }
+    val scope=rememberCoroutineScope()
+    val feedback=LocalFeedback.current
+    LaunchedEffect(q.id) { progress.animateTo(1f,tween(850,easing=FastOutSlowInEasing));feedback(true) }
     ScreenColumn {
-        TopBar(stringResource(R.string.answer_title, m.round + 1, m.config.rounds), close = true, onAction = onExit)
-        LazyColumn(Modifier.weight(1f), state = listState, contentPadding = PaddingValues(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            item {
-                Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(28.dp)).background(Tokens.surface).padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                    Label(q.text, size = 18, bold = true, center = true)
-                    Spacer(Modifier.height(12.dp))
-                    Label(stringResource(R.string.correct_answer), size = 13, color = Tokens.muted)
-                    BigNumber(formatNumber(q.answer), Modifier.height(88.dp), maxSize = 60, glass = true)
-                    q.unit?.let { Label(it, size = 16, color = Tokens.muted, center = true) }
-                    q.year?.let { Label(stringResource(R.string.year, it), size = 13, color = Tokens.muted) }
-                }
+        TopBar(stringResource(R.string.answer_title,m.round+1,m.config.rounds),close=true,onAction=onExit)
+        Box(Modifier.fillMaxWidth().heightIn(max=144.dp).verticalScroll(rememberScrollState()).padding(horizontal=24.dp,vertical=4.dp)) {
+            Label(q.text,Modifier.fillMaxWidth(),16,bold=true,center=true)
+        }
+        Row(Modifier.fillMaxWidth().padding(horizontal=20.dp),verticalAlignment=Alignment.CenterVertically) {
+            Column(Modifier.weight(1f)) {
+                Label(stringResource(R.string.correct_answer),size=13,color=Tokens.muted)
+                q.unit?.let { Label(it,size=13,color=Tokens.muted) }
+                if(q.scale=="log") Label(stringResource(R.string.log_scale),size=12,color=Tokens.muted)
             }
-            item {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Label(stringResource(R.string.round_results), size = 22, bold = true)
-                    Label(stringResource(if (q.scale == "log") R.string.log_comparison else R.string.linear_comparison), size = 13, color = Tokens.muted)
+            BigNumber(formatNumber(q.answer),Modifier.weight(1.5f).height(76.dp),maxSize=52,glass=true)
+        }
+        BoxWithConstraints(Modifier.weight(1f).fillMaxWidth().padding(horizontal=12.dp).clipToBounds()
+            .clickable(onClickLabel=stringResource(R.string.show_result)) { scope.launch { progress.snapTo(1f) } }) {
+            val density=LocalDensity.current
+            val slot=maxWidth/scores.size
+            val top=32.dp
+            val bottom=(maxHeight-32.dp).coerceAtLeast(top+1.dp)
+            val plotHeight=bottom-top
+            fun y(value: Double)=top+plotHeight*(1-scale.position(value))
+            RulerCanvas(Modifier.fillMaxSize().alpha(.3f))
+            Canvas(Modifier.fillMaxSize()) {
+                val baseline=with(density) { bottom.toPx() }
+                scores.forEachIndexed { index,score ->
+                    val style=Tokens.players[m.config.players[score.playerId].style]
+                    val x=with(density) { (slot*index+3.dp).toPx() }
+                    val width=with(density) { (slot-6.dp).toPx() }
+                    val target=with(density) { y(score.guess).toPx() }
+                    val barTop=baseline+(target-baseline)*progress.value
+                    val height=(baseline-barTop).coerceAtLeast(0f)
+                    drawRoundRect(style.color,Offset(x,barTop),Size(width,height),CornerRadius(14.dp.toPx()))
+                    if(score.rank==1) drawRoundRect(Tokens.gold,Offset(x,barTop),Size(width,height),CornerRadius(14.dp.toPx()),style=Stroke(2.dp.toPx()))
                 }
+                val answerY=with(density) { y(q.answer).toPx() }
+                drawLine(Color.White,Offset(0f,answerY),Offset(size.width,answerY),2.dp.toPx(),pathEffect=PathEffect.dashPathEffect(floatArrayOf(12.dp.toPx(),8.dp.toPx())))
             }
-            items(scores, key = { it.playerId }) { score ->
-                val player = m.config.players[score.playerId]
-                val style = Tokens.players[player.style]
-                Column(Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)).background(Tokens.surface)
-                    .border(1.dp, if (score.rank == 1) Tokens.gold.copy(alpha = .75f) else Color.White.copy(alpha = .08f), RoundedCornerShape(20.dp))
-                    .padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                        PlayerAvatar(player.name, style, 40.dp)
-                        Column(Modifier.weight(1f)) {
-                            Label(player.name, size = 18, bold = true)
-                            if (score.rank == 1) Label(stringResource(R.string.closest), size = 13, color = Tokens.gold, bold = true)
-                        }
-                        Label(androidx.compose.ui.res.pluralStringResource(R.plurals.earned_points, score.points, score.points), size = 16, color = style.inkLight, bold = true)
+            scores.forEachIndexed { index,score ->
+                if(score.rank==1) Box(Modifier.offset(x=slot*index,y=(y(score.guess)-30.dp).coerceAtLeast(0.dp)).width(slot),contentAlignment=Alignment.Center) { Crown(Modifier.size(24.dp)) }
+                if(scores.size<=4 && progress.value>=.95f) {
+                    val labelY=(y(score.guess)+8.dp).coerceAtMost((bottom-44.dp).coerceAtLeast(0.dp))
+                    Box(Modifier.offset(x=slot*index,y=labelY).width(slot).padding(horizontal=4.dp),contentAlignment=Alignment.Center) {
+                        ValuePill(formatNumber(score.guess,true),small=scores.size>2)
                     }
-                    // Stacked values can wrap at large font sizes without stealing width from names.
-                    Label(stringResource(R.string.guess_value, formatNumber(score.guess)), size = 20, bold = true)
-                    ComparisonTrack(scale.position(score.guess), scale.position(q.answer), style.color)
-                    Label(stringResource(R.string.distance_value, formatNumber(abs(score.guess - q.answer))), size = 14, color = Tokens.muted)
-                    if (score.bonus > 0) Label(stringResource(R.string.bonus_points, score.bonus), size = 13, color = Tokens.gold, bold = true)
+                }
+                Box(Modifier.offset(x=slot*index,y=bottom+4.dp).width(slot),contentAlignment=Alignment.Center) {
+                    Label((score.playerId+1).toString(),size=13,color=Tokens.players[m.config.players[score.playerId].style].inkLight,bold=true)
                 }
             }
         }
-        BottomActions { GameButton(stringResource(R.string.continue_game), color = Color.White, ink = Tokens.players[0].ink) { actions.advance(Screen.SCORE) } }
-    }
-}
-
-/** Same linear/log domain in every row. White marker = answer; colored dot = guess. */
-@Composable private fun ComparisonTrack(guess: Float, answer: Float, color: Color) {
-    Canvas(Modifier.fillMaxWidth().height(20.dp)) {
-        val inset = 8.dp.toPx()
-        val length = (size.width - 2 * inset).coerceAtLeast(0f)
-        val y = size.height / 2
-        val x = inset + length * guess
-        val target = inset + length * answer
-        drawLine(Tokens.high, Offset(inset, y), Offset(size.width - inset, y), 6.dp.toPx(), StrokeCap.Round)
-        drawLine(color.copy(alpha = .6f), Offset(min(x,target), y), Offset(max(x,target), y), 6.dp.toPx(), StrokeCap.Round)
-        drawLine(Color.White, Offset(target, 2.dp.toPx()), Offset(target, size.height - 2.dp.toPx()), 2.dp.toPx(), StrokeCap.Round)
-        drawCircle(Tokens.surface, 8.dp.toPx(), Offset(x,y))
-        drawCircle(color, 5.dp.toPx(), Offset(x,y))
+        Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()).padding(horizontal=20.dp,vertical=8.dp),horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+            scores.forEach { score ->
+                val player=m.config.players[score.playerId]
+                val style=Tokens.players[player.style]
+                Column(Modifier.width(legendWidth).clip(RoundedCornerShape(16.dp)).background(Tokens.surface)
+                    .border(1.dp,if(score.rank==1) Tokens.gold else style.color.copy(alpha=.4f),RoundedCornerShape(16.dp)).padding(12.dp),
+                    verticalArrangement=Arrangement.spacedBy(4.dp)) {
+                    Label(stringResource(R.string.bar_player,player.id+1,player.name),size=14,color=style.inkLight,bold=true)
+                    Label(formatNumber(score.guess,true),size=20,bold=true)
+                    Label(androidx.compose.ui.res.pluralStringResource(R.plurals.earned_points,score.points,score.points),size=14,color=style.inkLight,bold=true)
+                    if(score.bonus>0) Label(stringResource(R.string.bonus_points,score.bonus),size=12,color=Tokens.gold)
+                }
+            }
+        }
+        BottomActions { GameButton(stringResource(R.string.continue_game),color=Color.White,ink=Tokens.players[0].ink) { actions.advance(Screen.SCORE) } }
     }
 }
 

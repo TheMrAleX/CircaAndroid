@@ -42,11 +42,11 @@ class ScreensTest(private val width: Int,private val height: Int,private val sca
     @Test fun tiedResultsLowerRows()=capture("tied_results_lower") {
         val q=state.pool.first().copy(answer=.5,unit=null,min=.001,max=100.0,scale="log")
         val m=state.match!!.copy(config=state.config.copy(players=state.config.players.map{it.copy(name="Alejandra123")}),guesses=listOf(List(players){.5}))
-        RevealScreen(state.copy(pool=listOf(q),match=m),Actions(),listState=androidx.compose.foundation.lazy.LazyListState(2))
+        RevealScreen(state.copy(pool=listOf(q),match=m),Actions())
     }
     @Test fun hugeLogResults()=capture("huge_log_results") {
         val q=state.pool.first().copy(answer=1.4e9,unit=null,min=1.0,max=1e12,scale="log")
-        RevealScreen(state.copy(pool=listOf(q),match=state.match!!.copy(guesses=listOf(List(players){1.4e9*(it+1)}))),Actions(),listState=androidx.compose.foundation.lazy.LazyListState(2))
+        RevealScreen(state.copy(pool=listOf(q),match=state.match!!.copy(guesses=listOf(List(players){1.4e9*(it+1)}))),Actions())
     }
     @Test fun setupFilters()=capture("setup_filters") {
         SetupScreen(state,Actions(),listState=androidx.compose.foundation.lazy.LazyListState(3))
@@ -56,8 +56,18 @@ class ScreensTest(private val width: Int,private val height: Int,private val sca
         SelectorScreen(state.copy(pool=listOf(q),match=state.match!!.copy(guesses=listOf(emptyList()))),Actions())
     }
     @Test fun selectorDecimal()=capture("selector_decimal") {
-        val q=state.pool.first().copy(answer=.7,min=0.0,max=1.0,unit=null)
-        SelectorScreen(state.copy(pool=listOf(q),match=state.match!!.copy(guesses=listOf(emptyList()))),Actions())
+        val q=state.pool.first().copy(answer=7.0,min=0.0,max=10.0,unit=null)
+        SelectorScreen(state.copy(pool=listOf(q),match=state.match!!.copy(guesses=listOf(emptyList()))),Actions(),initialPosition=.332)
+    }
+    @Test fun selectorDecimalTrailingZero()=capture("selector_decimal_zero") {
+        val q=state.pool.first().copy(answer=7.0,min=0.0,max=10.0,unit=null)
+        SelectorScreen(state.copy(pool=listOf(q),match=state.match!!.copy(guesses=listOf(emptyList()))),Actions(),initialPosition=.34)
+    }
+    @Test fun selectorMinimum()=capture("selector_minimum") {
+        SelectorScreen(state.copy(match=state.match!!.copy(guesses=listOf(emptyList()))),Actions(),initialPosition=0.0)
+    }
+    @Test fun selectorMaximum()=capture("selector_maximum") {
+        SelectorScreen(state.copy(match=state.match!!.copy(guesses=listOf(emptyList()))),Actions(),initialPosition=1.0)
     }
     companion object {
         @JvmStatic @Parameterized.Parameters(name="{0}x{1}@{2}-{3}p") fun params()=listOf(

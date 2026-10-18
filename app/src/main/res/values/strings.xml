@@ -30,8 +30,7 @@
     <string name="start_round">Empezar ronda</string>
     <string name="pass_to">Pásale el celular a</string>
     <string name="ready">Soy yo, listo</string>
-    <string name="private_hint">Que nadie más mire la pantalla</string>
-    <string name="drag_hint">Arrastra hacia abajo para subir el número</string>
+    <string name="drag_hint">Desliza el panel hacia arriba o abajo</string>
     <string name="selector_title">%1$s · %2$d/%3$d</string>
     <string name="confirm">Confirmar</string>
     <string name="decrease">Disminuir estimación</string>
@@ -40,12 +39,12 @@
     <string name="accept">Aceptar</string>
     <string name="number_hint">Tu estimación</string>
     <string name="number_range">Entre %1$s y %2$s</string>
-    <string name="invalid_number">Introduce un número válido dentro del rango.</string>
+    <string name="invalid_number">Introduce un número válido dentro del rango, con hasta 6 decimales.</string>
     <string name="exit_title">¿Salir de la partida?</string>
     <string name="keep_playing">Seguir jugando</string>
     <string name="exit">Salir</string>
     <string name="saved_notice">Tu partida queda guardada.</string>
-    <string name="answer_title">Respuesta · Ronda %1$d/%2$d</string>
+    <string name="answer_title">Respuesta · %1$d/%2$d</string>
     <string name="continue_game">Continuar</string>
     <string name="winner">Ganador de la ronda</string>
     <string name="score_title">Marcador · Ronda %1$d/%2$d</string>
@@ -61,7 +60,7 @@
     <string name="clear_confirm">Borrar</string>
     <string name="cancel">Cancelar</string>
     <string name="about">Acerca de</string>
-    <string name="about_text">Versión 1.0.1 · Licencia MIT
+    <string name="about_text">Versión 1.0.2 · Licencia MIT
 No está afiliada a ningún juego existente</string>
     <string name="loading">Preparando las preguntas…</string>
     <string name="error_load">No se pudo abrir la base de preguntas. Vuelve a abrir la app.</string>
@@ -78,14 +77,8 @@ No está afiliada a ningún juego existente</string>
     <plurals name="available"><item quantity="one">%1$d pregunta disponible</item><item quantity="other">%1$d preguntas disponibles</item></plurals>
     <plurals name="points"><item quantity="one">%1$d punto</item><item quantity="other">%1$d puntos</item></plurals>
     <string name="correct_answer">RESPUESTA CORRECTA</string>
-    <string name="round_results">Así quedó la ronda</string>
-    <string name="linear_comparison">Punto de color: estimación · Marca blanca: respuesta. Gana la menor distancia.</string>
-    <string name="log_comparison">Escala logarítmica: gana la proporción más cercana. Punto de color: estimación · Marca blanca: respuesta.</string>
-    <string name="guess_value">Estimación: %1$s</string>
-    <string name="distance_value">Diferencia: %1$s</string>
     <plurals name="earned_points"><item quantity="one">+%1$d punto</item><item quantity="other">+%1$d puntos</item></plurals>
     <string name="bonus_points" tools:ignore="PluralsCandidate">Bonus +%1$d incluido</string>
-    <string name="closest">Más cerca</string>
     <string name="total_points_hint">Puntos acumulados · Los empates comparten puesto</string>
     <string name="final_subtitle">¡Gracias por jugar! Este es el podio.</string>
     <string name="party_caption">UN CELULAR · TODOS JUEGAN</string>
@@ -93,4 +86,7 @@ No está afiliada a ningún juego existente</string>
     <string name="experience">Durante el juego</string>
     <string name="saved_data">Datos guardados</string>
     <string name="history_hint">Las preguntas recientes y la partida se guardan solo en este dispositivo.</string>
+    <string name="show_result">Mostrar resultado</string>
+    <string name="bar_player">%1$d · %2$s</string>
+    <string name="log_scale">Logarítmica</string>
 </resources>
