@@ -20,7 +20,7 @@ data class Match(val config: Config,val questions: List<String>,val round: Int =
     val currentGuesses get() = guesses.getOrElse(round) { emptyList() }
     val turn get() = currentGuesses.size.coerceAtMost(config.players.lastIndex)
 }
-data class AppState(val screen: Screen = Screen.HOME,val pool: List<Question> = emptyList(),val config: Config = Config(),val match: Match? = null,val recent: List<String> = emptyList(),val sound: Boolean = true,val vibration: Boolean = true,val loading: Boolean = true,val error: Boolean = false,val savedQuestions: List<Question> = emptyList())
+data class AppState(val screen: Screen = Screen.HOME,val pool: List<Question> = emptyList(),val config: Config = Config(),val match: Match? = null,val recent: List<String> = emptyList(),val sound: Boolean = true,val vibration: Boolean = true,val loading: Boolean = true,val error: Boolean = false,val savedQuestions: List<Question> = emptyList(),val liveRuler: Boolean = true)
 
 class GameViewModel(app: Application): AndroidViewModel(app) {
     private val prefs = app.getSharedPreferences("aproximado",0)
@@ -83,6 +83,7 @@ class GameViewModel(app: Application): AndroidViewModel(app) {
         if(m.round+1>=m.config.rounds) advance(Screen.FINAL)
         else update { it.copy(screen=Screen.INTRO,match=m.copy(round=m.round+1,guesses=m.guesses+listOf(emptyList()),stage=Screen.INTRO)) }
     }
+    fun liveRuler(enabled: Boolean) = update { it.copy(liveRuler=enabled) }
     fun setting(sound: Boolean? = null,vibration: Boolean? = null) = update { it.copy(sound=sound ?: it.sound,vibration=vibration ?: it.vibration) }
     fun clear() = update { it.copy(match=null,recent=emptyList(),savedQuestions=emptyList()) }
     private fun configJson(c: Config)=JSONObject().put("players",JSONArray().apply { c.players.forEach { put(JSONObject().put("id",it.id).put("name",it.name).put("style",it.style)) } }).put("rounds",c.rounds).put("categories",JSONArray(c.categories.toList())).put("difficulty",c.difficulty ?: 0)
@@ -95,7 +96,7 @@ class GameViewModel(app: Application): AndroidViewModel(app) {
     private fun persist() {
         val s=mutable.value
         if(s.loading) return
-        val obj=JSONObject().put("config",configJson(s.config)).put("recent",JSONArray(s.recent)).put("sound",s.sound).put("vibration",s.vibration)
+        val obj=JSONObject().put("config",configJson(s.config)).put("recent",JSONArray(s.recent)).put("sound",s.sound).put("vibration",s.vibration).put("liveRuler",s.liveRuler)
         s.match?.let { m -> obj.put("match",JSONObject().put("config",configJson(m.config)).put("questions",JSONArray(m.questions)).put("round",m.round).put("stage",m.stage.name).put("guesses",JSONArray().apply { m.guesses.forEach { put(JSONArray(it)) } })) }
         // Checkpoint the current turn on discrete actions, including direct player changes.
         prefs.edit(commit=true) { putString("state",obj.toString()) }
@@ -108,7 +109,7 @@ class GameViewModel(app: Application): AndroidViewModel(app) {
             Match(parseConfig(m.getJSONObject("config")),m.getJSONArray("questions").strings(),m.getInt("round"),(0 until a.length()).map { i -> val r=a.getJSONArray(i);(0 until r.length()).map { r.getDouble(it) } },Screen.valueOf(m.getString("stage")))
         }
         if(match!=null) require(match.questions.size==match.config.rounds && match.round in match.questions.indices && match.guesses.size==match.round+1)
-        return AppState(config=parseConfig(o.getJSONObject("config")),match=match,recent=o.getJSONArray("recent").strings(),sound=o.optBoolean("sound",true),vibration=o.optBoolean("vibration",true))
+        return AppState(config=parseConfig(o.getJSONObject("config")),match=match,recent=o.getJSONArray("recent").strings(),sound=o.optBoolean("sound",true),vibration=o.optBoolean("vibration",true),liveRuler=o.optBoolean("liveRuler",true))
     }
 }
 private fun JSONArray.strings()=(0 until length()).map { getString(it) }

@@ -27,13 +27,15 @@ import androidx.compose.ui.unit.*
 import es.aproximado.app.*
 import es.aproximado.app.R
 import es.aproximado.core.*
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.Job
 import kotlin.math.*
 
 val LocalFeedback = staticCompositionLocalOf<(Boolean)->Unit> { {} }
 
-@Composable fun SelectorScreen(state: AppState,actions: Actions,initialPosition: Double? = null,playerIndex: Int? = null,onExit: ()->Unit = {}) {
+@Composable fun SelectorScreen(state: AppState,actions: Actions,initialPosition: Double? = null,playerIndex: Int? = null,onPreview: ((Double)->Unit)? = null,previewEpoch: Long = 0,liveContent: (@Composable ()->Unit)? = null,onExit: ()->Unit = {}) {
     val m=state.match ?: return;val q=state.question() ?: return
     val p=m.config.players[playerIndex ?: m.turn];val style=Tokens.players[p.style]
     val scope=rememberCoroutineScope()
@@ -51,6 +53,10 @@ val LocalFeedback = staticCompositionLocalOf<(Boolean)->Unit> { {} }
     val leaving=remember { Animatable(0f) }
     val decay=rememberSplineBasedDecay<Float>()
     val value=exact ?: RulerScale.snapped(q,position.toDouble())
+    val previewCallback by rememberUpdatedState(onPreview)
+    LaunchedEffect(q.id,previewEpoch,onPreview!=null) {
+        if(onPreview!=null) snapshotFlow { if(submitted) null else exact ?: RulerScale.snapped(q,position.toDouble()) }.filterNotNull().distinctUntilChanged().collect { previewCallback?.invoke(it) }
+    }
     val display=formatEstimate(q,value)
     val reference=remember(q) { formatEstimate(q,q.max).replace(Regex("[0-9]"),"8") }
     var controlsHeight by remember { mutableIntStateOf(0) }
@@ -73,6 +79,7 @@ val LocalFeedback = staticCompositionLocalOf<(Boolean)->Unit> { {} }
         Box(Modifier.fillMaxWidth().heightIn(max=144.dp).verticalScroll(rememberScrollState()).padding(horizontal=24.dp,vertical=8.dp)) {
             Label(q.text,Modifier.fillMaxWidth(),16,bold=true,center=true)
         }
+        liveContent?.invoke()
         BoxWithConstraints(Modifier.weight(1f).fillMaxWidth().clipToBounds()) {
             val controlSize=if(controlsHeight>0) with(density) { controlsHeight.toDp() } else 212.dp
             val upper=60.dp

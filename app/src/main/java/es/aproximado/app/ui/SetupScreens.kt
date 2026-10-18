@@ -33,7 +33,7 @@ class Actions(
     val color: (Int,Int)->Unit = {_,_->}, val start: (Boolean)->Unit = {},
     val advance: (Screen)->Unit = {}, val confirm: (Double,Int,Int)->Unit = {_,_,_->},
     val next: ()->Unit = {}, val resume: ()->Unit = {},
-    val setting: (Boolean?,Boolean?)->Unit = {_,_->}, val clear: ()->Unit = {}
+    val setting: (Boolean?,Boolean?)->Unit = {_,_->}, val clear: ()->Unit = {}, val liveRuler: (Boolean)->Unit = {}
 )
 @Composable fun Label(text: String, modifier: Modifier = Modifier, size: Int = 16, color: Color = Color.White, bold: Boolean = false, center: Boolean = false) {
     Text(text,modifier,color=color,fontSize=size.sp,fontWeight=if(bold) FontWeight.ExtraBold else FontWeight.Medium,

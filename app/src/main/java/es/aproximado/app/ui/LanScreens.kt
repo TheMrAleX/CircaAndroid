@@ -1,4 +1,4 @@
-@file:OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
+@file:OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class, androidx.compose.material3.ExperimentalMaterial3Api::class)
 package es.aproximado.app.ui
 
 import android.content.Intent
@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
@@ -31,7 +32,7 @@ import es.aproximado.app.lan.*
 import es.aproximado.core.*
 import es.aproximado.core.lan.*
 
-class LanActions(val name: (String)->Unit = {},val endpoint: (String)->Unit = {},val code: (String)->Unit = {},val host: ()->Unit = {},val join: ()->Unit = {},val close: ()->Unit = {},val refresh: ()->Unit = {},val browse: ()->Unit = {},val stopBrowse: ()->Unit = {},val configure: (Int,Int?,Set<String>)->Unit = {_,_,_->},val start: ()->Unit = {},val advance: ()->Unit = {},val lobby: ()->Unit = {},val remove: (Int)->Unit = {},val submit: (Double,String,Int)->Unit = {_,_,_->})
+class LanActions(val name: (String)->Unit = {},val endpoint: (String)->Unit = {},val code: (String)->Unit = {},val host: ()->Unit = {},val join: ()->Unit = {},val close: ()->Unit = {},val refresh: ()->Unit = {},val browse: ()->Unit = {},val stopBrowse: ()->Unit = {},val configure: (Int,Int?,Set<String>)->Unit = {_,_,_->},val start: ()->Unit = {},val advance: ()->Unit = {},val lobby: ()->Unit = {},val remove: (Int)->Unit = {},val submit: (Double,String,Int)->Unit = {_,_,_->},val preview: (Double,String,Int)->Unit = {_,_,_->},val liveSetting: (Boolean)->Unit = {})
 
 @Composable private fun LanTopBar(title: String,back: Boolean=false,close: Boolean=false,onAction: ()->Unit) {
     Box(Modifier.fillMaxWidth().zIndex(2f).background(Tokens.bg)) { TopBar(title,back,close,onAction) }
@@ -57,10 +58,13 @@ fun lanError(error: LanFailure): Int = when(error) {
 @Composable fun LanScreen(state: LanUiState,pool: List<Question>,actions: LanActions,onBack: ()->Unit) {
     var exit by remember { mutableStateOf(false) }
     var cancel by remember { mutableStateOf(false) }
+    var watching by remember { mutableStateOf(false) }
     fun leave() { if(state.active) exit=true else onBack() }
     BackHandler { leave() }
     DisposableEffect(state.active) { if(!state.active) actions.browse();onDispose { actions.stopBrowse() } }
     val room=state.snapshot
+    val projected=remember(room) { room?.takeIf { it.stage!=LanStage.LOBBY }?.let(::lanGameState) }
+    LaunchedEffect(room?.gameId,room?.round,room?.stage,state.active) { watching=false }
     when {
         !state.active -> LanEntry(state,actions,onBack=onBack)
         state.connection!=LanConnection.CONNECTED || room==null -> ScreenColumn {
@@ -75,11 +79,12 @@ fun lanError(error: LanFailure): Int = when(error) {
         room.stage==LanStage.ANSWERING -> {
             if(room.mine!=null || state.pending!=null) LanWaiting(state,actions,{ leave() },{cancel=true})
             else key(room.gameId,room.round,room.self) {
-                SelectorScreen(lanGameState(room),Actions(confirm={v,_,_->actions.submit(v,room.gameId,room.round)}),playerIndex=room.self) { leave() }
+                SelectorScreen(projected!!,Actions(confirm={v,_,_->actions.submit(v,room.gameId,room.round)}),playerIndex=room.self,
+                    onPreview=if(state.liveRuler && room.liveEnabled) { v -> actions.preview(v,room.gameId,room.round) } else null,previewEpoch=room.revision,
+                    liveContent=if(state.liveRuler && room.liveEnabled) { { LiveRules(state,compact=true) { watching=true } } } else null) { leave() }
             }
         }
         else -> {
-            val projected=lanGameState(room)
             val footer: @Composable ()->Unit = { BottomActions {
                 if(state.host) GameButton(stringResource(when(room.stage) {
                     LanStage.REVEAL -> R.string.continue_game
@@ -90,12 +95,15 @@ fun lanError(error: LanFailure): Int = when(error) {
                 if(room.stage!=LanStage.REVEAL) GameButton(stringResource(R.string.lan_leave),outline=true) { leave() }
             } }
             when(room.stage) {
-                LanStage.REVEAL -> RevealScreen(projected,Actions(),onExit={leave()},footer=footer)
-                LanStage.SCORE -> ScoreScreen(projected,Actions(),footer)
-                LanStage.FINISHED -> FinalScreen(projected,Actions(),footer)
+                LanStage.REVEAL -> RevealScreen(projected!!,Actions(),onExit={leave()},footer=footer)
+                LanStage.SCORE -> ScoreScreen(projected!!,Actions(),footer)
+                LanStage.FINISHED -> FinalScreen(projected!!,Actions(),footer)
                 else -> Unit
             }
         }
+    }
+    if(watching && room?.stage==LanStage.ANSWERING && state.active) ModalBottomSheet(onDismissRequest={watching=false},containerColor=Tokens.bg,shape=RoundedCornerShape(topStart=28.dp,topEnd=28.dp)) {
+        LiveWatchContent(state,actions)
     }
     if(exit) GameDialog(stringResource(if(state.host) R.string.lan_close_title else R.string.lan_leave_title),stringResource(if(state.host) R.string.lan_close_body else R.string.lan_leave_body),stringResource(R.string.lan_stay),stringResource(R.string.lan_leave),onPrimary={exit=false},onSecondary={exit=false;actions.close();onBack()},onDismiss={exit=false})
     if(cancel) GameDialog(stringResource(R.string.lan_cancel_title),stringResource(R.string.lan_cancel_body),stringResource(R.string.keep_playing),stringResource(R.string.lan_back_lobby),onPrimary={cancel=false},onSecondary={cancel=false;actions.lobby()},onDismiss={cancel=false})
@@ -171,6 +179,7 @@ fun lanError(error: LanFailure): Int = when(error) {
             } else Label(stringResource(R.string.lan_wait_host),color=Tokens.muted)
             Label(stringResource(R.string.lan_members,room.members.size),size=22,bold=true)
             LanMembers(room,state.host,actions.remove)
+            Panel(stringResource(R.string.live_multiplayer)) { LiveRoomPreference(state,actions.liveSetting) }
             if(state.host) {
                 Panel(stringResource(R.string.rounds)) {
                     Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) { listOf(5,10,15,20).forEach { n -> Choice(n.toString(),room.rounds==n,Modifier.weight(1f)) { actions.configure(n,room.difficulty,room.categories) } } }
@@ -235,10 +244,12 @@ fun lanError(error: LanFailure): Int = when(error) {
         LanTopBar(stringResource(R.string.lan_room),close=true,onAction=onExit)
         Column(Modifier.weight(1f).clipToBounds().verticalScroll(rememberScrollState()).padding(20.dp),verticalArrangement=Arrangement.spacedBy(16.dp)) {
             Column(Modifier.fillMaxWidth().padding(top=8.dp),horizontalAlignment=Alignment.CenterHorizontally,verticalArrangement=Arrangement.spacedBy(12.dp)) {
-                WaitingOrbit(room.members[room.self].name,Tokens.players[room.self])
+                if(!state.liveRuler || !room.liveEnabled) WaitingOrbit(room.members[room.self].name,Tokens.players[room.self])
                 Label(stringResource(R.string.lan_waiting),Modifier.fillMaxWidth(),size=26,bold=true,center=true)
-                Label(stringResource(R.string.lan_waiting_hint),Modifier.fillMaxWidth(),size=14,color=Tokens.muted,center=true)
+                Label(stringResource(if(state.liveRuler && room.liveEnabled) R.string.live_waiting_hint else R.string.lan_waiting_hint),Modifier.fillMaxWidth(),size=14,color=Tokens.muted,center=true)
             }
+            if(state.liveRuler && room.liveEnabled) LiveRules(state)
+            if(room.members.size in 2..3) LiveRoomPreference(state,actions.liveSetting)
             Label(stringResource(R.string.lan_waiting_count,room.members.count { it.submitted },room.members.size),Modifier.semantics { liveRegion=LiveRegionMode.Polite },size=18,bold=true)
             LanMembers(room)
             if(state.host) Label(stringResource(R.string.lan_cancel_hint),size=13,color=Tokens.muted)
@@ -247,6 +258,13 @@ fun lanError(error: LanFailure): Int = when(error) {
             if(state.host) GameButton(stringResource(R.string.lan_back_lobby),outline=true,onClick=onCancel)
             else GameButton(stringResource(R.string.lan_leave),outline=true,onClick=onExit)
         }
+    }
+}
+@Composable fun LiveWatchContent(state: LanUiState,actions: LanActions) {
+    Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(20.dp),verticalArrangement=Arrangement.spacedBy(16.dp)) {
+        LiveRoomPreference(state,actions.liveSetting)
+        LiveRules(state)
+        Label(stringResource(R.string.live_rules_hint),size=13,color=Tokens.muted)
     }
 }
 /** A rendering projection only. The offline match/checkpoint remains independent. */

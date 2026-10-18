@@ -58,7 +58,7 @@
     <string name="clear_confirm">Borrar</string>
     <string name="cancel">Cancelar</string>
     <string name="about">Acerca de</string>
-    <string name="about_text">Versión 1.0.6 · Licencia MIT
+    <string name="about_text">Versión 1.0.7 · Licencia MIT
 No está afiliada a ningún juego existente</string>
     <string name="loading">Preparando las preguntas…</string>
     <string name="error_load">No se pudo abrir la base de preguntas. Vuelve a abrir la app.</string>
@@ -149,4 +149,16 @@ No está afiliada a ningún juego existente</string>
     <string name="lan_channel">Partidas en red local</string>
     <string name="lan_notification_title">Partida LAN activa</string>
     <string name="lan_notification_text">Toca para volver a la sala. Mantén la Wi-Fi conectada.</string>
+    <string name="live_multiplayer">Multijugador LAN</string>
+    <string name="live_title">Regla en vivo</string>
+    <string name="live_rules_hint">Con 2 o 3 jugadores pueden ver cómo los demás mueven su regla. Todos deben tener esta opción activada. Con 4 o más, las estimaciones son privadas.</string>
+    <string name="live_active">En vivo · aún pueden cambiar</string>
+    <string name="live_off">Las estimaciones permanecen privadas.</string>
+    <string name="live_wait_consent">Se activará cuando todos estén conectados y tengan la opción encendida.</string>
+    <string name="live_large_room">Disponible solo en salas de 2 o 3 jugadores.</string>
+    <string name="live_view">Ver reglas en vivo</string>
+    <string name="live_waiting_hint">Tu respuesta está confirmada. Mira cómo ajustan su regla los demás.</string>
+    <string name="live_pending">Aún sin mover</string>
+    <string name="live_confirmed">Confirmó</string>
+    <string name="live_movement">Regla de %1$s: %2$s</string>
 </resources>

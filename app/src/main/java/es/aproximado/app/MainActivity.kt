@@ -58,7 +58,8 @@ class MainActivity : ComponentActivity() {
                 }
             }
             LaunchedEffect(openLan,state.loading) { if(openLan && !state.loading) { vm.screen(Screen.LAN);openLan=false } }
-            val lanActions=remember(repo,state.pool) { LanActions(repo::name,repo::endpoint,repo::code,{repo.host(state.pool)},repo::join,repo::close,repo::refresh,repo::browse,repo::stopBrowsing,repo::configure,repo::start,repo::advance,repo::lobby,repo::remove,repo::submit) }
+            LaunchedEffect(state.loading,state.liveRuler) { if(!state.loading) repo.livePreference(state.liveRuler) }
+            val lanActions=remember(repo,state.pool) { LanActions(repo::name,repo::endpoint,repo::code,{repo.host(state.pool)},repo::join,repo::close,repo::refresh,repo::browse,repo::stopBrowsing,repo::configure,repo::start,repo::advance,repo::lobby,repo::remove,repo::submit,repo::preview,{ enabled -> vm.liveRuler(enabled);repo.livePreference(enabled) }) }
             val haptics=LocalHapticFeedback.current
             val feedback: (Boolean)->Unit = { strong ->
                 if(state.vibration) haptics.performHapticFeedback(if(strong) HapticFeedbackType.LongPress else HapticFeedbackType.TextHandleMove)
@@ -70,7 +71,7 @@ class MainActivity : ComponentActivity() {
                 if(lan.active && state.screen==Screen.LAN) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                 else window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             }
-            val actions=remember(vm) { Actions(vm::screen,vm::configure,vm::count,vm::name,vm::color,vm::start,vm::advance,{ value,round,turn -> vm.confirm(value,round,turn) },vm::nextRound,vm::resume,vm::setting,vm::clear) }
+            val actions=remember(vm) { Actions(vm::screen,vm::configure,vm::count,vm::name,vm::color,vm::start,vm::advance,{ value,round,turn -> vm.confirm(value,round,turn) },vm::nextRound,vm::resume,vm::setting,vm::clear,{ enabled -> vm.liveRuler(enabled);repo.livePreference(enabled) }) }
             CompositionLocalProvider(LocalFeedback provides feedback) { AproximadoTheme { AproximadoApp(state,actions,lan,lanActions) } }
         }
     }

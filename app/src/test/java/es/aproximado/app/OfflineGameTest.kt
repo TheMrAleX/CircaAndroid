@@ -43,7 +43,7 @@ class OfflineGameTest {
                     assertEquals(turn,vm.state.value.match!!.turn)
                     vm.advance(Screen.SELECT)
                     val q=vm.state.value.question()!!
-                    vm.confirm((q.answer+turn).coerceIn(q.min,q.max))
+                    vm.confirm(es.aproximado.core.EstimateInput.round(q,(q.answer+turn).coerceIn(q.min,q.max)))
                 }
                 assertEquals(Screen.REVEAL,vm.state.value.screen)
                 assertEquals(n,vm.state.value.scores().last().size)
@@ -65,6 +65,15 @@ class OfflineGameTest {
         assertEquals(Screen.SELECT,restored.state.value.screen)
         assertEquals(listOf(answer),restored.state.value.match!!.currentGuesses)
         assertEquals(1,restored.state.value.match!!.turn)
+    }
+    @Test fun liveRulerConsentSurvivesProcessDeathAndDefaultsOnForOldSaves()=runBlocking {
+        val vm=loaded();assertTrue(vm.state.value.liveRuler)
+        vm.liveRuler(false);assertFalse(loaded().state.value.liveRuler)
+        vm.liveRuler(true);assertTrue(loaded().state.value.liveRuler)
+        val prefs=app.getSharedPreferences("aproximado",0)
+        val saved=org.json.JSONObject(prefs.getString("state",null)!!).apply { remove("liveRuler") }
+        prefs.edit().putString("state",saved.toString()).commit()
+        assertTrue(loaded().state.value.liveRuler)
     }
     @Test fun configBoundsAndUniqueColors()=runBlocking {
         val vm=loaded();vm.count(99)

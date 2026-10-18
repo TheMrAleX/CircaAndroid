@@ -40,6 +40,10 @@ private fun Modifier.clipCompat()=clip(RoundedCornerShape(28.dp)).border(1.dp,Co
                     Label(stringResource(R.string.vibration),Modifier.weight(1f));GameSwitch(state.vibration,stringResource(R.string.vibration)) { actions.setting(null,!state.vibration) }
                 }
                 }
+            Panel(stringResource(R.string.live_multiplayer)) {
+                LivePreference(state.liveRuler,actions.liveRuler)
+                Label(stringResource(R.string.live_rules_hint),size=14,color=Tokens.muted)
+            }
             Panel(stringResource(R.string.saved_data)) {
                 Label(stringResource(R.string.history_hint),size=14,color=Tokens.muted)
                 Box(Modifier.fillMaxWidth().heightIn(min=64.dp).clickable(role=Role.Button) { clearing=true }.padding(vertical=12.dp)) { Label(stringResource(R.string.clear_history),color=Tokens.danger) }

@@ -172,3 +172,7 @@ Petición del usuario: modo LAN nativo para 2–8 teléfonos en la misma Wi-Fi o
 ## Espera LAN 1.0.6
 
 Tras confirmar antes que los demás, mostrar «Esperando resultados…» con un anillo propio giratorio alrededor del avatar, en el color del jugador. Giro con EaseInOutCubic (.65, 0, .35, 1) de 2,2 s y respiración sutil de 1,1 s. Animar solo la capa gráfica, sin recomponer la sala ni emitir tráfico. Mantener contador real de confirmaciones, lista desplazable y controles existentes; la revelación sigue dependiendo del anfitrión y de que confirmen todos. Respetar la escala de animaciones de Compose; previews/renders usan una fase fija para comparar el layout.
+
+## Reglas en vivo LAN 1.0.7
+
+Con 2 o 3 jugadores y consentimiento unánime, mostrar indicadores compactos de los oponentes al seleccionar y reglas de lectura durante la espera. Regla fija y panel de color móvil con interpolación de 140 ms; sin animar ni reiniciar la selección propia. Pulsar los indicadores abre un sheet desplazable con reglas mayores y el interruptor personal. Reutilizar el switch en Ajustes y la sala. Con 4–8 jugadores o cualquier interruptor apagado, ocultar y dejar de enviar borradores; conservar la espera animada. La confirmación y los resultados son independientes del movimiento compartido.

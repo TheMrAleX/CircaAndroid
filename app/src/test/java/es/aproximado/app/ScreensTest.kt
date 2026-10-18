@@ -104,6 +104,25 @@ class ScreensTest(private val width: Int,private val height: Int,private val sca
     @Test fun lanJoinForm()=capture("lan_join_form") { LanEntry(es.aproximado.app.lan.LanUiState(name="Alejandra123",endpoint="192.168.43.1:45555",code="12345678"),LanActions(),initialJoin=true) {} }
     @Test fun lanLobbyRoster()=capture("lan_lobby_roster") { LanLobby(previewLan(players),state.pool,LanActions(),scrollState=androidx.compose.foundation.ScrollState(560)) {} }
     @Test fun lanLobbyFilters()=capture("lan_lobby_filters") { LanLobby(previewLan(players),state.pool,LanActions(),scrollState=androidx.compose.foundation.ScrollState(1500)) {} }
+    @Test fun liveTwoWaiting()=capture("live_two_waiting") { LanWaiting(previewLiveLan(2),LanActions(),{},{}) }
+    @Test fun liveThreeWaiting()=capture("live_three_waiting") { LanWaiting(previewLiveLan(3),LanActions(),{},{}) }
+    @Test fun liveOwnSelector()=capture("live_own_selector") {
+        val s=previewLiveLan(3)
+        val room=s.snapshot!!.copy(mine=null,members=s.snapshot.members.map { it.copy(submitted=false) })
+        SelectorScreen(lanGameState(room),Actions(),playerIndex=0,liveContent={ LiveRules(s.copy(snapshot=room),compact=true) } )
+    }
+    @Test fun liveWatchContent()=capture("live_watch") { LiveWatchContent(previewLiveLan(3),LanActions()) }
+    @Test fun liveDisabledWaiting()=capture("live_disabled") { LanWaiting(previewLiveLan(3).let { it.copy(liveRuler=false,snapshot=it.snapshot!!.copy(liveEnabled=false)) },LanActions(),{},{}) }
+    @Test fun liveFourPrivate()=capture("live_four_private") { LanWaiting(previewLiveLan(4),LanActions(),{},{}) }
+    @Test fun liveHugeAndDecimal()=capture("live_huge_decimal") {
+        val s=previewLiveLan(3);val room=s.snapshot!!
+        val q=room.prompt!!.copy(min=.1,max=2e9,scale="log",decimals=1)
+        LiveWatchContent(s.copy(snapshot=room.copy(prompt=q),liveValues=mapOf(1 to 1.4e9,2 to .5)),LanActions())
+    }
+    @Test fun liveLongNamesAndConfirmed()=capture("live_long_names_confirmed") {
+        val s=previewLiveLan(3);val room=s.snapshot!!
+        LiveWatchContent(s.copy(snapshot=room.copy(members=room.members.map { it.copy(name="Alejandra123",submitted=it.id!=1) }),liveValues=mapOf(1 to 9999.0)),LanActions())
+    }
     companion object {
         @JvmStatic @Parameterized.Parameters(name="{0}x{1}@{2}-{3}p") fun params()=listOf(
             arrayOf<Any>(360,800,1f,2),arrayOf<Any>(360,800,1f,8),

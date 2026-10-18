@@ -22,7 +22,7 @@ import java.util.UUID
 import java.util.concurrent.Executors
 
 data class FoundRoom(val name: String,val endpoint: String)
-data class LanUiState(val name: String="",val endpoint: String="",val code: String="",val active: Boolean=false,val host: Boolean=false,val connection: LanConnection=LanConnection.CLOSED,val snapshot: LanSnapshot?=null,val addresses: List<String> = emptyList(),val rooms: List<FoundRoom> = emptyList(),val error: LanFailure?=null,val pending: Double?=null,val browsing: Boolean=false)
+data class LanUiState(val name: String="",val endpoint: String="",val code: String="",val active: Boolean=false,val host: Boolean=false,val connection: LanConnection=LanConnection.CLOSED,val snapshot: LanSnapshot?=null,val addresses: List<String> = emptyList(),val rooms: List<FoundRoom> = emptyList(),val error: LanFailure?=null,val pending: Double?=null,val browsing: Boolean=false,val liveRuler: Boolean=true,val liveValues: Map<Int,Double> = emptyMap())
 private data class PendingGuess(val game: String,val round: Int,val value: Double)
 
 /** Process-scoped session: Activity recreation never owns or closes sockets. */
@@ -32,7 +32,7 @@ class LanRepository private constructor(private val app: Application) {
     private val main=Handler(Looper.getMainLooper())
     private val worker=Executors.newSingleThreadExecutor { r -> Thread(r,"lan-setup").apply { isDaemon=true } }
     private val token=prefs.getString("token",null) ?: UUID.randomUUID().toString().also { prefs.edit { putString("token",it) } }
-    private val mutable=MutableStateFlow(LanUiState(name=prefs.getString("name","")!!,endpoint=prefs.getString("endpoint","")!!,code=prefs.getString("code","")!!))
+    private val mutable=MutableStateFlow(LanUiState(name=prefs.getString("name","")!!,endpoint=prefs.getString("endpoint","")!!,code=prefs.getString("code","")!!,liveRuler=prefs.getBoolean("liveRuler",true)))
     val state: StateFlow<LanUiState> = mutable.asStateFlow()
     private var generation=0
     private var server: LanServer?=null
@@ -57,9 +57,10 @@ class LanRepository private constructor(private val app: Application) {
         mutable.update { it.copy(active=true,host=true,snapshot=null,addresses=emptyList(),pending=null,error=null,connection=LanConnection.CONNECTING) }
         if(!foreground()) return
         prefs.edit { putString("name",name) }
+        val liveRuler=mutable.value.liveRuler
         worker.execute {
             try {
-                val room=LanServer(pool,name,onState={ s -> main.post { if(gen==generation) receive(s) } },onFailure={ e -> main.post { if(gen==generation) mutable.update { it.copy(error=e,pending=null) } } })
+                val room=LanServer(pool,name,onState={ s -> main.post { if(gen==generation) receive(s) } },onFailure={ e -> main.post { if(gen==generation) mutable.update { it.copy(error=e,pending=null) } } },hostLiveRuler=liveRuler,onLive={ f -> main.post { if(gen==generation) receiveLive(f) } })
                 main.post {
                     if(gen!=generation) { room.close();return@post }
                     server=room;mutable.update { it.copy(code=room.code,connection=LanConnection.CONNECTED,addresses=addresses(room.port)) };register(room.port,name)
@@ -84,15 +85,30 @@ class LanRepository private constructor(private val app: Application) {
             onConnection={ connection,error -> main.post { if(gen==generation) {
                 if(error==LanFailure.INVALID) { pending=null;clearPending() }
                 mutable.update { it.copy(connection=connection,error=error,pending=if(error==LanFailure.INVALID) null else it.pending) }
+                if(connection!=LanConnection.CONNECTED) mutable.update { it.copy(liveValues=emptyMap()) }
                 if(connection==LanConnection.FAILED || connection==LanConnection.CLOSED) close()
-            } } })
+            } } },liveRuler=s.liveRuler,onLive={ f -> main.post { if(gen==generation) receiveLive(f) } })
     }
     private fun receive(s: LanSnapshot) {
         val old=mutable.value.snapshot
         if(old!=null && old.roomId==s.roomId && s.revision<old.revision) return
         val p=pending
         if(p!=null && (p.game!=s.gameId || p.round!=s.round || s.stage!=LanStage.ANSWERING || s.mine!=null)) { pending=null;clearPending() }
-        mutable.update { it.copy(snapshot=s,error=null,pending=pending?.value) }
+        mutable.update { it.copy(snapshot=s,error=null,pending=pending?.value,liveValues=if(old?.revision==s.revision && s.liveEnabled && it.liveRuler) it.liveValues else emptyMap()) }
+    }
+    private fun receiveLive(frame: LanLiveFrame) {
+        mutable.update { s -> if(s.liveRuler && s.connection==LanConnection.CONNECTED && s.snapshot?.let { frame.accepts(it) }==true) s.copy(liveValues=frame.values) else s }
+    }
+    fun livePreference(enabled: Boolean) {
+        if(mutable.value.liveRuler==enabled) return
+        prefs.edit { putBoolean("liveRuler",enabled) }
+        mutable.update { it.copy(liveRuler=enabled,liveValues=emptyMap()) }
+        if(mutable.value.host) server?.preference(enabled) else client?.preference(enabled)
+    }
+    fun preview(value: Double,game: String,round: Int) {
+        val s=mutable.value;val room=s.snapshot ?: return
+        if(!s.liveRuler || !room.liveEnabled || room.gameId!=game || room.round!=round || room.stage!=LanStage.ANSWERING || room.mine!=null || s.pending!=null || s.connection!=LanConnection.CONNECTED || !EstimateInput.accepts(room.prompt!!.model(),value)) return
+        if(s.host) server?.preview(game,round,room.revision,value) else client?.preview(game,round,room.revision,value)
     }
     private fun clearPending() { prefs.edit { remove("pending_value");remove("pending_game");remove("pending_round") } }
     fun submit(value: Double,game: String,round: Int) {
@@ -112,7 +128,7 @@ class LanRepository private constructor(private val app: Application) {
     fun close() {
         generation++;server?.close();server=null;client?.close();client=null;pending=null
         registration?.let { runCatching { nsd.unregisterService(it) } };registration=null
-        stopBrowsing();mutable.update { it.copy(active=false,snapshot=null,pending=null,connection=LanConnection.CLOSED,addresses=emptyList()) }
+        stopBrowsing();mutable.update { it.copy(active=false,snapshot=null,pending=null,liveValues=emptyMap(),connection=LanConnection.CLOSED,addresses=emptyList()) }
         app.stopService(serviceIntent)
     }
     private fun addresses(port: Int): List<String> = runCatching {
