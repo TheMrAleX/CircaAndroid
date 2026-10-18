@@ -65,7 +65,7 @@ private fun Modifier.clipCompat()=clip(RoundedCornerShape(28.dp)).border(1.dp,Co
 
 @Composable fun LicenseContent() {
     val context=LocalContext.current
-    val text=remember { context.assets.open("LICENSE.txt").bufferedReader().use { it.readText() }+"\n\nFredoka — SIL OFL\n\n"+context.assets.open("Fredoka-OFL.txt").bufferedReader().use { it.readText() } }
+    val text=remember { context.assets.open("LICENSE.txt").bufferedReader().use { it.readText() }+"\n\nFredoka — SIL OFL\n\n"+context.assets.open("Fredoka-OFL.txt").bufferedReader().use { it.readText() }+"\n\nMIT — versiones hasta 1.0.7\n\n"+context.assets.open("MIT-through-v1.0.7.txt").bufferedReader().use { it.readText() } }
     SelectionContainer { Label(text,size=13,color=Tokens.muted) }
 }
 @Composable fun LicenseDialog(onDismiss: ()->Unit) {

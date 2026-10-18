@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.background
@@ -109,20 +110,36 @@ class ScreensTest(private val width: Int,private val height: Int,private val sca
     @Test fun liveOwnSelector()=capture("live_own_selector") {
         val s=previewLiveLan(3)
         val room=s.snapshot!!.copy(mine=null,members=s.snapshot.members.map { it.copy(submitted=false) })
-        SelectorScreen(lanGameState(room),Actions(),playerIndex=0,liveContent={ LiveRules(s.copy(snapshot=room),compact=true) } )
+        SelectorScreen(lanGameState(room),Actions(),playerIndex=0,liveRoom=s.copy(snapshot=room),onLiveSettings={} )
     }
-    @Test fun liveWatchContent()=capture("live_watch") { LiveWatchContent(previewLiveLan(3),LanActions()) }
+    @Test fun liveWatchContent()=capture("live_watch") { LiveSettingsContent(previewLiveLan(players),LanActions()) }
     @Test fun liveDisabledWaiting()=capture("live_disabled") { LanWaiting(previewLiveLan(3).let { it.copy(liveRuler=false,snapshot=it.snapshot!!.copy(liveEnabled=false)) },LanActions(),{},{}) }
-    @Test fun liveFourPrivate()=capture("live_four_private") { LanWaiting(previewLiveLan(4),LanActions(),{},{}) }
+    @Test fun liveFourShared()=capture("live_four_shared") { LanWaiting(previewLiveLan(4),LanActions(),{},{}) }
     @Test fun liveHugeAndDecimal()=capture("live_huge_decimal") {
         val s=previewLiveLan(3);val room=s.snapshot!!
         val q=room.prompt!!.copy(min=.1,max=2e9,scale="log",decimals=1)
-        LiveWatchContent(s.copy(snapshot=room.copy(prompt=q),liveValues=mapOf(1 to 1.4e9,2 to .5)),LanActions())
+        SharedLiveBoard(s.copy(snapshot=room.copy(prompt=q),liveValues=mapOf(1 to 1.4e9,2 to .5)),modifier=Modifier.fillMaxSize())
     }
     @Test fun liveLongNamesAndConfirmed()=capture("live_long_names_confirmed") {
         val s=previewLiveLan(3);val room=s.snapshot!!
-        LiveWatchContent(s.copy(snapshot=room.copy(members=room.members.map { it.copy(name="Alejandra123",submitted=it.id!=1) }),liveValues=mapOf(1 to 9999.0)),LanActions())
+        SharedLiveBoard(s.copy(snapshot=room.copy(members=room.members.map { it.copy(name="Alejandra123",submitted=it.id!=1) }),liveValues=mapOf(1 to 9999.0)),modifier=Modifier.fillMaxSize())
     }
+    @Test fun sharedAllPlayersSelector()=capture("shared_all_selector") {
+        val s=previewLiveLan(players);val room=s.snapshot!!.copy(mine=null,members=s.snapshot.members.map { it.copy(name="Alejandra123",submitted=it.id==2) })
+        SelectorScreen(lanGameState(room),Actions(),playerIndex=room.self,liveRoom=s.copy(snapshot=room),onLiveSettings={})
+    }
+    @Test fun sharedAllPlayersWaiting()=capture("shared_all_waiting") { LanWaiting(previewLiveLan(players),LanActions(),{},{}) }
+    @Test fun sharedEmptyDrafts()=capture("shared_empty_drafts") {
+        val s=previewLiveLan(players)
+        SharedLiveBoard(s.copy(liveValues=emptyMap()),modifier=Modifier.fillMaxSize())
+    }
+    @Test fun sharedPreciseSelector()=capture("shared_precise_selector") {
+        val s=previewLiveLan(players);val room=s.snapshot!!
+        val q=room.prompt!!.copy(text="¿Cuántos metros por segundo al cuadrado vale la gravedad estándar de referencia terrestre?",min=0.0,max=30.0,unit="m/s²",decimals=5)
+        val r=room.copy(mine=null,prompt=q,members=room.members.map { it.copy(submitted=false) })
+        SelectorScreen(lanGameState(r),Actions(),playerIndex=r.self,liveRoom=s.copy(snapshot=r,liveValues=room.members.drop(1).associate { it.id to 9.80665 }),onLiveSettings={})
+    }
+    @Test fun license()=capture("license") { androidx.compose.foundation.layout.Column(Modifier.padding(20.dp)) { LicenseContent() } }
     companion object {
         @JvmStatic @Parameterized.Parameters(name="{0}x{1}@{2}-{3}p") fun params()=listOf(
             arrayOf<Any>(360,800,1f,2),arrayOf<Any>(360,800,1f,8),

@@ -77,11 +77,11 @@ fun lanError(error: LanFailure): Int = when(error) {
         }
         room.stage==LanStage.LOBBY -> LanLobby(state,pool,actions) { leave() }
         room.stage==LanStage.ANSWERING -> {
-            if(room.mine!=null || state.pending!=null) LanWaiting(state,actions,{ leave() },{cancel=true})
+            if(room.mine!=null || state.pending!=null) LanWaiting(state,actions,{ leave() },{cancel=true},onLiveSettings={watching=true})
             else key(room.gameId,room.round,room.self) {
                 SelectorScreen(projected!!,Actions(confirm={v,_,_->actions.submit(v,room.gameId,room.round)}),playerIndex=room.self,
                     onPreview=if(state.liveRuler && room.liveEnabled) { v -> actions.preview(v,room.gameId,room.round) } else null,previewEpoch=room.revision,
-                    liveContent=if(state.liveRuler && room.liveEnabled) { { LiveRules(state,compact=true) { watching=true } } } else null) { leave() }
+                    liveRoom=state,onLiveSettings={watching=true}) { leave() }
             }
         }
         else -> {
@@ -103,7 +103,7 @@ fun lanError(error: LanFailure): Int = when(error) {
         }
     }
     if(watching && room?.stage==LanStage.ANSWERING && state.active) ModalBottomSheet(onDismissRequest={watching=false},containerColor=Tokens.bg,shape=RoundedCornerShape(topStart=28.dp,topEnd=28.dp)) {
-        LiveWatchContent(state,actions)
+        LiveSettingsContent(state,actions) { watching=false;leave() }
     }
     if(exit) GameDialog(stringResource(if(state.host) R.string.lan_close_title else R.string.lan_leave_title),stringResource(if(state.host) R.string.lan_close_body else R.string.lan_leave_body),stringResource(R.string.lan_stay),stringResource(R.string.lan_leave),onPrimary={exit=false},onSecondary={exit=false;actions.close();onBack()},onDismiss={exit=false})
     if(cancel) GameDialog(stringResource(R.string.lan_cancel_title),stringResource(R.string.lan_cancel_body),stringResource(R.string.keep_playing),stringResource(R.string.lan_back_lobby),onPrimary={cancel=false},onSecondary={cancel=false;actions.lobby()},onDismiss={cancel=false})
@@ -238,8 +238,21 @@ fun lanError(error: LanFailure): Int = when(error) {
     }
 }
 
-@Composable fun LanWaiting(state: LanUiState,actions: LanActions,onExit: ()->Unit,onCancel: ()->Unit) {
+@Composable fun LanWaiting(state: LanUiState,actions: LanActions,onExit: ()->Unit,onCancel: ()->Unit,onLiveSettings: ()->Unit = {}) {
     val room=state.snapshot ?: return
+    if(state.liveRuler && room.liveEnabled) {
+        ScreenColumn {
+            SelectorHeader(Player(room.self,room.members[room.self].name,room.self),room.self+1,room.members.size,room.round+1,room.rounds,onExit,simultaneous=true,onLiveSettings=onLiveSettings)
+            Box(Modifier.fillMaxWidth().padding(horizontal=20.dp,vertical=8.dp)) { Label(room.prompt!!.text,size=16,bold=true,center=true) }
+            Label(stringResource(if(room.mine==null) R.string.live_sending_count else R.string.live_waiting_count,room.members.count { it.submitted },room.members.size),Modifier.fillMaxWidth().padding(horizontal=20.dp,vertical=8.dp).semantics { liveRegion=LiveRegionMode.Polite },size=14,color=Tokens.muted,center=true)
+            SharedLiveBoard(state,modifier=Modifier.weight(1f).fillMaxWidth())
+            BottomActions {
+                if(state.host) GameButton(stringResource(R.string.lan_back_lobby),outline=true,onClick=onCancel)
+                else GameButton(stringResource(R.string.lan_leave),outline=true,onClick=onExit)
+            }
+        }
+        return
+    }
     ScreenColumn {
         LanTopBar(stringResource(R.string.lan_room),close=true,onAction=onExit)
         Column(Modifier.weight(1f).clipToBounds().verticalScroll(rememberScrollState()).padding(20.dp),verticalArrangement=Arrangement.spacedBy(16.dp)) {
@@ -248,8 +261,7 @@ fun lanError(error: LanFailure): Int = when(error) {
                 Label(stringResource(R.string.lan_waiting),Modifier.fillMaxWidth(),size=26,bold=true,center=true)
                 Label(stringResource(if(state.liveRuler && room.liveEnabled) R.string.live_waiting_hint else R.string.lan_waiting_hint),Modifier.fillMaxWidth(),size=14,color=Tokens.muted,center=true)
             }
-            if(state.liveRuler && room.liveEnabled) LiveRules(state)
-            if(room.members.size in 2..3) LiveRoomPreference(state,actions.liveSetting)
+            LiveRoomPreference(state,actions.liveSetting)
             Label(stringResource(R.string.lan_waiting_count,room.members.count { it.submitted },room.members.size),Modifier.semantics { liveRegion=LiveRegionMode.Polite },size=18,bold=true)
             LanMembers(room)
             if(state.host) Label(stringResource(R.string.lan_cancel_hint),size=13,color=Tokens.muted)
@@ -260,11 +272,11 @@ fun lanError(error: LanFailure): Int = when(error) {
         }
     }
 }
-@Composable fun LiveWatchContent(state: LanUiState,actions: LanActions) {
+@Composable fun LiveSettingsContent(state: LanUiState,actions: LanActions,onExit: (() ->Unit)?=null) {
     Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(20.dp),verticalArrangement=Arrangement.spacedBy(16.dp)) {
         LiveRoomPreference(state,actions.liveSetting)
-        LiveRules(state)
         Label(stringResource(R.string.live_rules_hint),size=13,color=Tokens.muted)
+        onExit?.let { GameButton(stringResource(R.string.lan_leave),outline=true,onClick=it) }
     }
 }
 /** A rendering projection only. The offline match/checkpoint remains independent. */

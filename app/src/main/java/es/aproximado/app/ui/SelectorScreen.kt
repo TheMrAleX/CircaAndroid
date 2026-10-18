@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.*
 import es.aproximado.app.*
 import es.aproximado.app.R
 import es.aproximado.core.*
+import es.aproximado.app.lan.LanUiState
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
@@ -35,9 +36,10 @@ import kotlin.math.*
 
 val LocalFeedback = staticCompositionLocalOf<(Boolean)->Unit> { {} }
 
-@Composable fun SelectorScreen(state: AppState,actions: Actions,initialPosition: Double? = null,playerIndex: Int? = null,onPreview: ((Double)->Unit)? = null,previewEpoch: Long = 0,liveContent: (@Composable ()->Unit)? = null,onExit: ()->Unit = {}) {
+@Composable fun SelectorScreen(state: AppState,actions: Actions,initialPosition: Double? = null,playerIndex: Int? = null,onPreview: ((Double)->Unit)? = null,previewEpoch: Long = 0,liveRoom: LanUiState? = null,onLiveSettings: (() ->Unit)? = null,onExit: ()->Unit = {}) {
     val m=state.match ?: return;val q=state.question() ?: return
     val p=m.config.players[playerIndex ?: m.turn];val style=Tokens.players[p.style]
+    val shared=liveRoom?.takeIf { it.liveRuler && it.snapshot?.liveEnabled==true }
     val scope=rememberCoroutineScope()
     val density=LocalDensity.current
     val feedback=LocalFeedback.current
@@ -60,6 +62,7 @@ val LocalFeedback = staticCompositionLocalOf<(Boolean)->Unit> { {} }
     val display=formatEstimate(q,value)
     val reference=remember(q) { formatEstimate(q,q.max).replace(Regex("[0-9]"),"8") }
     var controlsHeight by remember { mutableIntStateOf(0) }
+    var plotHeight by remember { mutableIntStateOf(0) }
     fun setPosition(next: Float) {
         if(submitted) return
         position=next.coerceIn(0f,1f);exact=null
@@ -75,16 +78,15 @@ val LocalFeedback = staticCompositionLocalOf<(Boolean)->Unit> { {} }
         position=RulerScale.position(q,next).toFloat();exact=next;feedback(false)
     }
     ScreenColumn {
-        SelectorHeader(p,(playerIndex ?: m.turn)+1,m.config.players.size,m.round+1,m.config.rounds,onExit,playerIndex!=null)
-        Box(Modifier.fillMaxWidth().heightIn(max=144.dp).verticalScroll(rememberScrollState()).padding(horizontal=24.dp,vertical=8.dp)) {
+        SelectorHeader(p,(playerIndex ?: m.turn)+1,m.config.players.size,m.round+1,m.config.rounds,onExit,playerIndex!=null,onLiveSettings)
+        Box(Modifier.fillMaxWidth().then(if(shared==null) Modifier.heightIn(max=144.dp).verticalScroll(rememberScrollState()) else Modifier).padding(horizontal=24.dp,vertical=8.dp)) {
             Label(q.text,Modifier.fillMaxWidth(),16,bold=true,center=true)
         }
-        liveContent?.invoke()
         BoxWithConstraints(Modifier.weight(1f).fillMaxWidth().clipToBounds()) {
             val controlSize=if(controlsHeight>0) with(density) { controlsHeight.toDp() } else 212.dp
             val upper=60.dp
             val lower=(maxHeight-controlSize-68.dp).coerceAtLeast(upper+1.dp)
-            val travel=lower-upper
+            val travel=if(shared!=null) { if(plotHeight>0) (with(density) { plotHeight.toDp() }-24.dp).coerceAtLeast(1.dp) else 80.dp } else lower-upper
             val travelPx=with(density) { travel.toPx() }
             val panelTop=lower-travel*position
             val description=stringResource(R.string.estimate_accessibility,display)
@@ -97,22 +99,34 @@ val LocalFeedback = staticCompositionLocalOf<(Boolean)->Unit> { {} }
                             fling.animateDecay(-velocity/travelPx,decay) { setPosition(this.value) }
                         }
                     })) {
-                // The ticks never scroll. The colored boundary tracks the selected position.
-                RulerCanvas(Modifier.fillMaxSize().alpha(.65f))
-                Box(Modifier.offset { IntOffset(0,panelTop.roundToPx()) }.fillMaxSize()
-                    .graphicsLayer { translationY=leaving.value*size.height }
-                    .clip(RoundedCornerShape(topStart=32.dp,topEnd=32.dp)).background(style.color))
-                BigNumber(display,Modifier.offset { IntOffset(0,(panelTop-60.dp).roundToPx()) }
-                    .padding(horizontal=24.dp).graphicsLayer { translationY=leaving.value*size.height },
-                    style,maxSize=80,referenceText=reference)
-                if(q.unit!=null || display.length>10) Column(Modifier.offset { IntOffset(0,(panelTop+48.dp).roundToPx()) }.fillMaxWidth().padding(horizontal=24.dp),horizontalAlignment=Alignment.CenterHorizontally) {
-                    if(display.length>10) Label(formatNumber(value),size=13,color=style.ink,center=true)
-                    q.unit?.let { Label(it,size=14,color=style.ink,center=true) }
+                if(shared!=null) {
+                    SharedLiveBoard(shared,Modifier.fillMaxSize().padding(bottom=controlSize+8.dp),ownValue=value,onPlotHeight={plotHeight=it})
+                } else {
+                    // The ticks never scroll. The colored boundary tracks the selected position.
+                    RulerCanvas(Modifier.fillMaxSize().alpha(.65f))
+                    Box(Modifier.offset { IntOffset(0,panelTop.roundToPx()) }.fillMaxSize()
+                        .graphicsLayer { translationY=leaving.value*size.height }
+                        .clip(RoundedCornerShape(topStart=32.dp,topEnd=32.dp)).background(style.color))
+                    BigNumber(display,Modifier.offset { IntOffset(0,(panelTop-60.dp).roundToPx()) }
+                        .padding(horizontal=24.dp).graphicsLayer { translationY=leaving.value*size.height },
+                        style,maxSize=80,referenceText=reference)
+                    if(q.unit!=null || display.length>10) Column(Modifier.offset { IntOffset(0,(panelTop+48.dp).roundToPx()) }.fillMaxWidth().padding(horizontal=24.dp),horizontalAlignment=Alignment.CenterHorizontally) {
+                        if(display.length>10) Label(formatNumber(value),size=13,color=style.ink,center=true)
+                        q.unit?.let { Label(it,size=14,color=style.ink,center=true) }
+                    }
                 }
                 Column(Modifier.align(Alignment.BottomCenter).fillMaxWidth().onSizeChanged { controlsHeight=it.height }
-                    .graphicsLayer { translationY=leaving.value*size.height }.navigationBarsPadding().padding(20.dp),
+                    .graphicsLayer { translationY=leaving.value*size.height }
+                    .then(if(shared!=null) Modifier.clip(RoundedCornerShape(topStart=24.dp,topEnd=24.dp)).background(style.color) else Modifier)
+                    .navigationBarsPadding().padding(horizontal=20.dp,vertical=if(shared!=null) 12.dp else 20.dp),
                     horizontalAlignment=Alignment.CenterHorizontally,verticalArrangement=Arrangement.spacedBy(12.dp)) {
-                    Label(stringResource(R.string.drag_hint),Modifier.fillMaxWidth(),13,style.ink,center=true)
+                    if(shared!=null) {
+                        Row(Modifier.fillMaxWidth(),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+                            BigNumber(display,Modifier.weight(1f).height(44.dp),style,maxSize=36,referenceText=reference)
+                            q.unit?.let { Label(it,Modifier.widthIn(max=80.dp),13,style.ink,center=true) }
+                        }
+                        if(reference.length>10) Label(formatEstimate(q,value),size=12,color=style.ink,center=true)
+                    } else Label(stringResource(R.string.drag_hint),Modifier.fillMaxWidth(),13,style.ink,center=true)
                     Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(12.dp),verticalAlignment=Alignment.CenterVertically) {
                         RoundButton("−",stringResource(R.string.decrease),color=style.ink.copy(alpha=.15f),ink=style.ink,enabled=!submitted) { fine(-1) }
                         Box(Modifier.weight(1f).heightIn(min=48.dp).clip(RoundedCornerShape(16.dp)).background(style.ink.copy(alpha=.12f))
@@ -155,7 +169,7 @@ val LocalFeedback = staticCompositionLocalOf<(Boolean)->Unit> { {} }
     }
 }
 
-@Composable fun SelectorHeader(player: Player,turn: Int,players: Int,round: Int,rounds: Int,onExit: ()->Unit,simultaneous: Boolean = false) {
+@Composable fun SelectorHeader(player: Player,turn: Int,players: Int,round: Int,rounds: Int,onExit: ()->Unit,simultaneous: Boolean = false,onLiveSettings: (() ->Unit)? = null) {
     val style=Tokens.players[player.style]
     Row(Modifier.fillMaxWidth().heightIn(min=80.dp).padding(horizontal=20.dp,vertical=8.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(12.dp)) {
         PlayerAvatar(player.name,style,40.dp)
@@ -163,7 +177,8 @@ val LocalFeedback = staticCompositionLocalOf<(Boolean)->Unit> { {} }
             Label(player.name,size=20,color=style.inkLight,bold=true)
             Label(if(simultaneous) stringResource(R.string.lan_selector_progress,round,rounds,players) else stringResource(R.string.selector_progress,turn,players,round,rounds),size=13,color=Tokens.muted)
         }
-        RoundButton("×",stringResource(R.string.close),color=Color.Transparent) { onExit() }
+        if(onLiveSettings!=null) RoundButton("⋮",stringResource(R.string.live_options),color=Color.Transparent,onClick=onLiveSettings)
+        else RoundButton("×",stringResource(R.string.close),color=Color.Transparent) { onExit() }
     }
 }
 

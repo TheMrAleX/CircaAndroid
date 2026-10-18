@@ -153,16 +153,17 @@ No está afiliada a ningún juego existente</string>
     <string name="lan_notification_text">Toca para volver a la sala. Mantén la Wi-Fi conectada.</string>
     <string name="live_multiplayer">Multijugador LAN</string>
     <string name="live_title">Regla en vivo</string>
-    <string name="live_rules_hint">Con 2 o 3 jugadores pueden ver cómo los demás mueven su regla. Todos deben tener esta opción activada. Con 4 o más, las estimaciones son privadas.</string>
-    <string name="live_active">En vivo · aún pueden cambiar</string>
+    <string name="live_rules_hint">Con 2–8 jugadores verán todas las barras en el mismo gráfico. Arrastra sobre cualquier barra para ajustar solo la tuya. Si alguien apaga esta opción, las estimaciones son privadas para todos.</string>
+    <string name="live_active">Tablero compartido · 2–8 jugadores</string>
     <string name="live_off">Las estimaciones permanecen privadas.</string>
     <string name="live_wait_consent">Se activará cuando todos estén conectados y tengan la opción encendida.</string>
-    <string name="live_large_room">Disponible solo en salas de 2 o 3 jugadores.</string>
-    <string name="live_view">Ver reglas en vivo</string>
     <string name="live_waiting_hint">Tu respuesta está confirmada. Mira cómo ajustan su regla los demás.</string>
     <string name="live_pending">Aún sin mover</string>
     <string name="live_confirmed">Confirmó</string>
     <string name="live_movement">Regla de %1$s: %2$s</string>
     <string name="license_title">Licencia y créditos</string>
     <string name="license_read">Leer licencia completa</string>
+    <string name="live_options">Opciones de regla en vivo</string>
+    <string name="live_waiting_count">Tu respuesta está lista · %1$d/%2$d</string>
+    <string name="live_sending_count">Enviando tu respuesta · %1$d/%2$d</string>
 </resources>

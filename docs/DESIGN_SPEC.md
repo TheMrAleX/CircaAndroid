@@ -176,3 +176,11 @@ Tras confirmar antes que los demás, mostrar «Esperando resultados…» con un 
 ## Reglas en vivo LAN 1.0.7
 
 Con 2 o 3 jugadores y consentimiento unánime, mostrar indicadores compactos de los oponentes al seleccionar y reglas de lectura durante la espera. Regla fija y panel de color móvil con interpolación de 140 ms; sin animar ni reiniciar la selección propia. Pulsar los indicadores abre un sheet desplazable con reglas mayores y el interruptor personal. Reutilizar el switch en Ajustes y la sala. Con 4–8 jugadores o cualquier interruptor apagado, ocultar y dejar de enviar borradores; conservar la espera animada. La confirmación y los resultados son independientes del movimiento compartido.
+
+## Tablero compartido LAN 1.0.8 (petición prioritaria)
+
+Sustituir las tarjetas/mini reglas de 1.0.7 por un solo gráfico en el selector con todas las barras, incluida la propia, para 2–8 jugadores. Columna fija por jugador y color; misma escala pública para todos, sin reajustarla a las estimaciones. Nombre propio con su color en cabecera, botón de opciones de privacidad y valor propio legible sobre los controles inferiores. Arrastrar verticalmente sobre cualquier columna, fondo, leyenda o zona de controles ajusta solo la barra local. Mantener teclado y ajuste fino; la pregunta larga puede desplazarse y la cabecera conserva sus botones.
+
+Regla fija, barra propia sin retardo y barras remotas interpoladas 140 ms. Mostrar valores en una leyenda fija de 1 fila hasta 4 jugadores o 2 filas hasta 8, con numeración correspondiente a las barras: evitar pills flotantes y solapes con ocho jugadores. Ajustar números a una línea; nombres largos pueden abreviarse visualmente conservando su descripción completa. Confirmar congela la barra propia, conserva el tablero mientras terminan los demás y no permite editar la respuesta. Las confirmadas ajenas también quedan visibles y congeladas mientras el modo compartido esté autorizado. Nunca revelar el objetivo real antes de que confirmen todos.
+
+Conservar interruptor y consentimiento unánime para toda la sala. Si cualquiera lo apaga o se pierde conexión, retirar todo valor ajeno y volver al selector/espera privados. Opciones accesibles desde la cabecera sin salir ni perder la selección. Licencia y crédito al autor actualizados en Acerca de, con texto íntegro desplazable y licencias de terceros.
