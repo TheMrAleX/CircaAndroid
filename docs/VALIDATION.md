@@ -1,4 +1,4 @@
-# Validación de Aproximado 1.0.4
+# Validación de Aproximado 1.0.5
 
 ## Alcance
 
@@ -77,3 +77,16 @@ Las firmas oficiales de 1.0.2 y 1.0.3 difieren. La instalación pública requier
 ## Publicación 1.0.4 verificada
 
 CI `39144757551` y release `39144766164` correctos. APK oficial descargado: SHA256 `4878e463a6df6eb8aefc351aece68ce799f612b7572eeeba01a065b54098c027`, firma v2 RSA3072, versión 1.0.4/código 5, ARM64 exclusivo, sin INTERNET, DB3 íntegra y coincidencia completa de las 400 filas con los JSON. Lint debug/release local: sin incidencias; build release con R8 y firma correcto. El certificado difiere del de 1.0.3, con las consecuencias de instalación documentadas en RELEASING.md.
+
+## LAN 1.0.5
+
+- 173 casos locales correctos, sin omisiones: 18 de motor existente, 10 de motor/protocolo LAN, 8 de integración offline, 1 de integración Android LAN y 136 capturas comparadas.
+- Sockets TCP reales: ocho participantes, cinco rondas, resultados idénticos, desconexión y reentrada con la misma plaza/respuesta. Proxy TCP de prueba corta una conexión y verifica reconexión automática y reenvío idempotente de una confirmación no reconocida.
+- Privacidad de snapshots, ausencia de IDs/fuentes/respuestas antes de revelación, código incorrecto, sala llena, entradas tardías, estados inválidos, límites, confirmaciones duplicadas/de otra partida o ronda, valores no finitos/fuera de rango/precisión incorrecta y rechazo de manipulación/replay.
+- Android simulado: foreground connectedDevice con notificación, recreación de ViewModel sin perder sala, resultados coherentes para anfitrión/invitado y preservación de preferencias offline. Compilación de API 35/minSdk 26.
+- Pantallas LAN: crear/unirse, sala anfitrión/invitado, roster desplazado de ocho personas, filtros, espera, reconexión y selector propio. Matriz 360×800 (2/8), 320×640 y 411×914 con fontScale 1.3. Se revisaron renders pequeños y cabeceras/listas/botones fijos. Las filas parcialmente visibles por scroll no son texto truncado permanentemente.
+- `:core:test :app:verifyPaparazziDebug :app:lintDebug :app:assembleDebug` correcto; lint debug sin incidencias. El catálogo sigue con 400 preguntas validadas y Room 3 sin cambios.
+
+No hay `/dev/kvm`, emulador instalado ni teléfonos físicos disponibles. Las conexiones reales anteriores son loopback, no ensayos de radios Wi-Fi ni hotspot físico. Las comprobaciones de fabricante/red descritas en LAN.md quedan pendientes de dispositivos; no se declara una auditoría criptográfica externa ni garantía frente a usuarios maliciosos que posean el código.
+
+Build release local 1.0.5 con R8, recursos reducidos y firma v2 correcto; lint release sin incidencias.

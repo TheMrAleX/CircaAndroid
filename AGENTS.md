@@ -48,5 +48,5 @@ La petición de rediseño 1.0.1 sustituye las posiciones rígidas de la spec ori
 ## Revisión 1.0.5 en curso
 - [x] Motor LAN autoritativo y protocolo cifrado con pruebas de sockets reales.
 - [x] Sala Wi-Fi/hotspot, descubrimiento local, entrada IP y reconexión.
-- [x] UI e integración: 173 casos (28 motor/protocolo, 9 Android, 136 visuales), comparación visual correcta; lint debug sin incidencias y APK debug compilado. Build release en comprobación.
+- [x] UI e integración: 173 casos (28 motor/protocolo, 9 Android, 136 visuales), comparación visual correcta; lint debug sin incidencias y APK debug compilado. Build release/R8 firmado y lint release correctos.
 - [ ] Release publicada y APK verificado.
