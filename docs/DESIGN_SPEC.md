@@ -168,3 +168,7 @@ Omitir el pase de turno. Tras confirmar, mostrar directamente el selector del si
 ## Extensión LAN 1.0.5
 
 Petición del usuario: modo LAN nativo para 2–8 teléfonos en la misma Wi-Fi o en el hotspot de uno de ellos. Reutilizar tema, regla móvil, gráfica y podio. Añadir entrada LAN, creación/unión, sala con configuración del anfitrión, estados de conexión y espera de respuestas. Respuestas simultáneas y privadas hasta confirmar todos. Nombre y color propios siempre visibles. Controles del anfitrión diferenciados de la espera de los invitados. Mantener áreas táctiles de 48 dp y contenido desplazable a 320×640/fontScale 1.3.
+
+## Espera LAN 1.0.6
+
+Tras confirmar antes que los demás, mostrar «Esperando resultados…» con un anillo propio giratorio alrededor del avatar, en el color del jugador. Giro con EaseInOutCubic (.65, 0, .35, 1) de 2,2 s y respiración sutil de 1,1 s. Animar solo la capa gráfica, sin recomponer la sala ni emitir tráfico. Mantener contador real de confirmaciones, lista desplazable y controles existentes; la revelación sigue dependiendo del anfitrión y de que confirmen todos. Respetar la escala de animaciones de Compose; previews/renders usan una fase fija para comparar el layout.

@@ -88,3 +88,11 @@
 - Revisión final LAN: coalescer snapshots completos en la cola para no acumular estados obsoletos. Reenviar la confirmación pendiente solo al recibir el primer snapshot de una reconexión, evitando ráfagas redundantes. Solicitar notificaciones opcionales una sola vez en Android 13+; una negativa no bloquea LAN. Cabeceras opacas y clipping en listas desplazables; pestañas Crear/Unirse para reducir navegación.
 
 - Publicación 1.0.5: conservar tag en `207758c`; CI y release correctos. Verificar el APK adjunto tras descargarlo (firma, SHA256, manifest LAN, ABI y 400 filas), no solo la página del tag. La firma temporal cambia respecto a 1.0.4; informar de desinstalación y pérdida de datos. No afirmar pruebas físicas Wi-Fi/hotspot que este entorno no permite ejecutar.
+
+## 1.0.6 — espera animada LAN
+
+- La confirmación del usuario acredita que 1.0.5 funciona en sus dispositivos; no atribuir esas pruebas a este entorno ni generalizarlas a todos los fabricantes.
+- Reutilizar la pantalla de espera real tras confirmar, sustituyendo el aviso estático por «Esperando resultados…» y un anillo giratorio propio alrededor del avatar. EaseInOutCubic mediante CubicBezierEasing(.65, 0, .35, 1), giro de 2200 ms y respiración 1100 ms. Conservar progreso y controles de la sala.
+- Leer los estados animados en graphicsLayer, sin layout ni tráfico por frame. Compose gestiona el reloj y la escala de animaciones; no añadir timers, dependencias ni cambios de protocolo. Congelar solo la fase de previews/Paparazzi para comparación determinista. La semántica anuncia espera indeterminada y el contador usa liveRegion polite solo al cambiar las confirmaciones.
+
+- Verificar el movimiento con el reloj de animación real en Paparazzi (LocalInspectionMode=false), además de las cuatro capturas de espera: ciclo de 2,2 s a 10 fps, 23 fotogramas y 22 imágenes distintas. Guardar la animación APNG como evidencia y comparar también su referencia en CI. Es comprobación funcional de animación, no medición de fps en hardware físico.

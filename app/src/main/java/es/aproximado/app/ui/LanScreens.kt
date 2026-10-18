@@ -4,6 +4,7 @@ package es.aproximado.app.ui
 import android.content.Intent
 import android.provider.Settings
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,6 +15,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.*
@@ -195,15 +198,48 @@ fun lanError(error: LanFailure): Int = when(error) {
         }
     }
 }
+/** Animation values are read only by the graphics layer: no layout or network work per frame. */
+@Composable fun WaitingOrbit(name: String,style: PlayerStyle,modifier: Modifier = Modifier) {
+    val inspection=LocalInspectionMode.current
+    val rotation: State<Float>
+    val breath: State<Float>
+    if(inspection) {
+        rotation=remember { mutableFloatStateOf(35f) }
+        breath=remember { mutableFloatStateOf(1f) }
+    } else {
+        val motion=rememberInfiniteTransition(label="waiting_orbit")
+        val ease=remember { CubicBezierEasing(.65f,0f,.35f,1f) }
+        rotation=motion.animateFloat(0f,360f,infiniteRepeatable(tween(2200,easing=ease),RepeatMode.Restart),label="orbit_rotation")
+        breath=motion.animateFloat(.94f,1f,infiniteRepeatable(tween(1100,easing=ease),RepeatMode.Reverse),label="orbit_breath")
+    }
+    val description=stringResource(R.string.lan_waiting)
+    Box(modifier.size(104.dp).semantics(mergeDescendants=true) {
+        contentDescription=description
+        progressBarRangeInfo=ProgressBarRangeInfo.Indeterminate
+    },contentAlignment=Alignment.Center) {
+        Canvas(Modifier.fillMaxSize().padding(6.dp).graphicsLayer {
+            rotationZ=rotation.value;scaleX=breath.value;scaleY=breath.value
+        }) {
+            val stroke=Stroke(4.dp.toPx(),cap=StrokeCap.Round)
+            drawCircle(style.color.copy(alpha=.12f),style=stroke)
+            drawArc(style.color,-90f,210f,false,style=stroke)
+            drawArc(style.inkLight,150f,38f,false,style=stroke)
+        }
+        PlayerAvatar(name,style,48.dp)
+    }
+}
+
 @Composable fun LanWaiting(state: LanUiState,actions: LanActions,onExit: ()->Unit,onCancel: ()->Unit) {
     val room=state.snapshot ?: return
     ScreenColumn {
         LanTopBar(stringResource(R.string.lan_room),close=true,onAction=onExit)
         Column(Modifier.weight(1f).clipToBounds().verticalScroll(rememberScrollState()).padding(20.dp),verticalArrangement=Arrangement.spacedBy(16.dp)) {
-            PlayerAvatar(room.members[room.self].name,Tokens.players[room.self],48.dp)
-            Label(stringResource(R.string.lan_waiting),size=28,bold=true)
-            Label(stringResource(R.string.lan_waiting_hint),color=Tokens.muted)
-            Label(stringResource(R.string.lan_waiting_count,room.members.count { it.submitted },room.members.size),size=18,bold=true)
+            Column(Modifier.fillMaxWidth().padding(top=8.dp),horizontalAlignment=Alignment.CenterHorizontally,verticalArrangement=Arrangement.spacedBy(12.dp)) {
+                WaitingOrbit(room.members[room.self].name,Tokens.players[room.self])
+                Label(stringResource(R.string.lan_waiting),Modifier.fillMaxWidth(),size=26,bold=true,center=true)
+                Label(stringResource(R.string.lan_waiting_hint),Modifier.fillMaxWidth(),size=14,color=Tokens.muted,center=true)
+            }
+            Label(stringResource(R.string.lan_waiting_count,room.members.count { it.submitted },room.members.size),Modifier.semantics { liveRegion=LiveRegionMode.Polite },size=18,bold=true)
             LanMembers(room)
             if(state.host) Label(stringResource(R.string.lan_cancel_hint),size=13,color=Tokens.muted)
         }
@@ -233,3 +269,5 @@ fun previewLan(n: Int,stage: LanStage = LanStage.LOBBY,host: Boolean=true): LanU
 
 @Preview(widthDp=360) @Composable fun LanFieldPreview()=AproximadoTheme { LanField(stringResource(R.string.lan_address),"192.168.43.1:45555") {} }
 @Preview(widthDp=360,heightDp=800) @Composable fun LanReconnectPreview(@PreviewParameter(PreviewStates::class) s: AppState)=AproximadoTheme { LanScreen(previewLan(s.config.players.size).copy(connection=LanConnection.RECONNECTING),s.pool,LanActions()) {} }
+
+@Preview(widthDp=160,heightDp=160) @Composable fun WaitingOrbitPreview()=AproximadoTheme { WaitingOrbit("Ana",Tokens.players[1]) }

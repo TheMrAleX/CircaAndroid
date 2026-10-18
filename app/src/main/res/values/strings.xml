@@ -58,7 +58,7 @@
     <string name="clear_confirm">Borrar</string>
     <string name="cancel">Cancelar</string>
     <string name="about">Acerca de</string>
-    <string name="about_text">Versión 1.0.5 · Licencia MIT
+    <string name="about_text">Versión 1.0.6 · Licencia MIT
 No está afiliada a ningún juego existente</string>
     <string name="loading">Preparando las preguntas…</string>
     <string name="error_load">No se pudo abrir la base de preguntas. Vuelve a abrir la app.</string>
@@ -130,8 +130,8 @@ No está afiliada a ningún juego existente</string>
     <string name="lan_connecting">Conectando a la sala…</string>
     <string name="lan_reconnecting">Reconectando…</string>
     <string name="lan_reconnect_hint">Conservamos tu plaza y reenviamos la confirmación si hace falta. Mantén la Wi-Fi conectada y al anfitrión en la sala.</string>
-    <string name="lan_waiting">¡Respuesta enviada!</string>
-    <string name="lan_waiting_hint">La respuesta real y las estimaciones se revelan cuando todos confirman.</string>
+    <string name="lan_waiting">Esperando resultados…</string>
+    <string name="lan_waiting_hint">En cuanto todos confirmen, verás la respuesta y las estimaciones.</string>
     <string name="lan_waiting_count">Confirmaciones: %1$d/%2$d</string>
     <string name="lan_back_lobby">Volver a la sala</string>
     <string name="lan_cancel_title">¿Cancelar esta partida?</string>
