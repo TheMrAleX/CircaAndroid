@@ -81,18 +81,19 @@ class GameTest {
         assertEquals(1f/3f,(scale.position(28.0)-scale.position(23.0))/(scale.position(38.0)-scale.position(23.0)),1e-6f)
         for(answer in listOf(0.0,.5,1.4e9)) {
             val equal=ComparisonScale(q(answer=answer),List(8){answer})
-            assertEquals(.5f,equal.position(answer),1e-6f)
+            assertTrue(equal.position(answer) in 0f..1f)
+            assertEquals(0f,equal.position(0.0),0f)
         }
         val log=ComparisonScale(q(scale="log"),listOf(50.0,200.0))
         assertEquals(log.position(100.0)-log.position(50.0),log.position(200.0)-log.position(100.0),1e-6f)
     }
     @Test fun rulerPrecisionDoesNotRevealAnswerAndEndpointsAreReachable() {
-        val integer=q(answer=100.0).copy(min=.5,max=999.5)
+        val integer=q(answer=100.0).copy(min=.5,max=999.5,decimalPlaces=3)
         val fractional=integer.copy(answer=100.5)
         for(i in 0..1000) assertEquals(RulerScale.snapped(integer,i/1000.0),RulerScale.snapped(fractional,i/1000.0),0.0)
         assertEquals(.5,RulerScale.snapped(integer,0.0),0.0)
         assertEquals(999.5,RulerScale.snapped(integer,1.0),0.0)
-        val fraction=q(answer=.5).copy(min=0.0,max=1.0)
+        val fraction=q(answer=.5).copy(min=0.0,max=1.0,decimalPlaces=3)
         assertEquals(.57,RulerScale.initial(integer.copy(answer=RulerScale.snapped(integer,.5))),1e-9)
         assertEquals(.001,RulerScale.step(fraction,.5),1e-9)
         assertEquals(.501,RulerScale.snapped(fraction,.501),1e-9)
@@ -121,16 +122,58 @@ class GameTest {
         assertEquals(.5,RulerScale.drag(RulerScale.drag(.5,-20.0,200.0),20.0,200.0),1e-9)
     }
     @Test fun movingEstimateKeepsDecimalColumnsAndPrecision() {
-        val question=q().copy(min=0.0,max=10.0)
+        val question=q().copy(min=0.0,max=10.0,decimalPlaces=2)
         assertEquals("3,32",formatEstimate(question,3.32))
         assertEquals("3,40",formatEstimate(question,3.4))
         assertEquals("3,00",formatEstimate(question,3.0))
         assertEquals("10,00",formatEstimate(question,10.0))
         for(i in 300..400) assertEquals(4,formatEstimate(question,i/100.0).length)
-        assertEquals("0,500",formatEstimate(question.copy(max=1.0),.5))
-        assertEquals("1.400.000.000",formatEstimate(question.copy(max=1e12),1.4e9))
-        assertEquals("3,321234",formatEstimate(question,3.321234,6))
-        assertEquals("3,32",formatEstimate(question.copy(max=10000.0),3.32,2))
+        assertEquals("0,500",formatEstimate(question.copy(max=1.0,decimalPlaces=3),.5))
+        assertEquals("1.400.000.000",formatEstimate(question.copy(max=1e12,decimalPlaces=0),1.4e9))
+        assertEquals("3,321",formatEstimate(question.copy(decimalPlaces=3),3.321))
+        assertEquals("3,32",formatEstimate(question.copy(max=10000.0),3.32))
+    }
+
+    @Test fun discreteQuestionsOnlyAllowWholeNumbersInEveryInputPath() {
+        val zodiac=q(answer=12.0).copy(min=0.0,max=36.0)
+        assertEquals(0,RulerScale.fractionDigits(zodiac))
+        assertEquals(1.0,EstimateInput.fineStep(zodiac),0.0)
+        assertTrue(EstimateInput.accepts(zodiac,12.0))
+        assertFalse(EstimateInput.accepts(zodiac,12.5))
+        assertFalse(EstimateInput.accepts(zodiac,Double.NaN))
+        for(scale in listOf("linear","log")) {
+            val question=zodiac.copy(scale=scale,min=if(scale=="log") 1.0 else 0.0)
+            for(i in 0..1000) {
+                val value=RulerScale.snapped(question,i/1000.0)
+                assertTrue(EstimateInput.accepts(question,value))
+                assertEquals(value,kotlin.math.floor(value),0.0)
+                assertFalse(formatEstimate(question,value).contains(','))
+            }
+        }
+        val goal=zodiac.copy(answer=7.32,max=22.0,decimalPlaces=2)
+        assertEquals(.01,EstimateInput.fineStep(goal),0.0)
+        assertTrue(EstimateInput.accepts(goal,7.32))
+        assertFalse(EstimateInput.accepts(goal,7.321))
+        assertEquals("7,30",formatEstimate(goal,7.3))
+        assertTrue(EstimateInput.accepts(goal,EstimateInput.round(goal,.1+.2)))
+    }
+    @Test fun closeBarsHaveProportionalHeightsWithoutAnAutomaticZoom() {
+        val question=q(answer=10.0).copy(max=30.0,decimalPlaces=2)
+        val scale=ComparisonScale(question,listOf(9.99,8.99))
+        assertEquals(0.0,scale.minimum,0.0)
+        assertEquals(0f,scale.position(0.0),0f)
+        assertTrue(scale.position(9.99)-scale.position(8.99)<.1f)
+        assertEquals(9.99/8.99,(scale.position(9.99)/scale.position(8.99)).toDouble(),1e-6)
+        assertEquals(10.0/scale.maximum,scale.position(10.0).toDouble(),1e-6)
+        assertEquals(listOf(0.0,scale.maximum/2,scale.maximum),scale.ticks)
+        val log=ComparisonScale(question.copy(scale="log",min=1.0,max=1000.0),listOf(9.99,8.99))
+        assertEquals(1.0,log.minimum,0.0)
+        assertEquals(1000.0,log.maximum,0.0)
+        assertTrue(log.position(9.99)-log.position(8.99)<.02f)
+        assertTrue(ComparisonScale(question.copy(answer=0.0),List(8){0.0}).maximum>0)
+        val tiny=ComparisonScale(question.copy(answer=.005,decimalPlaces=3),listOf(.004,.005))
+        assertTrue(tiny.maximum<.01)
+        assertEquals(1.25,(tiny.position(.005)/tiny.position(.004)).toDouble(),1e-6)
     }
 
 }

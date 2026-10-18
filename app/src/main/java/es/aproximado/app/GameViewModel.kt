@@ -58,7 +58,7 @@ class GameViewModel(app: Application): AndroidViewModel(app) {
         val s=mutable.value;val m=s.match ?: return
         if(s.screen!=Screen.SELECT || m.currentGuesses.size>=m.config.players.size) return
         val q=s.pool.first { it.id==m.questions[m.round] }
-        if(!value.isFinite() || value !in q.min..q.max) return
+        if(!EstimateInput.accepts(q,value)) return
         val guesses=m.currentGuesses+value
         val stage=if(guesses.size==m.config.players.size) Screen.REVEAL else Screen.PASS
         val all=m.guesses.toMutableList().apply { this[m.round]=guesses }

@@ -80,4 +80,46 @@ class OfflineGameTest {
         app.getSharedPreferences("aproximado",0).edit().putString("state","{invalid").commit()
         assertNull(loaded().state.value.match)
     }
+    @Test fun precisionMetadataAndIntegerKeyboardAreEnforcedByTheViewModel()=runBlocking {
+        val initial=loaded()
+        val zodiac=initial.state.value.pool.first { it.id=="cultura_035" }
+        assertEquals(0,zodiac.decimalPlaces)
+        assertEquals(412,initial.state.value.pool.count { it.decimalPlaces==0 })
+        assertEquals(18,initial.state.value.pool.count { it.decimalPlaces>0 })
+        initial.configure { it.copy(rounds=5) };initial.start()
+        val prefs=app.getSharedPreferences("aproximado",0)
+        val state=org.json.JSONObject(prefs.getString("state",null)!!)
+        state.getJSONObject("match").put("questions",org.json.JSONArray(listOf(zodiac.id)+initial.state.value.pool.filter { it.id!=zodiac.id }.take(4).map { it.id })).put("stage","PASS")
+        prefs.edit().putString("state",state.toString()).commit()
+        val restored=loaded();restored.resume();restored.advance(Screen.SELECT)
+        assertEquals(zodiac,restored.state.value.question())
+        restored.confirm(12.5)
+        assertEquals(Screen.SELECT,restored.state.value.screen)
+        assertTrue(restored.state.value.match!!.currentGuesses.isEmpty())
+        restored.confirm(12.0)
+        assertEquals(Screen.PASS,restored.state.value.screen)
+        assertEquals(listOf(12.0),restored.state.value.match!!.currentGuesses)
+    }
+    @Test fun installedVersionOneDatabaseMigratesWithoutLosingQuestions()=runBlocking {
+        val name="questions-migration-test.db"
+        app.deleteDatabase(name)
+        val file=app.getDatabasePath(name);file.parentFile!!.mkdirs()
+        javaClass.getResourceAsStream("/questions-v1.db")!!.use { input -> file.outputStream().use { input.copyTo(it) } }
+        android.database.sqlite.SQLiteDatabase.openDatabase(file.path,null,android.database.sqlite.SQLiteDatabase.OPEN_READWRITE).use { old ->
+            old.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)")
+            old.execSQL("INSERT OR REPLACE INTO room_master_table VALUES (42,'a75ced22a5d0aabbdaea789f3f207a34')")
+        }
+        val db=androidx.room.Room.databaseBuilder(app,QuestionsDb::class.java,name)
+            .addMigrations(QuestionsDb.precisionMigration(app)).build()
+        try {
+            val migrated=db.questions().all().map { it.model() }
+            val fresh=loaded().state.value.pool
+            assertEquals(fresh,migrated)
+            assertEquals(430,migrated.size)
+            assertEquals(0,migrated.first { it.id=="cultura_035" }.decimalPlaces)
+            assertEquals(2,migrated.first { it.id=="deportes_004" }.decimalPlaces)
+            assertEquals(3,migrated.first { it.id=="curiosidades_013" }.decimalPlaces)
+        } finally { db.close();app.deleteDatabase(name) }
+    }
+
 }

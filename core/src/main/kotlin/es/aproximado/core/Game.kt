@@ -9,7 +9,7 @@ import kotlin.random.Random
 data class Question(
     val id: String, val category: String, val text: String, val answer: Double,
     val unit: String?, val min: Double, val max: Double, val scale: String,
-    val difficulty: Int, val year: Int? = null, val source: String = ""
+    val difficulty: Int, val year: Int? = null, val source: String = "", val decimalPlaces: Int = 0
 )
 data class Player(val id: Int, val name: String, val style: Int = id)
 data class RoundScore(val playerId: Int, val guess: Double, val error: Double, val rank: Int, val points: Int, val bonus: Int)
@@ -80,10 +80,10 @@ object RulerScale {
     // Precision comes from the playable range, never from the hidden answer.
     fun step(q: Question, value: Double): Double {
         val mark = if (q.scale == "log") value * kotlin.math.expm1((ln(q.max) - ln(q.min)) / 1000) else (q.max - q.min) / 1000
-        return niceStep(mark.coerceAtLeast(.001))
+        return niceStep(mark.coerceAtLeast(.001)).coerceAtLeast(10.0.pow(-q.decimalPlaces))
     }
     /** One decimal precision for the whole question, including trailing zeroes. */
-    fun fractionDigits(q: Question): Int = ceil(-log10(step(q, q.min))).toInt().coerceIn(0, 3)
+    fun fractionDigits(q: Question): Int = q.decimalPlaces
 
     /** The boundary follows the finger; moving up increases the selected value. */
     fun drag(position: Double, delta: Double, travel: Double): Double {
@@ -96,7 +96,7 @@ object RulerScale {
         if (position >= 1) return q.max
         val value = value(q, position)
         val step = step(q, value)
-        return (round(value / step) * step).coerceIn(q.min, q.max)
+        return EstimateInput.round(q,(round(value / step) * step).coerceIn(q.min, q.max))
     }
 
 }
@@ -118,20 +118,32 @@ fun formatNumber(value: Double, compact: Boolean = false, fractionDigits: Int? =
     return DecimalFormat(pattern, symbols).format(if (value == 0.0) 0.0 else value / divisor) + suffix
 }
 
-/** Shared comparison domain, including the answer, with room at both ends.
- * Transform before interpolation so a logarithmic tie has equal visual distance.
- */
+/** Proportional linear bars start at zero. Log charts retain the question's domain. */
 class ComparisonScale(q: Question, guesses: List<Double>) {
     private val logarithmic = q.scale == "log"
     private fun transform(value: Double): Double {
-        require(value.isFinite() && (!logarithmic || value > 0))
+        require(value.isFinite() && value >= 0 && (!logarithmic || value > 0))
         return if (logarithmic) ln(value) else value
     }
-    private val values = (guesses + q.answer).map(::transform)
-    private val low = values.min()
-    private val center = low + (values.max() - low) / 2
-    private val span = (values.max() - low).coerceAtLeast(if (logarithmic) .1 else max(abs(q.answer) * .1, .01))
-    fun position(value: Double): Float = ((transform(value) - center) / (span * 1.3) + .5).toFloat().coerceIn(0f,1f)
+    private val values = guesses + q.answer
+    val minimum: Double = if(logarithmic) min(q.min,values.min()) else 0.0
+    val maximum: Double = if(logarithmic) max(q.max,values.max()) else run {
+        val upper=values.max().coerceAtLeast(10.0.pow(-q.decimalPlaces))*1.15
+        val tick=RulerScale.niceStep(upper/4)
+        ceil(upper/tick)*tick
+    }
+    private val low=transform(minimum)
+    private val span=transform(maximum)-low
+    fun position(value: Double): Float = ((transform(value)-low)/span).toFloat().coerceIn(0f,1f)
+    val ticks: List<Double> get() = listOf(minimum,if(logarithmic) exp(low+span/2) else maximum/2,maximum)
 }
 
-fun formatEstimate(q: Question, value: Double, fractionDigits: Int = RulerScale.fractionDigits(q)): String = formatNumber(value, fractionDigits = fractionDigits)
+object EstimateInput {
+    fun accepts(q: Question,value: Double): Boolean = value.isFinite() && value in q.min..q.max &&
+        java.math.BigDecimal.valueOf(value).stripTrailingZeros().scale() <= q.decimalPlaces
+    fun round(q: Question,value: Double): Double = java.math.BigDecimal.valueOf(value)
+        .setScale(q.decimalPlaces,java.math.RoundingMode.HALF_UP).toDouble()
+    fun fineStep(q: Question): Double = 10.0.pow(-q.decimalPlaces)
+}
+
+fun formatEstimate(q: Question, value: Double): String = formatNumber(value, fractionDigits = q.decimalPlaces)

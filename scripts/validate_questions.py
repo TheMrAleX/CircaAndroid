@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """Strict validation shared by generation and CI; no network required."""
+from decimal import Decimal
 import json
 import math
 import unicodedata
 from collections import Counter
 from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
-FIELDS = {'id','category','text_es','answer','unit','min_plausible','max_plausible','scale','difficulty','as_of_year','source_hint'}
+FIELDS = {'id','category','text_es','answer','unit','min_plausible','max_plausible','scale','difficulty','as_of_year','source_hint','decimal_places'}
 def load_questions():
     questions, ids, texts = [], set(), set()
     for path in sorted((ROOT/'data/questions').glob('*.json')):
@@ -31,6 +32,9 @@ def load_questions():
             assert type(q['difficulty']) is int and q['difficulty'] in (1,2,3), q['id']
             assert q['as_of_year'] is None or (type(q['as_of_year']) is int and 1 <= q['as_of_year'] <= 2100), q['id']
             assert q['unit'] is None or isinstance(q['unit'],str), q['id']
+            assert type(q['decimal_places']) is int and 0 <= q['decimal_places'] <= 3, q['id']
+            for key in ('answer','min_plausible','max_plausible'):
+                assert Decimal(str(q[key])).normalize().as_tuple().exponent >= -q['decimal_places'], f'{q["id"]}: {key} exceeds decimal_places'
             questions.append(q)
     counts = Counter(q['category'] for q in questions)
     assert len(questions) >= 400, f'Only {len(questions)} questions'

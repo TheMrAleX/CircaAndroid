@@ -10,7 +10,8 @@
     "scale": "linear",
     "difficulty": 2,
     "as_of_year": null,
-    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
+    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia",
+    "decimal_places": 0
   },
   {
     "id": "curiosidades_002",
@@ -23,7 +24,8 @@
     "scale": "linear",
     "difficulty": 3,
     "as_of_year": null,
-    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
+    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia",
+    "decimal_places": 0
   },
   {
     "id": "curiosidades_003",
@@ -36,7 +38,8 @@
     "scale": "linear",
     "difficulty": 1,
     "as_of_year": null,
-    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
+    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia",
+    "decimal_places": 0
   },
   {
     "id": "curiosidades_004",
@@ -49,7 +52,8 @@
     "scale": "linear",
     "difficulty": 2,
     "as_of_year": null,
-    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
+    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia",
+    "decimal_places": 0
   },
   {
     "id": "curiosidades_005",
@@ -62,7 +66,8 @@
     "scale": "linear",
     "difficulty": 3,
     "as_of_year": null,
-    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
+    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia",
+    "decimal_places": 0
   },
   {
     "id": "curiosidades_006",
@@ -75,7 +80,8 @@
     "scale": "linear",
     "difficulty": 3,
     "as_of_year": null,
-    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
+    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia",
+    "decimal_places": 0
   },
   {
     "id": "curiosidades_007",
@@ -88,7 +94,8 @@
     "scale": "linear",
     "difficulty": 3,
     "as_of_year": null,
-    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
+    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia",
+    "decimal_places": 0
   },
   {
     "id": "curiosidades_008",
@@ -101,7 +108,8 @@
     "scale": "linear",
     "difficulty": 1,
     "as_of_year": null,
-    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
+    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia",
+    "decimal_places": 0
   },
   {
     "id": "curiosidades_009",
@@ -114,7 +122,8 @@
     "scale": "linear",
     "difficulty": 2,
     "as_of_year": null,
-    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
+    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia",
+    "decimal_places": 0
   },
   {
     "id": "curiosidades_010",
@@ -127,7 +136,8 @@
     "scale": "linear",
     "difficulty": 2,
     "as_of_year": null,
-    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
+    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia",
+    "decimal_places": 0
   },
   {
     "id": "curiosidades_011",
@@ -140,7 +150,8 @@
     "scale": "linear",
     "difficulty": 1,
     "as_of_year": null,
-    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
+    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia",
+    "decimal_places": 0
   },
   {
     "id": "curiosidades_012",
@@ -153,7 +164,8 @@
     "scale": "linear",
     "difficulty": 1,
     "as_of_year": null,
-    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
+    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia",
+    "decimal_places": 0
   },
   {
     "id": "curiosidades_013",
@@ -166,7 +178,8 @@
     "scale": "linear",
     "difficulty": 3,
     "as_of_year": null,
-    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
+    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia",
+    "decimal_places": 3
   },
   {
     "id": "curiosidades_014",
@@ -179,7 +192,8 @@
     "scale": "linear",
     "difficulty": 3,
     "as_of_year": null,
-    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
+    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia",
+    "decimal_places": 0
   },
   {
     "id": "curiosidades_015",
@@ -192,7 +206,8 @@
     "scale": "linear",
     "difficulty": 3,
     "as_of_year": null,
-    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
+    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia",
+    "decimal_places": 2
   },
   {
     "id": "curiosidades_016",
@@ -205,7 +220,8 @@
     "scale": "linear",
     "difficulty": 2,
     "as_of_year": null,
-    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
+    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia",
+    "decimal_places": 2
   },
   {
     "id": "curiosidades_017",
@@ -218,7 +234,8 @@
     "scale": "linear",
     "difficulty": 3,
     "as_of_year": null,
-    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
+    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia",
+    "decimal_places": 2
   },
   {
     "id": "curiosidades_018",
@@ -231,7 +248,8 @@
     "scale": "linear",
     "difficulty": 3,
     "as_of_year": null,
-    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
+    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia",
+    "decimal_places": 0
   },
   {
     "id": "curiosidades_019",
@@ -244,7 +262,8 @@
     "scale": "linear",
     "difficulty": 3,
     "as_of_year": null,
-    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
+    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia",
+    "decimal_places": 0
   },
   {
     "id": "curiosidades_020",
@@ -257,7 +276,8 @@
     "scale": "linear",
     "difficulty": 1,
     "as_of_year": null,
-    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
+    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia",
+    "decimal_places": 0
   },
   {
     "id": "curiosidades_021",
@@ -270,7 +290,8 @@
     "scale": "linear",
     "difficulty": 3,
     "as_of_year": null,
-    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
+    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia",
+    "decimal_places": 0
   },
   {
     "id": "curiosidades_022",
@@ -283,7 +304,8 @@
     "scale": "linear",
     "difficulty": 1,
     "as_of_year": null,
-    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
+    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia",
+    "decimal_places": 0
   },
   {
     "id": "curiosidades_023",
@@ -296,7 +318,8 @@
     "scale": "linear",
     "difficulty": 1,
     "as_of_year": null,
-    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
+    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia",
+    "decimal_places": 0
   },
   {
     "id": "curiosidades_024",
@@ -309,7 +332,8 @@
     "scale": "linear",
     "difficulty": 1,
     "as_of_year": null,
-    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
+    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia",
+    "decimal_places": 0
   },
   {
     "id": "curiosidades_025",
@@ -322,7 +346,8 @@
     "scale": "linear",
     "difficulty": 3,
     "as_of_year": null,
-    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
+    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia",
+    "decimal_places": 0
   },
   {
     "id": "curiosidades_026",
@@ -335,7 +360,8 @@
     "scale": "linear",
     "difficulty": 3,
     "as_of_year": null,
-    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
+    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia",
+    "decimal_places": 0
   },
   {
     "id": "curiosidades_027",
@@ -348,7 +374,8 @@
     "scale": "linear",
     "difficulty": 1,
     "as_of_year": null,
-    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
+    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia",
+    "decimal_places": 0
   },
   {
     "id": "curiosidades_028",
@@ -361,7 +388,8 @@
     "scale": "linear",
     "difficulty": 1,
     "as_of_year": null,
-    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
+    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia",
+    "decimal_places": 0
   },
   {
     "id": "curiosidades_029",
@@ -374,7 +402,8 @@
     "scale": "linear",
     "difficulty": 2,
     "as_of_year": null,
-    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
+    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia",
+    "decimal_places": 0
   },
   {
     "id": "curiosidades_030",
@@ -387,6 +416,7 @@
     "scale": "log",
     "difficulty": 2,
     "as_of_year": null,
-    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia"
+    "source_hint": "BIPM; geometría; estándares internacionales y obras de referencia",
+    "decimal_places": 0
   }
 ]
