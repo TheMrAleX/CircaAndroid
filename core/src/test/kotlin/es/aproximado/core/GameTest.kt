@@ -107,4 +107,30 @@ class GameTest {
         assertEquals(1,Scoring.round(q(scale="log"),listOf(50.0,180.0)).first().playerId)
     }
 
+    @Test fun selectorDragFollowsFingerAndClampsAtBothEnds() {
+        assertEquals(.75,RulerScale.drag(.5,-50.0,200.0),1e-9)
+        assertEquals(.25,RulerScale.drag(.5,50.0,200.0),1e-9)
+        assertEquals(1.0,RulerScale.drag(.5,-10000.0,200.0),0.0)
+        assertEquals(0.0,RulerScale.drag(.5,10000.0,200.0),0.0)
+        for(scale in listOf("linear","log")) {
+            val question=q(scale=scale)
+            val up=RulerScale.value(question,RulerScale.drag(.5,-30.0,200.0))
+            val down=RulerScale.value(question,RulerScale.drag(.5,30.0,200.0))
+            assertTrue(up>down)
+        }
+        assertEquals(.5,RulerScale.drag(RulerScale.drag(.5,-20.0,200.0),20.0,200.0),1e-9)
+    }
+    @Test fun movingEstimateKeepsDecimalColumnsAndPrecision() {
+        val question=q().copy(min=0.0,max=10.0)
+        assertEquals("3,32",formatEstimate(question,3.32))
+        assertEquals("3,40",formatEstimate(question,3.4))
+        assertEquals("3,00",formatEstimate(question,3.0))
+        assertEquals("10,00",formatEstimate(question,10.0))
+        for(i in 300..400) assertEquals(4,formatEstimate(question,i/100.0).length)
+        assertEquals("0,500",formatEstimate(question.copy(max=1.0),.5))
+        assertEquals("1.400.000.000",formatEstimate(question.copy(max=1e12),1.4e9))
+        assertEquals("3,321234",formatEstimate(question,3.321234,6))
+        assertEquals("3,32",formatEstimate(question.copy(max=10000.0),3.32,2))
+    }
+
 }

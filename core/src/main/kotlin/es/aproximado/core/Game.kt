@@ -82,6 +82,15 @@ object RulerScale {
         val mark = if (q.scale == "log") value * kotlin.math.expm1((ln(q.max) - ln(q.min)) / 1000) else (q.max - q.min) / 1000
         return niceStep(mark.coerceAtLeast(.001))
     }
+    /** One decimal precision for the whole question, including trailing zeroes. */
+    fun fractionDigits(q: Question): Int = ceil(-log10(step(q, q.min))).toInt().coerceIn(0, 3)
+
+    /** The boundary follows the finger; moving up increases the selected value. */
+    fun drag(position: Double, delta: Double, travel: Double): Double {
+        require(position.isFinite() && delta.isFinite() && travel.isFinite() && travel > 0)
+        return (position - delta / travel).coerceIn(0.0, 1.0)
+    }
+
     fun snapped(q: Question, position: Double): Double {
         if (position <= 0) return q.min
         if (position >= 1) return q.max
@@ -92,7 +101,8 @@ object RulerScale {
 
 }
 
-fun formatNumber(value: Double, compact: Boolean = false): String {
+fun formatNumber(value: Double, compact: Boolean = false, fractionDigits: Int? = null): String {
+    require(fractionDigits == null || fractionDigits in 0..6)
     require(value.isFinite())
     val symbols = DecimalFormatSymbols(Locale.forLanguageTag("es-ES")).apply { groupingSeparator = '.'; decimalSeparator = ',' }
     val abs = abs(value)
@@ -104,7 +114,7 @@ fun formatNumber(value: Double, compact: Boolean = false): String {
         compact && abs >= 1e4 -> { divisor = 1e3; suffix = " mil" }
         else -> { divisor = 1.0; suffix = "" }
     }
-    val pattern = if (divisor != 1.0) "#,##0.#" else "#,##0.###"
+    val pattern = if (divisor != 1.0) "#,##0.#" else if (fractionDigits == null) "#,##0.###" else "#,##0" + if (fractionDigits > 0) "." + "0".repeat(fractionDigits) else ""
     return DecimalFormat(pattern, symbols).format(if (value == 0.0) 0.0 else value / divisor) + suffix
 }
 
@@ -123,3 +133,5 @@ class ComparisonScale(q: Question, guesses: List<Double>) {
     private val span = (values.max() - low).coerceAtLeast(if (logarithmic) .1 else max(abs(q.answer) * .1, .01))
     fun position(value: Double): Float = ((transform(value) - center) / (span * 1.3) + .5).toFloat().coerceIn(0f,1f)
 }
+
+fun formatEstimate(q: Question, value: Double, fractionDigits: Int = RulerScale.fractionDigits(q)): String = formatNumber(value, fractionDigits = fractionDigits)
