@@ -53,3 +53,9 @@ La firma publicada cambió respecto a v1.0.0: se requiere reinstalación, con p�
 La gráfica vuelve a ser la vista principal. Se revisaron barras, línea de respuesta, leyenda, coronas, empates de ocho jugadores y números grandes en 360×800 (2/8 jugadores), 320×640 y 411×914 con fuente al 130%. Se revisaron el selector al mínimo, al máximo y las capturas 3,32/3,40: marcas fijas y panel/número con altura variable; tamaño de letra y decimales estables. Se retiró el aviso de privacidad del pase de turno.
 
 Tests puros adicionales comprueban dirección, recorrido, límites y reversibilidad del arrastre, además de precisión decimal y ceros finales. Se mantienen las pruebas de partidas completas y restauración con Room. Sin prueba táctil en dispositivo físico ni medición de FPS.
+
+## Evidencia remota 1.0.2 (18 de octubre de 2026)
+
+CI `39090848418` y release `39090914423` terminaron correctamente para `0ff34b6`. Se descargaron el APK y el archivo SHA256 adjuntos a v1.0.2. Se verificaron checksum `a01186cdca1428fb36bc84aad163937593c5b3727ac4969d97259054fb29e732`, firma v2, versión 1.0.2/código 3, ABI exclusivamente ARM64, SQLite íntegra con 430 preguntas y ausencia de INTERNET. La comparación Paparazzi pasó las 80 referencias y los informes locales contienen 99 casos sin fallos ni omisiones (15 motor + 4 integración + 80 visuales). Lint debug y release sin incidencias.
+
+Se compararon las firmas oficiales de 1.0.1 y 1.0.2: difieren, por lo que la instalación requiere desinstalar la anterior. El procedimiento y la pérdida de datos locales se documentan en RELEASING.md. Sin verificación en dispositivo físico.

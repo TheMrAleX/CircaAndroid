@@ -49,3 +49,5 @@
 
 - Se admite escritura de hasta seis decimales; al introducir más precisión que la de la regla, se conserva esa precisión durante el resto del turno para no mostrar un valor redondeado diferente del confirmado. Los extremos siguen siendo alcanzables y la inercia se detiene al abrir teclado, ajustar o confirmar.
 - Se acorta el encabezado a «Respuesta · X/Y» para evitar una fila adicional en 320 dp con fuente grande. La leyenda se ensancha al aumentar la fuente; permanece desplazable horizontalmente y las barras de los ocho jugadores siempre se ven a la vez.
+
+- Publicación verificada de 1.0.2: la firma oficial difiere de 1.0.1. Se explica la reinstalación y pérdida de datos en README/RELEASING y en la entrega; no se afirma compatibilidad de actualización sin disponer de la clave anterior.

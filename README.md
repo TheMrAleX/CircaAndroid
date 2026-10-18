@@ -4,7 +4,7 @@ Juego nativo Android de trivia numérica para **2–8 personas** que se pasan un
 
 **[Descargar APK firmado v1.0.2](https://github.com/TheMrAleX/CircaAndroid/releases/download/v1.0.2/Aproximado-v1.0.2-arm64-v8a.apk)** · [Release y SHA256](https://github.com/TheMrAleX/CircaAndroid/releases/tag/v1.0.2)
 
-**Firma de actualizaciones:** si la firma de una release cambia, Android requiere desinstalar la anterior; se perderán la partida y el historial locales. [Detalle de firma y actualizaciones](RELEASING.md).
+**Instalación sobre 1.0.1:** esta release usa otra firma y requiere desinstalar la anterior; se perderán la partida y el historial locales. [Detalle de firma y actualizaciones](RELEASING.md).
 
 ## Cómo jugar
 

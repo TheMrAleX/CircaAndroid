@@ -68,3 +68,20 @@ El APK descargado verifica firma v2, ARM64 exclusivo, 430 preguntas, integridad 
 ```
 
 **Instalación sobre v1.0.0:** las firmas publicadas son diferentes. Certificado SHA256 de v1.0.0: `fcf0d2fc923660af0cad63fa2b17ca6fd18103947c44e6f7b9bed73f5c47170c`; de v1.0.1: `46a0e40c09b58d21576070b49a37bb6348e2e0e82defa4d00ff6ef36e162245d`. Para instalar v1.0.1 hay que desinstalar v1.0.0, perdiendo partida e historial locales. Configurar una clave estable permite conservar compatibilidad entre las futuras versiones que usen esa clave; no recupera la clave temporal anterior.
+
+## Publicación verificada: v1.0.2
+
+Publicada el 18 de octubre de 2026 desde `0ff34b6` (versionCode 3):
+
+- [Release v1.0.2](https://github.com/TheMrAleX/CircaAndroid/releases/tag/v1.0.2)
+- [APK ARM64 firmado](https://github.com/TheMrAleX/CircaAndroid/releases/download/v1.0.2/Aproximado-v1.0.2-arm64-v8a.apk)
+- [CI correcto](https://github.com/TheMrAleX/CircaAndroid/actions/runs/39090848418)
+- [Release correcta](https://github.com/TheMrAleX/CircaAndroid/actions/runs/39090914423)
+
+El APK oficial descargado verifica firma v2, ARM64 exclusivo, versión 1.0.2/código 3, 430 preguntas, integridad SQLite y ausencia de INTERNET. SHA256:
+
+```text
+a01186cdca1428fb36bc84aad163937593c5b3727ac4969d97259054fb29e732
+```
+
+Certificado SHA256: `77dde14adbea29eee3916cd2496a400cfff746d6bad3f9352a9ef8c2f8c000d6`. Es distinto del de v1.0.1: la firma temporal vuelve a requerir desinstalar la versión anterior, con pérdida de partida, configuración e historial locales. No se dispone de la clave temporal anterior para producir una actualización compatible. Para futuras versiones, configurar una clave estable mediante las secrets indicadas al inicio.

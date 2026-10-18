@@ -27,4 +27,4 @@ La petición de rediseño 1.0.1 sustituye las posiciones rígidas de la spec ori
 - [x] Regla fija y panel de jugador móvil, con número en tiempo real.
 - [x] Aviso de privacidad retirado; decimales y tamaño del número estables.
 - [x] 99 casos: 15 tests de motor, 4 de integración y 80 capturas comparadas; lint debug sin incidencias y APK debug compilado.
-- [ ] APK release, CI remoto y publicación de v1.0.2.
+- [x] Release v1.0.2 publicada; CI y workflow correctos; APK oficial descargado y verificado (SHA256, firma v2, ARM64, versión 3 y 430 preguntas).
