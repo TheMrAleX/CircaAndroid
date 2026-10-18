@@ -1,6 +1,6 @@
 # Aproximado — instrucciones de trabajo
 
-Trabaja autónomamente: elige opciones razonables sin preguntar y registra decisiones en DECISIONS.md. Kotlin, Compose, Material 3 como base con componentes propios, MVVM/StateFlow, Room offline, una Activity, vertical, UI española. No usar marcas o assets de otros juegos. No añadir INTERNET, anuncios ni analytics. Nunca versionar secretos. Haz commits pequeños por fase y verifica datos, tests, lint y builds. Consulta docs/DESIGN_SPEC.md antes de cada pantalla. No declarar verificaciones que no se ejecutaron.
+Trabaja autónomamente: elige opciones razonables sin preguntar y registra decisiones en DECISIONS.md. Kotlin, Compose, Material 3 como base con componentes propios, MVVM/StateFlow, Room offline, una Activity, vertical, UI española. No usar marcas o assets de otros juegos. Sin anuncios ni analytics. Excepción autorizada en 1.0.5: INTERNET es necesario para sockets LAN en Android; no usar servicios externos. Nunca versionar secretos. Haz commits pequeños por fase y verifica datos, tests, lint y builds. Consulta docs/DESIGN_SPEC.md antes de cada pantalla. No declarar verificaciones que no se ejecutaron.
 
 ## Estado
 - [x] 0 Entorno y proyecto
@@ -44,3 +44,9 @@ La petición de rediseño 1.0.1 sustituye las posiciones rígidas de la spec ori
 - [x] Room 3 y migración conservadora para partidas antiguas.
 - [x] 126 casos: 18 motor, 8 integración y 100 capturas; lint debug y build debug correctos. Revisión de números con cinco decimales, cifra completa y siguiente jugador en pantalla pequeña.
 - [x] Release v1.0.4 publicada; CI y release remotos correctos; APK oficial descargado, SHA256/firma v2/ARM64 y 400 filas verificadas.
+
+## Revisión 1.0.5 en curso
+- [x] Motor LAN autoritativo y protocolo cifrado con pruebas de sockets reales.
+- [x] Sala Wi-Fi/hotspot, descubrimiento local, entrada IP y reconexión.
+- [x] UI e integración: 173 casos (28 motor/protocolo, 9 Android, 136 visuales), comparación visual correcta; lint debug sin incidencias y APK debug compilado. Build release en comprobación.
+- [ ] Release publicada y APK verificado.

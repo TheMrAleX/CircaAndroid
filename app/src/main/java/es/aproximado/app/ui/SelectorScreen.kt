@@ -33,9 +33,9 @@ import kotlin.math.*
 
 val LocalFeedback = staticCompositionLocalOf<(Boolean)->Unit> { {} }
 
-@Composable fun SelectorScreen(state: AppState,actions: Actions,initialPosition: Double? = null,onExit: ()->Unit = {}) {
+@Composable fun SelectorScreen(state: AppState,actions: Actions,initialPosition: Double? = null,playerIndex: Int? = null,onExit: ()->Unit = {}) {
     val m=state.match ?: return;val q=state.question() ?: return
-    val p=m.config.players[m.turn];val style=Tokens.players[p.style]
+    val p=m.config.players[playerIndex ?: m.turn];val style=Tokens.players[p.style]
     val scope=rememberCoroutineScope()
     val density=LocalDensity.current
     val feedback=LocalFeedback.current
@@ -69,7 +69,7 @@ val LocalFeedback = staticCompositionLocalOf<(Boolean)->Unit> { {} }
         position=RulerScale.position(q,next).toFloat();exact=next;feedback(false)
     }
     ScreenColumn {
-        SelectorHeader(p,m.turn+1,m.config.players.size,m.round+1,m.config.rounds,onExit)
+        SelectorHeader(p,(playerIndex ?: m.turn)+1,m.config.players.size,m.round+1,m.config.rounds,onExit,playerIndex!=null)
         Box(Modifier.fillMaxWidth().heightIn(max=144.dp).verticalScroll(rememberScrollState()).padding(horizontal=24.dp,vertical=8.dp)) {
             Label(q.text,Modifier.fillMaxWidth(),16,bold=true,center=true)
         }
@@ -148,18 +148,18 @@ val LocalFeedback = staticCompositionLocalOf<(Boolean)->Unit> { {} }
     }
 }
 
-@Composable fun SelectorHeader(player: Player,turn: Int,players: Int,round: Int,rounds: Int,onExit: ()->Unit) {
+@Composable fun SelectorHeader(player: Player,turn: Int,players: Int,round: Int,rounds: Int,onExit: ()->Unit,simultaneous: Boolean = false) {
     val style=Tokens.players[player.style]
     Row(Modifier.fillMaxWidth().heightIn(min=80.dp).padding(horizontal=20.dp,vertical=8.dp),verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(12.dp)) {
         PlayerAvatar(player.name,style,40.dp)
         Column(Modifier.weight(1f),verticalArrangement=Arrangement.spacedBy(2.dp)) {
             Label(player.name,size=20,color=style.inkLight,bold=true)
-            Label(stringResource(R.string.selector_progress,turn,players,round,rounds),size=13,color=Tokens.muted)
+            Label(if(simultaneous) stringResource(R.string.lan_selector_progress,round,rounds,players) else stringResource(R.string.selector_progress,turn,players,round,rounds),size=13,color=Tokens.muted)
         }
         RoundButton("×",stringResource(R.string.close),color=Color.Transparent) { onExit() }
     }
 }
 
-@Preview(widthDp=360) @Composable fun SelectorHeaderPreview() = AproximadoTheme { SelectorHeader(Player(1,"Alejandra123"),2,8,3,10) {} }
+@Preview(widthDp=360) @Composable fun SelectorHeaderPreview() = AproximadoTheme { SelectorHeader(Player(1,"Alejandra123"),2,8,3,10,onExit={}) }
 
 @Preview(widthDp=360,heightDp=800) @Composable fun SelectorPreview(@PreviewParameter(PreviewStates::class) s: AppState) = AproximadoTheme { SelectorScreen(s.copy(match=s.match?.copy(guesses=listOf(emptyList()))),Actions()) }

@@ -14,7 +14,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 // PASS is retained only to read saved games from versions before 1.0.4.
-enum class Screen { HOME, SETUP, INTRO, PASS, SELECT, REVEAL, SCORE, FINAL, SETTINGS }
+enum class Screen { HOME, SETUP, INTRO, PASS, SELECT, REVEAL, SCORE, FINAL, SETTINGS, LAN }
 data class Config(val players: List<Player> = (0..1).map { Player(it, "") },val rounds: Int = 10,val categories: Set<String> = emptySet(),val difficulty: Int? = null)
 data class Match(val config: Config,val questions: List<String>,val round: Int = 0,val guesses: List<List<Double>> = listOf(emptyList()),val stage: Screen = Screen.INTRO) {
     val currentGuesses get() = guesses.getOrElse(round) { emptyList() }

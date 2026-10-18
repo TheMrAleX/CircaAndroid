@@ -13,7 +13,12 @@ private class Peer(val socket: Socket,val channel: LanChannel,workers: ExecutorS
     private val queue=ArrayBlockingQueue<LanMessage>(8)
     private val closed=AtomicBoolean(false)
     init { workers.execute { try { while(!closed.get()) { val m=queue.take();channel.send(m);if(m==LanMessage.Bye) break } } catch (_: Exception) { } finally { close() } } }
-    fun send(message: LanMessage) { if(!closed.get() && !queue.offer(message)) close() }
+    fun send(message: LanMessage) {
+        if(closed.get()) return
+        // Snapshots are complete: retain only the newest queued state for a slow connection.
+        if(message is LanMessage.State) queue.removeIf { it is LanMessage.State }
+        if(!queue.offer(message)) close()
+    }
     fun read()=channel.receive()
     override fun close() { if(closed.compareAndSet(false,true)) { runCatching { socket.close() };queue.clear();queue.offer(LanMessage.Bye) } }
 }

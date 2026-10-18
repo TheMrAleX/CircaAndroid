@@ -121,9 +121,10 @@ class LanTest {
             val clientSocket=Socket("127.0.0.1",listener.localPort).apply { soTimeout=5000 }
             val serverSocket=listener.accept().apply { soTimeout=5000 };listener.close()
             val recorded=ByteArrayOutputStream()
+            val forward=java.util.concurrent.atomic.AtomicBoolean(true)
             val output=object: OutputStream() {
-                override fun write(b: Int) { recorded.write(b);serverSocket.getOutputStream().write(b) }
-                override fun write(b: ByteArray,off: Int,len: Int) { recorded.write(b,off,len);serverSocket.getOutputStream().write(b,off,len) }
+                override fun write(b: Int) { recorded.write(b);if(forward.get()) serverSocket.getOutputStream().write(b) }
+                override fun write(b: ByteArray,off: Int,len: Int) { recorded.write(b,off,len);if(forward.get()) serverSocket.getOutputStream().write(b,off,len) }
                 override fun flush()=serverSocket.getOutputStream().flush()
             }
             val executor=Executors.newSingleThreadExecutor()
@@ -137,10 +138,10 @@ class LanTest {
                 else {
                     // First consume a valid frame. Modify the next authenticated frame in transit.
                     assertEquals(LanMessage.Ping,client.receive())
-                    recorded.reset();val sink=ByteArrayOutputStream()
-                    // A copied earlier frame with one altered tag must also fail, never decode as a command.
-                    frame[frame.lastIndex]=(frame.last().toInt() xor 1).toByte()
-                    sink.write(frame);serverSocket.getOutputStream().write(sink.toByteArray())
+                    recorded.reset();forward.set(false);server.send(LanMessage.Ping)
+                    val altered=recorded.toByteArray()
+                    altered[altered.lastIndex]=(altered.last().toInt() xor 1).toByte()
+                    serverSocket.getOutputStream().write(altered)
                 }
                 assertThrows(Exception::class.java) { client.receive() }
             } finally { clientSocket.close();serverSocket.close();executor.shutdownNow() }

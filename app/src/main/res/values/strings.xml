@@ -25,7 +25,7 @@
     <string name="choose_color">Elegir color de %1$s</string>
     <string name="color_number">Color %1$d</string>
     <string name="round_of">RONDA %1$d DE %2$d</string>
-    <string name="resume_detail" tools:ignore="PluralsCandidate">Ronda %1$d/%2$d · %3$d jugadores</string>
+    <string name="resume_detail" tools:ignore="PluralsCandidate">Ronda %1$d/%2$d · Jugadores: %3$d</string>
     <string name="read_together">Cada jugador responde por turno en este teléfono</string>
     <string name="start_round">Empezar ronda</string>
     <string name="drag_hint">Desliza el panel hacia arriba o abajo</string>
@@ -58,7 +58,7 @@
     <string name="clear_confirm">Borrar</string>
     <string name="cancel">Cancelar</string>
     <string name="about">Acerca de</string>
-    <string name="about_text">Versión 1.0.4 · Licencia MIT
+    <string name="about_text">Versión 1.0.5 · Licencia MIT
 No está afiliada a ningún juego existente</string>
     <string name="loading">Preparando las preguntas…</string>
     <string name="error_load">No se pudo abrir la base de preguntas. Vuelve a abrir la app.</string>
@@ -79,7 +79,7 @@ No está afiliada a ningún juego existente</string>
     <string name="bonus_points" tools:ignore="PluralsCandidate">Bonus +%1$d incluido</string>
     <string name="total_points_hint">Puntos acumulados · Los empates comparten puesto</string>
     <string name="final_subtitle">¡Gracias por jugar! Este es el podio.</string>
-    <string name="party_caption">UN CELULAR · TODOS JUEGAN</string>
+    <string name="party_caption">TRIVIA NUMÉRICA · 2 A 8</string>
     <string name="experience">Durante el juego</string>
     <string name="saved_data">Datos guardados</string>
     <string name="history_hint">Las preguntas recientes y la partida se guardan solo en este dispositivo.</string>
@@ -88,4 +88,65 @@ No está afiliada a ningún juego existente</string>
     <string name="log_scale">Logarítmica</string>
     <string name="integer_only">Solo números enteros</string>
     <plurals name="decimal_precision"><item quantity="one">Hasta %1$d decimal</item><item quantity="other">Hasta %1$d decimales</item></plurals>
+
+    <string name="lan_play">Jugar en red local</string>
+    <string name="lan_title">Red local</string>
+    <string name="lan_intro">Cada persona juega desde su teléfono. Conéctense a la misma Wi-Fi o al hotspot de uno de los teléfonos. No se necesitan datos móviles.</string>
+    <string name="lan_name">Tu nombre</string>
+    <string name="lan_host">Crear sala</string>
+    <string name="lan_create_hint">Activa el hotspot antes de crear la sala, o usa la Wi-Fi compartida. El anfitrión también juega.</string>
+    <string name="lan_wifi_settings">Abrir ajustes Wi-Fi</string>
+    <string name="lan_join_title">Unirse a una sala</string>
+    <string name="lan_address">IP y puerto</string>
+    <string name="lan_address_hint">Ejemplo: 192.168.43.1:45555</string>
+    <string name="lan_code">Código de 8 dígitos</string>
+    <string name="lan_join">Conectar</string>
+    <string name="lan_nearby">Salas en esta red</string>
+    <string name="lan_search">Buscar salas</string>
+    <string name="lan_no_rooms">La búsqueda es opcional. Si no aparece una sala, escribe la IP y el puerto que muestra el anfitrión.</string>
+    <string name="lan_found">%1$s · %2$s</string>
+    <string name="lan_room">Sala local</string>
+    <string name="lan_share">Comparte estos datos</string>
+    <string name="lan_share_hint">Los demás deben estar en tu Wi-Fi o conectados a tu hotspot. El código es privado y cambia en cada sala.</string>
+    <string name="lan_no_address">Todavía no hay una IP local. Activa Wi-Fi o hotspot y actualiza.</string>
+    <string name="lan_refresh">Actualizar direcciones</string>
+    <string name="lan_members">Jugadores · %1$d/8</string>
+    <string name="lan_you">%1$s · Tú</string>
+    <string name="lan_online">Conectado</string>
+    <string name="lan_offline">Desconectado · plaza reservada</string>
+    <string name="lan_submitted">Respuesta confirmada</string>
+    <string name="lan_not_submitted">Preparando su respuesta</string>
+    <string name="lan_remove">Quitar a %1$s</string>
+    <string name="lan_wait_host">El anfitrión configura e inicia la partida.</string>
+    <string name="lan_wait_host_next">El anfitrión continuará la partida.</string>
+    <string name="lan_room_rules">Rondas: %1$d · Preguntas disponibles: %2$d</string>
+    <string name="lan_need_players">Se necesitan entre 2 y 8 jugadores conectados para empezar.</string>
+    <string name="lan_leave">Salir de la sala</string>
+    <string name="lan_close_title">¿Cerrar la sala?</string>
+    <string name="lan_close_body">Se desconectarán todos los jugadores. La partida LAN terminará.</string>
+    <string name="lan_leave_title">¿Salir de la sala?</string>
+    <string name="lan_leave_body">Tu plaza queda reservada durante la partida. Puedes volver a conectar con los mismos datos.</string>
+    <string name="lan_stay">Seguir en la sala</string>
+    <string name="lan_connecting">Conectando a la sala…</string>
+    <string name="lan_reconnecting">Reconectando…</string>
+    <string name="lan_reconnect_hint">Conservamos tu plaza y reenviamos la confirmación si hace falta. Mantén la Wi-Fi conectada y al anfitrión en la sala.</string>
+    <string name="lan_waiting">¡Respuesta enviada!</string>
+    <string name="lan_waiting_hint">La respuesta real y las estimaciones se revelan cuando todos confirman.</string>
+    <string name="lan_waiting_count">Confirmaciones: %1$d/%2$d</string>
+    <string name="lan_back_lobby">Volver a la sala</string>
+    <string name="lan_cancel_title">¿Cancelar esta partida?</string>
+    <string name="lan_cancel_body">Todos volverán a la sala. Se descartará el marcador de esta partida.</string>
+    <string name="lan_cancel_hint">Si alguien no puede volver a conectar, el anfitrión puede cancelar la partida y quitarlo en la sala.</string>
+    <string name="lan_error_code">No se pudo validar la sala. Comprueba el código y que el anfitrión siga conectado.</string>
+    <string name="lan_error_full">La sala ya tiene 8 jugadores.</string>
+    <string name="lan_error_started">La partida ya empezó. Espera a que vuelvan a la sala.</string>
+    <string name="lan_error_invalid">Revisa el nombre, la IP con puerto y el código. La configuración o respuesta debe ser válida para esta ronda.</string>
+    <string name="lan_error_closed">El anfitrión cerró la sala o retiró tu plaza.</string>
+    <string name="lan_error_version">La sala usa otra versión del protocolo. Instalen la misma versión de Aproximado.</string>
+    <string name="lan_error_changed">La sala anterior terminó. Usa los datos de la nueva sala.</string>
+    <string name="lan_error_network">No se pudo conectar. Revisa Wi-Fi, IP y puerto. Algunas redes de invitados aíslan los teléfonos; prueba con un hotspot.</string>
+    <string name="lan_selector_progress">Ronda %1$d/%2$d · Jugadores: %3$d</string>
+    <string name="lan_channel">Partidas en red local</string>
+    <string name="lan_notification_title">Partida LAN activa</string>
+    <string name="lan_notification_text">Toca para volver a la sala. Mantén la Wi-Fi conectada.</string>
 </resources>

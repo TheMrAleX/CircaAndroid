@@ -71,6 +71,8 @@ fun emoji(category: String) = when(category) {
             Label(stringResource(R.string.tagline),Modifier.padding(horizontal=24.dp),size=16,color=Tokens.muted,center=true)
             Spacer(Modifier.height(32.dp))
             GameButton(stringResource(R.string.play)) { actions.screen(Screen.SETUP) }
+            Spacer(Modifier.height(12.dp))
+            GameButton(stringResource(R.string.lan_play),color=Color.White,ink=Tokens.players[0].ink) { actions.screen(Screen.LAN) }
             state.match?.takeIf { it.stage!=Screen.FINAL }?.let { m ->
                 Spacer(Modifier.height(12.dp))
                 GameButton(stringResource(R.string.resume),color=Color.White,ink=Tokens.players[0].ink,detail=stringResource(R.string.resume_detail,m.round+1,m.config.rounds,m.config.players.size),onClick=actions.resume)

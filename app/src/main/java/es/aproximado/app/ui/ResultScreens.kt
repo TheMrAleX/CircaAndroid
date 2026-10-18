@@ -30,7 +30,7 @@ import kotlinx.coroutines.launch
 import kotlin.math.*
 
 /** A shared vertical chart remains the main result view for two to eight players. */
-@Composable fun RevealScreen(state: AppState, actions: Actions, onExit: () -> Unit = {}) {
+@Composable fun RevealScreen(state: AppState, actions: Actions, onExit: () -> Unit = {},footer: (@Composable ()->Unit)? = null) {
     val m=state.match ?: return
     val q=state.question() ?: return
     val scores=remember(m.currentGuesses,q) { Scoring.round(q,m.currentGuesses).sortedBy { it.guess } }
@@ -117,7 +117,7 @@ import kotlin.math.*
                 }
             }
         }
-        BottomActions { GameButton(stringResource(R.string.continue_game),color=Color.White,ink=Tokens.players[0].ink) { actions.advance(Screen.SCORE) } }
+        if(footer!=null) footer() else BottomActions { GameButton(stringResource(R.string.continue_game),color=Color.White,ink=Tokens.players[0].ink) { actions.advance(Screen.SCORE) } }
     }
 }
 
@@ -137,7 +137,7 @@ import kotlin.math.*
         Label(target.value.roundToInt().toString(),Modifier.padding(end=12.dp),28,bold=true)
     }
 }
-@Composable fun ScoreScreen(state: AppState,actions: Actions) {
+@Composable fun ScoreScreen(state: AppState,actions: Actions,footer: (@Composable ()->Unit)? = null) {
     val m=state.match ?: return;val rounds=state.scores()
     val standings=Scoring.standings(m.config.players,rounds)
     ScreenColumn {
@@ -146,11 +146,11 @@ import kotlin.math.*
         LazyColumn(Modifier.weight(1f),contentPadding=PaddingValues(20.dp),verticalArrangement=Arrangement.spacedBy(8.dp)) {
             items(standings,key={it.player.id}) { standing -> ScoreRow(standing,Modifier.animateItem(),bonus=rounds.lastOrNull()?.firstOrNull { it.playerId==standing.player.id }?.points ?: 0,compact=m.config.players.size>6) }
         }
-        BottomActions { GameButton(stringResource(if(m.round+1==m.config.rounds) R.string.final_result else R.string.next_round),color=Color.White,ink=Tokens.players[0].ink,onClick=actions.next) }
+        if(footer!=null) footer() else BottomActions { GameButton(stringResource(if(m.round+1==m.config.rounds) R.string.final_result else R.string.next_round),color=Color.White,ink=Tokens.players[0].ink,onClick=actions.next) }
     }
 }
 
-@Composable fun FinalScreen(state: AppState,actions: Actions) {
+@Composable fun FinalScreen(state: AppState,actions: Actions,footer: (@Composable ()->Unit)? = null) {
     val m=state.match ?: return
     val standings=Scoring.standings(m.config.players,state.scores())
     val first=standings.take(3)
@@ -183,7 +183,7 @@ import kotlin.math.*
                 items(standings.drop(3),key={it.player.id}) { ScoreRow(it,compact=true) }
                 item { Label(stringResource(R.string.rules),size=13,color=Tokens.muted,center=true) }
             }
-            BottomActions { GameButton(stringResource(R.string.again)) { actions.start(true) };GameButton(stringResource(R.string.menu),outline=true) { actions.screen(Screen.HOME) } }
+            if(footer!=null) footer() else BottomActions { GameButton(stringResource(R.string.again)) { actions.start(true) };GameButton(stringResource(R.string.menu),outline=true) { actions.screen(Screen.HOME) } }
         }
     }
 }

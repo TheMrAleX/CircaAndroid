@@ -92,6 +92,18 @@ class ScreensTest(private val width: Int,private val height: Int,private val sca
         val q=state.pool.first().copy(text="¿Cuántos kilómetros cuadrados de superficie tiene Brasil según la referencia IBGE de 2015?",answer=8515767.049,unit="km²",min=10000.0,max=100000000.0,scale="log",decimalPlaces=3)
         RevealScreen(state.copy(pool=listOf(q),match=state.match!!.copy(guesses=listOf(List(players){8000000.0+it*100000.0}))),Actions())
     }
+    @Test fun lanEntry()=capture("lan_entry") { LanEntry(es.aproximado.app.lan.LanUiState(name="Alejandra123"),LanActions()) {} }
+    @Test fun lanLobbyHost()=capture("lan_lobby_host") { LanLobby(previewLan(players),state.pool,LanActions()) {} }
+    @Test fun lanLobbyGuest()=capture("lan_lobby_guest") { LanLobby(previewLan(players,host=false),state.pool,LanActions()) {} }
+    @Test fun lanWaiting()=capture("lan_waiting") { LanWaiting(previewLan(players,es.aproximado.core.lan.LanStage.ANSWERING),LanActions(),{},{}) }
+    @Test fun lanReconnecting()=capture("lan_reconnecting") { LanScreen(previewLan(players).copy(connection=es.aproximado.core.lan.LanConnection.RECONNECTING),state.pool,LanActions()) {} }
+    @Test fun lanOwnSelector()=capture("lan_own_selector") {
+        val room=previewLan(players,es.aproximado.core.lan.LanStage.ANSWERING,host=false).snapshot!!
+        SelectorScreen(lanGameState(room),Actions(),playerIndex=room.self)
+    }
+    @Test fun lanJoinForm()=capture("lan_join_form") { LanEntry(es.aproximado.app.lan.LanUiState(name="Alejandra123",endpoint="192.168.43.1:45555",code="12345678"),LanActions(),initialJoin=true) {} }
+    @Test fun lanLobbyRoster()=capture("lan_lobby_roster") { LanLobby(previewLan(players),state.pool,LanActions(),scrollState=androidx.compose.foundation.ScrollState(560)) {} }
+    @Test fun lanLobbyFilters()=capture("lan_lobby_filters") { LanLobby(previewLan(players),state.pool,LanActions(),scrollState=androidx.compose.foundation.ScrollState(1500)) {} }
     companion object {
         @JvmStatic @Parameterized.Parameters(name="{0}x{1}@{2}-{3}p") fun params()=listOf(
             arrayOf<Any>(360,800,1f,2),arrayOf<Any>(360,800,1f,8),

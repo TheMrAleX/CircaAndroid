@@ -164,3 +164,7 @@ Los conteos usan enteros; solo unas pocas medidas admiten decimales mediante met
 ## Corrección del usuario para 1.0.4
 
 Omitir el pase de turno. Tras confirmar, mostrar directamente el selector del siguiente jugador con avatar, nombre, turno y ronda en una cabecera integrada. Reiniciar la estimación y conservar FLAG_SECURE. Conservar las cifras publicadas sin redondear objetivos para facilitar aciertos; en la revelación, permitir leer la cifra completa junto a la representación gráfica.
+
+## Extensión LAN 1.0.5
+
+Petición del usuario: modo LAN nativo para 2–8 teléfonos en la misma Wi-Fi o en el hotspot de uno de ellos. Reutilizar tema, regla móvil, gráfica y podio. Añadir entrada LAN, creación/unión, sala con configuración del anfitrión, estados de conexión y espera de respuestas. Respuestas simultáneas y privadas hasta confirmar todos. Nombre y color propios siempre visibles. Controles del anfitrión diferenciados de la espera de los invitados. Mantener áreas táctiles de 48 dp y contenido desplazable a 320×640/fontScale 1.3.
