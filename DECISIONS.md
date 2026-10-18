@@ -110,3 +110,9 @@
 - Verificar motor, sockets reales y Android simulado; no afirmar pruebas físicas Wi-Fi/hotspot ni rendimiento de hardware que este entorno no dispone.
 
 - Publicar v1.0.7 en `0debc0c`, tras 214 casos, comparación visual, lint debug/release y build firmado local. CI/release remotos correctos; verificar el APK adjunto descargado (SHA256, firma, versión, ABI y 400 filas). La firma temporal cambia respecto a 1.0.6: documentar reinstalación y pérdida de datos; no afirmar compatibilidad de actualización.
+
+## 1.0.8 — autoría y tablero compartido
+
+- «No distribuirlo como suyo» se interpreta como impedir atribuirse la obra original, no prohibir toda redistribución. Licencia propia con uso/modificación/redistribución (también comercial) permitidos, crédito visible a TheMrAleX y enlace original, modificaciones identificadas, sin presentarlas como oficiales y conservación de condiciones. No añadir un veto comercial no solicitado. Licencia de código disponible sin afirmar aprobación OSI.
+- El cambio no revoca permisos de copias/código publicados bajo MIT. Conservar el texto MIT de hasta 1.0.7, avisos de contribuyentes y OFL de Fredoka. Empaquetar texto de la licencia actual y OFL, y ofrecerlos desde Acerca de.
+- Versión siguiente 1.0.8/código 9. La petición nueva sustituye el límite de 2–3: tablero simultáneo de 2–8 barras, incluida la propia. Conservar consentimiento unánime y el interruptor; si alguien lo apaga, volver al selector privado y no compartir valores.

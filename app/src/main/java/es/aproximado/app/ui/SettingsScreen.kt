@@ -8,6 +8,8 @@ import androidx.compose.ui.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.*
 import androidx.compose.ui.unit.dp
@@ -29,6 +31,7 @@ private fun Modifier.clipCompat()=clip(RoundedCornerShape(28.dp)).border(1.dp,Co
 
 @Composable fun SettingsScreen(state: AppState,actions: Actions) {
     var clearing by remember { mutableStateOf(false) }
+    var license by remember { mutableStateOf(false) }
     ScreenColumn {
         TopBar(stringResource(R.string.settings),back=true) { actions.screen(Screen.HOME) }
         Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).navigationBarsPadding().padding(20.dp),verticalArrangement=Arrangement.spacedBy(16.dp)) {
@@ -48,9 +51,29 @@ private fun Modifier.clipCompat()=clip(RoundedCornerShape(28.dp)).border(1.dp,Co
                 Label(stringResource(R.string.history_hint),size=14,color=Tokens.muted)
                 Box(Modifier.fillMaxWidth().heightIn(min=64.dp).clickable(role=Role.Button) { clearing=true }.padding(vertical=12.dp)) { Label(stringResource(R.string.clear_history),color=Tokens.danger) }
             }
-            Panel(stringResource(R.string.about)) { Label(stringResource(R.string.about_text),color=Tokens.muted);Label(stringResource(R.string.rules),size=13,color=Tokens.muted) }
+            Panel(stringResource(R.string.about)) {
+                Label(stringResource(R.string.about_text),color=Tokens.muted)
+                GameButton(stringResource(R.string.license_read),outline=true) { license=true }
+                Label(stringResource(R.string.rules),size=13,color=Tokens.muted)
+            }
         }
     }
+    if(license) LicenseDialog { license=false }
     if(clearing) GameDialog(stringResource(R.string.clear_title),primary=stringResource(R.string.clear_confirm),secondary=stringResource(R.string.cancel),onPrimary={actions.clear();clearing=false},onSecondary={clearing=false})
 }
 @Preview(widthDp=360,heightDp=800) @Composable fun SettingsPreview(@PreviewParameter(PreviewStates::class) s: AppState) = AproximadoTheme { SettingsScreen(s,Actions()) }
+
+@Composable fun LicenseContent() {
+    val context=LocalContext.current
+    val text=remember { context.assets.open("LICENSE.txt").bufferedReader().use { it.readText() }+"\n\nFredoka — SIL OFL\n\n"+context.assets.open("Fredoka-OFL.txt").bufferedReader().use { it.readText() } }
+    SelectionContainer { Label(text,size=13,color=Tokens.muted) }
+}
+@Composable fun LicenseDialog(onDismiss: ()->Unit) {
+    Dialog(onDismissRequest=onDismiss) {
+        Column(Modifier.fillMaxWidth().heightIn(max=560.dp).clipCompat().background(Tokens.surface).padding(20.dp),verticalArrangement=Arrangement.spacedBy(16.dp)) {
+            Label(stringResource(R.string.license_title),size=22,bold=true)
+            Box(Modifier.weight(1f,fill=false).verticalScroll(rememberScrollState())) { LicenseContent() }
+            GameButton(stringResource(R.string.close),onClick=onDismiss)
+        }
+    }
+}

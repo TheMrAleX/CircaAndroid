@@ -58,7 +58,7 @@ Arquitectura: una Activity, Compose y Material 3 con componentes propios, MVVM/S
 
 ## Licencias
 
-Código y datos originales bajo [MIT](LICENSE). Fuente Fredoka bajo [SIL OFL](docs/licenses/Fredoka-OFL.txt). Icono, confetti y clic sintetizado propios. **No está afiliada a ningún juego existente.**
+Código y datos originales bajo la [Licencia de atribución y autoría](LICENSE) desde 1.0.8: puedes jugar, modificar y redistribuir con crédito visible a TheMrAleX y enlace al proyecto; debes identificar los cambios y no puedes presentarte como autor del original. Es una licencia propia de código disponible. Las versiones hasta 1.0.7 y el código obtenido bajo MIT conservan [sus permisos MIT](docs/licenses/MIT-through-v1.0.7.txt); este cambio no los revoca. Fuente Fredoka bajo [SIL OFL](docs/licenses/Fredoka-OFL.txt). Icono, confetti y clic sintetizado propios. **No está afiliada a ningún juego existente.**
 
 ## Entorno cloud
 

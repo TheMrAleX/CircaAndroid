@@ -58,7 +58,9 @@
     <string name="clear_confirm">Borrar</string>
     <string name="cancel">Cancelar</string>
     <string name="about">Acerca de</string>
-    <string name="about_text">Versión 1.0.7 · Licencia MIT
+    <string name="about_text">Versión 1.0.8 · Licencia de atribución y autoría
+Aproximado, de TheMrAleX
+github.com/TheMrAleX/CircaAndroid
 No está afiliada a ningún juego existente</string>
     <string name="loading">Preparando las preguntas…</string>
     <string name="error_load">No se pudo abrir la base de preguntas. Vuelve a abrir la app.</string>
@@ -161,4 +163,6 @@ No está afiliada a ningún juego existente</string>
     <string name="live_pending">Aún sin mover</string>
     <string name="live_confirmed">Confirmó</string>
     <string name="live_movement">Regla de %1$s: %2$s</string>
+    <string name="license_title">Licencia y créditos</string>
+    <string name="license_read">Leer licencia completa</string>
 </resources>

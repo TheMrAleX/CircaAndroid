@@ -1,21 +1,54 @@
-MIT License
+Aproximado — Licencia de atribución y autoría, versión 1.0
+Copyright (c) 2026 TheMrAleX y los respectivos titulares de sus contribuciones.
+Proyecto original: https://github.com/TheMrAleX/CircaAndroid
 
-Copyright (c) 2026 Aproximado contributors
+1. Permisos
+Se permite jugar, ejecutar, estudiar, copiar y modificar este software, así
+como distribuir el software original o versiones modificadas, en código
+fuente o formato compilado, con o sin fines comerciales, siempre que se
+cumplan las condiciones siguientes. Las modificaciones privadas no tienen
+que publicarse.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+2. Crédito y conservación de avisos
+Toda distribución debe conservar esta licencia, los avisos de copyright y
+la identificación del proyecto original. Debe incluir un crédito visible:
+«Basado en Aproximado, de TheMrAleX» y la dirección del proyecto original.
+En repositorios, el crédito debe aparecer en el README principal; en apps,
+en una sección accesible de Créditos o Acerca de. El crédito puede traducirse
+sin perder el nombre del proyecto, el autor ni su enlace. Los avisos de
+terceros deben conservarse conforme a sus propias licencias.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+3. Autoría y versiones modificadas
+No se puede afirmar ni dar a entender que se creó el software original,
+atribuirse su autoría, eliminar su procedencia ni presentar una copia o un
+fork como proyecto original propio. Las versiones modificadas deben indicar
+claramente que son modificaciones y quién las realizó; no deben presentarse
+como versiones oficiales del proyecto original. Puedes atribuirte tus
+propias aportaciones, manteniendo el crédito de la obra de la que derivan.
+La redistribución con crédito y sin suplantación sí está permitida.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+4. Condiciones de redistribución
+Las copias redistribuidas de este software y sus derivados deben conservar
+estos permisos y condiciones respecto del código y los materiales aquí
+licenciados. No se concede autorización para retirar estos requisitos ni
+para usar el nombre del autor como respaldo o aprobación de una versión
+modificada. Otras autorizaciones pueden concederlas sus titulares por escrito.
+
+5. Alcance y licencias anteriores
+Esta licencia se aplica a las distribuciones de Aproximado desde la versión
+1.0.8 realizadas bajo ella, y a las nuevas aportaciones de sus titulares.
+No revoca derechos ya concedidos bajo MIT: las versiones publicadas hasta
+1.0.7 y el código obtenido bajo MIT conservan los permisos de aquella licencia,
+cuya copia se mantiene en docs/licenses/MIT-through-v1.0.7.txt. Los componentes
+de terceros, incluida la fuente Fredoka (SIL OFL), mantienen sus licencias.
+No se concede más derecho que el que pueda otorgar cada titular.
+
+6. Ausencia de garantía y responsabilidad
+EL SOFTWARE SE ENTREGA «TAL CUAL», SIN GARANTÍA EXPRESA NI IMPLÍCITA,
+INCLUIDAS LAS DE COMERCIABILIDAD, ADECUACIÓN A UN FIN O AUSENCIA DE INFRACCIÓN.
+EN LA MEDIDA PERMITIDA POR LA LEY, LOS TITULARES NO RESPONDEN POR DAÑOS,
+RECLAMACIONES U OTRAS RESPONSABILIDADES DERIVADAS DEL USO O DISTRIBUCIÓN.
+NO SE EXCLUYEN DERECHOS O RESPONSABILIDADES QUE LA LEY IMPIDA EXCLUIR.
+
+Es una licencia propia de código disponible, no una declaración de
+certificación como licencia de código abierto por la OSI.

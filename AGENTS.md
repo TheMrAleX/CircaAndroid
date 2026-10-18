@@ -62,3 +62,9 @@ El usuario informó que 1.0.5 funciona correctamente en su prueba; las pruebas f
 - [x] Interruptor persistente en Ajustes/sala, indicadores y reglas de lectura; confirmación independiente.
 - [x] 214 casos correctos: 34 motor/protocolo, 10 Android, 168 capturas, 1 ciclo animado y 1 prueba interactiva del selector (71 fotogramas). Comparación visual correcta; lint debug/release sin incidencias, APK debug y release/R8 firmado compilados.
 - [x] Release 1.0.7 publicada; CI/release correctos y APK oficial descargado y verificado (SHA256, firma v2, versión 8, ARM64 y 400 preguntas).
+
+## Revisión 1.0.8
+La petición actual sustituye MIT para las nuevas distribuciones: licencia propia de atribución y autoría; conservar los permisos MIT históricos y las licencias de terceros. Permitir redistribución con crédito y cambios identificados, prohibiendo suplantar al autor original.
+- [x] Licencia, crédito al autor y archivo MIT histórico.
+- [ ] Gráfico LAN compartido para 2–8 jugadores con arrastre propio.
+- [ ] Tests, revisión visual, compilaciones y release.
