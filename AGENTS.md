@@ -61,4 +61,4 @@ El usuario informó que 1.0.5 funciona correctamente en su prueba; las pruebas f
 - [x] Protocolo LAN 2 con borradores efímeros, contexto validado, coalescencia 8 Hz y consentimiento unánime; solo 2–3 plazas.
 - [x] Interruptor persistente en Ajustes/sala, indicadores y reglas de lectura; confirmación independiente.
 - [x] 214 casos correctos: 34 motor/protocolo, 10 Android, 168 capturas, 1 ciclo animado y 1 prueba interactiva del selector (71 fotogramas). Comparación visual correcta; lint debug/release sin incidencias, APK debug y release/R8 firmado compilados.
-- [ ] Release 1.0.7 y APK oficial verificado.
+- [x] Release 1.0.7 publicada; CI/release correctos y APK oficial descargado y verificado (SHA256, firma v2, versión 8, ARM64 y 400 preguntas).

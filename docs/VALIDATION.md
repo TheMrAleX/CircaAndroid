@@ -122,3 +122,9 @@ LiveSelectorTest mantiene el selector real conectado al reloj de Compose y ejecu
 Revisión visual en 320×640/fontScale 1.3: selección con dos oponentes, espera 2/3, privacidad a partir de 4, modo desactivado, nombres de 12 caracteres, jugador confirmado, números 1.400.000.000 y 0,5, Ajustes y sala. Las cifras largas en vivo se abrevian y su semántica conserva la cifra completa. Los nombres largos pueden ocupar dos líneas; contenido de espera/sheet desplazable y botón inferior fijo. No se atribuyen pruebas físicas Wi-Fi/hotspot ni medidas de fps a estos renders.
 
 Build release local 1.0.7 con R8, reducción de recursos y firma v2 correcto; lint release sin incidencias.
+
+## Publicación 1.0.7 verificada
+
+Tag v1.0.7 en `0debc0c`. [CI 39157398548](https://github.com/TheMrAleX/CircaAndroid/actions/runs/39157398548) y [release 39157400077](https://github.com/TheMrAleX/CircaAndroid/actions/runs/39157400077) correctos. Descarga oficial de APK y SHA256 desde GitHub Releases comprobada: `33428d603750768a7d98f7b50cd15b4a15189edcef7a0a3b284aa0cec09946f1`. Firma v2 RSA3072 verificada, certificado SHA256 `8e15df891f10c74284011ff5c647b232c4040a26fa4e032d2449aee8fafabae4`. Versión 1.0.7/código 8, minSdk 26/target 35, solo lib/arm64-v8a y catálogo SQLite 3 íntegro de 400 filas con todos los campos idénticos al asset validado local. Sin almacenes de firma ni evidencias de tests empaquetadas.
+
+La firma temporal cambió respecto a 1.0.6; reinstalación y pérdida de datos locales documentadas. Todos los participantes deben usar 1.0.7 por el protocolo LAN 2. La validación física en teléfonos de esta función sigue pendiente por no disponer de dispositivos.

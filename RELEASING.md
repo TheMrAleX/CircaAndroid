@@ -155,3 +155,9 @@ APK oficial descargado: versión 1.0.6/código 7, firma v2 RSA3072, ARM64 exclus
 ```
 
 Certificado SHA256: `796d4fa9761a60176edb757fb650bf86d0401b906593d19114dacc877d0be113`. Difiere del de 1.0.5: Android exige desinstalar la anterior y se pierden los datos locales. Configurar una firma estable mediante las secrets descritas al inicio para futuras actualizaciones compatibles; no recupera la clave temporal anterior.
+
+## Verificación publicada: 1.0.7
+
+Tag `v1.0.7` en `0debc0c`, versión/código 1.0.7/8. CI `39157398548` y release `39157400077` correctos. APK adjunto descargado y verificado: SHA256 `33428d603750768a7d98f7b50cd15b4a15189edcef7a0a3b284aa0cec09946f1`; firma v2 RSA3072; certificado SHA256 `8e15df891f10c74284011ff5c647b232c4040a26fa4e032d2449aee8fafabae4`. ARM64 exclusivo y Room 3 con 400 preguntas íntegras.
+
+La clave temporal difiere de 1.0.6: Android exige desinstalar la anterior antes de instalar este APK, perdiendo sus datos locales. Las instrucciones de firma estable anteriores evitan cambios de identidad en futuras publicaciones. Protocolo LAN 2: todos los teléfonos de la sala deben instalar 1.0.7.
