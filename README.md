@@ -2,13 +2,13 @@
 
 Juego nativo Android de trivia numérica para **2–8 personas**: pasando un teléfono o con un teléfono por jugador en **LAN por Wi-Fi/hotspot**. 400 preguntas en español y 12 categorías, sin servidores externos, anuncios ni analytics. No requiere acceso a Internet.
 
-**[Descargar APK firmado v1.0.7](https://github.com/TheMrAleX/CircaAndroid/releases/download/v1.0.7/Aproximado-v1.0.7-arm64-v8a.apk)** · [Release y SHA256](https://github.com/TheMrAleX/CircaAndroid/releases/tag/v1.0.7)
+**[Descargar APK firmado v1.0.8](https://github.com/TheMrAleX/CircaAndroid/releases/download/v1.0.8/Aproximado-v1.0.8-arm64-v8a.apk)** · [Release y SHA256](https://github.com/TheMrAleX/CircaAndroid/releases/tag/v1.0.8)
 
-**Firma y actualizaciones:** la firma de 1.0.7 difiere de 1.0.6. Android requiere desinstalar la anterior; se perderán sus datos locales. [Detalle de firma](RELEASING.md).
+**Firma y actualizaciones:** el workflow genera una firma temporal por ejecución; una firma distinta de la instalada implica reinstalar. Android requiere desinstalar la anterior; se perderán sus datos locales. [Detalle de firma](RELEASING.md).
 
 ## LAN por Wi-Fi o hotspot
 
-En **Jugar en red local**, cada persona pone su nombre. Una crea la sala y comparte el código y la IP:puerto; las demás se unen desde la misma Wi-Fi o conectadas al hotspot. La búsqueda de salas es opcional: también se puede escribir la dirección. El anfitrión configura y avanza; todos responden simultáneamente desde su teléfono. Con 2 o 3 jugadores y «Regla en vivo» activada por todos, se muestran sus movimientos en tiempo real. Con 4 o más, o si cualquiera lo apaga, las estimaciones permanecen privadas.
+En **Jugar en red local**, cada persona pone su nombre. Una crea la sala y comparte el código y la IP:puerto; las demás se unen desde la misma Wi-Fi o conectadas al hotspot. La búsqueda de salas es opcional: también se puede escribir la dirección. El anfitrión configura y avanza; todos responden simultáneamente desde su teléfono. Con **2–8 jugadores** y «Regla en vivo» activada por todos, un único gráfico muestra todas las barras, incluida la tuya. Arrastra verticalmente sobre cualquier barra, fondo o leyenda para ajustar solo tu número. Si cualquiera apaga la opción, las estimaciones permanecen privadas.
 
 Reconexión con plaza reservada, confirmaciones idempotentes y tráfico local cifrado. Android exige el permiso `INTERNET` para sockets LAN; la app solo admite destinos IPv4 privados/link-local, sin servicios externos. El hotspot se activa desde Android. [Instrucciones, límites y solución de problemas](LAN.md).
 
@@ -30,9 +30,9 @@ Si termina el proceso del anfitrión, la sala termina y hay que crear otra. Algu
 - **Revelación:** gráfica vertical de barras por estimación, línea de respuesta real, corona y leyenda de puntos.
 - **Marcador y resultado:** puntuación acumulada, puestos compartidos en empate y podio final.
 
-Novedades 1.0.7: **Regla en vivo** para salas de 2 o 3, con interruptor en Ajustes y consentimiento de todos. Indicadores mientras seleccionas y reglas ampliadas mientras esperas; la confirmación y la puntuación siguen independientes. Con 4–8 jugadores siempre es privado. Todos deben instalar 1.0.7 para jugar juntos. [Cambios completos](docs/releases/v1.0.7.md).
+Novedades 1.0.8: **tablero LAN compartido para 2–8 jugadores**. Nombre y color propios arriba, todas las barras simultáneas, valores en leyenda fija y controles inferiores. Confirmar congela tu barra mientras observas las demás; el menú ⋮ permite apagar el modo o salir. Todos deben instalar 1.0.8 (protocolo LAN 3). [Cambios completos](docs/releases/v1.0.8.md).
 
-Se conserva la [espera animada de 1.0.6](docs/screens/waiting_orbit.png). [Selector en vivo](docs/screens/live_own_selector_320x640_1.3_8p.png) · [Reglas de rivales](docs/screens/live_watch_320x640_1.3_8p.png) · [Prueba interactiva animada](docs/screens/live_selector_interaction.png).
+[Selector con ocho barras](docs/screens/shared_all_selector_320x640_1.3_8p.png) · [Espera compartida](docs/screens/shared_all_waiting_320x640_1.3_8p.png) · [Prueba interactiva de arrastre](docs/screens/live_selector_interaction.png). El modo privado conserva la [espera animada](docs/screens/waiting_orbit.png).
 
 Ejemplos LAN: [crear sala](docs/screens/lan_entry_320x640_1.3_8p.png), [unirse](docs/screens/lan_join_form_320x640_1.3_8p.png) y [espera](docs/screens/lan_waiting_320x640_1.3_8p.png).
 

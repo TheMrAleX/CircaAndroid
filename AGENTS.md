@@ -66,5 +66,7 @@ El usuario informó que 1.0.5 funciona correctamente en su prueba; las pruebas f
 ## Revisión 1.0.8
 La petición actual sustituye MIT para las nuevas distribuciones: licencia propia de atribución y autoría; conservar los permisos MIT históricos y las licencias de terceros. Permitir redistribución con crédito y cambios identificados, prohibiendo suplantar al autor original.
 - [x] Licencia, crédito al autor y archivo MIT histórico.
-- [ ] Gráfico LAN compartido para 2–8 jugadores con arrastre propio.
-- [ ] Tests, revisión visual, compilaciones y release.
+- [x] Protocolo LAN 3 y gráfico compartido de 2–8 barras; arrastre propio probado sobre una columna ajena, privacidad opcional y confirmaciones congeladas.
+- [x] 235 casos correctos: 35 motor/protocolo, 10 Android, 188 capturas, 1 ciclo de espera y 1 interacción táctil (81 fotogramas). Comparación visual correcta; lint debug sin incidencias y APK debug compilado.
+- [x] Build release/R8 firmado y lint release sin incidencias; licencias empaquetadas idénticas a los textos del repo.
+- [ ] Publicación 1.0.8 y APK oficial verificado.

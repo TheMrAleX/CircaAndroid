@@ -128,3 +128,17 @@ Build release local 1.0.7 con R8, reducción de recursos y firma v2 correcto; li
 Tag v1.0.7 en `0debc0c`. [CI 39157398548](https://github.com/TheMrAleX/CircaAndroid/actions/runs/39157398548) y [release 39157400077](https://github.com/TheMrAleX/CircaAndroid/actions/runs/39157400077) correctos. Descarga oficial de APK y SHA256 desde GitHub Releases comprobada: `33428d603750768a7d98f7b50cd15b4a15189edcef7a0a3b284aa0cec09946f1`. Firma v2 RSA3072 verificada, certificado SHA256 `8e15df891f10c74284011ff5c647b232c4040a26fa4e032d2449aee8fafabae4`. Versión 1.0.7/código 8, minSdk 26/target 35, solo lib/arm64-v8a y catálogo SQLite 3 íntegro de 400 filas con todos los campos idénticos al asset validado local. Sin almacenes de firma ni evidencias de tests empaquetadas.
 
 La firma temporal cambió respecto a 1.0.6; reinstalación y pérdida de datos locales documentadas. Todos los participantes deben usar 1.0.7 por el protocolo LAN 2. La validación física en teléfonos de esta función sigue pendiente por no disponer de dispositivos.
+
+## Licencia y tablero compartido 1.0.8
+
+235 casos correctos: 35 motor/protocolo (18 juego, 10 LAN y 7 de modo compartido), 10 Android, 188 capturas y 2 pruebas animadas/interactivas. verifyPaparazziDebug correcto; lint debug sin incidencias y build debug correcto. 400 preguntas validadas, sin cambios de catálogo.
+
+Nueva prueba de sockets reales con ocho participantes: siete valores ajenos por receptor en un único frame de menos de 256 bytes, retirada por opt-out, restauración, congelación de confirmadas y resultados iguales en todos. Se mantienen las pruebas de tres participantes, contextos atrasados, límites, coalescencia, reconexión y valores inválidos.
+
+LiveSelectorTest muestra ocho barras y conduce el selector real con SetProgress, botón fino y eventos táctiles DOWN/MOVE/CANCEL sobre la última columna de un oponente. Comprueba que el gesto modifica la estimación propia sin confirmar, que un movimiento remoto no la altera, que la privacidad retira las ocho barras y detiene el envío, y que reactivar/confirmar conserva el valor correcto. APNG de 81 fotogramas en docs/screens/live_selector_interaction.png. El reloj de Compose controla la prueba; no se usa espera de tiempo real para simular gestos.
+
+Revisión de 320×640/fontScale 1.3: ocho barras, pregunta completa (incluida la de gravedad con cinco decimales), nombre de 12 caracteres, valores fijos en leyenda de dos filas, controles propios y espera compartida. También se revisan dos, tres y cuatro participantes, borradores vacíos, cifra 1.400.000.000 y 0,5, opciones de privacidad y licencia desplazable. Nombres abreviados solo en la leyenda estrecha; cabecera y semántica conservan la identidad completa. Los valores se ajustan a una sola línea.
+
+LICENSE actual idéntica al texto empaquetado; MIT histórico y OFL de Fredoka también empaquetados y accesibles desde Acerca de. No se revocan los permisos MIT previos. Este entorno sigue sin teléfonos físicos: las pruebas LAN usan sockets loopback y Android simulado.
+
+Build release local 1.0.8 con R8 y reducción de recursos correcto; lint release sin incidencias y firma v2 válida. LICENSE, MIT histórico y OFL empaquetados coinciden byte a byte con sus textos del repositorio.
