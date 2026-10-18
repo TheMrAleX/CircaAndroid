@@ -1,6 +1,6 @@
 # Jugar por Wi-Fi o hotspot (1.0.5)
 
-Se necesitan de 2 a 8 teléfonos Android con Aproximado 1.0.5, uno por persona. El anfitrión también juega. No se necesitan Internet, datos móviles, cuentas ni servidores externos. El modo de pasar un solo teléfono sigue disponible en **Jugar**.
+Se necesitan de 2 a 8 teléfonos Android con Aproximado 1.0.5, uno por persona. El anfitrión también juega. El número de clientes que admite un hotspot depende del teléfono; si permite menos, usa una Wi-Fi compartida. No se necesitan Internet, datos móviles, cuentas ni servidores externos. El modo de pasar un solo teléfono sigue disponible en **Jugar**.
 
 ## Misma Wi-Fi
 

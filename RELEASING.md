@@ -119,3 +119,22 @@ El APK oficial descargado verifica firma v2, ARM64 exclusivo, versión 1.0.4/có
 ```
 
 Certificado SHA256: `a32801d393df8d610ea5f59afc766d4400e9e48b16b36adf1cf506a3bf868935`. Es diferente de 1.0.3: Android exige desinstalar la anterior y se pierden los datos locales. La migración preserva partidas cuando la actualización usa una firma compatible, pero no elimina esta restricción de Android. Configurar una clave estable mediante las secrets descritas arriba para futuras versiones compatibles.
+
+## Publicación verificada: v1.0.5
+
+Publicada el 18 de octubre de 2026 desde `207758c` (versionCode 6):
+
+- [Release v1.0.5](https://github.com/TheMrAleX/CircaAndroid/releases/tag/v1.0.5)
+- [APK ARM64 firmado](https://github.com/TheMrAleX/CircaAndroid/releases/download/v1.0.5/Aproximado-v1.0.5-arm64-v8a.apk)
+- [CI correcto](https://github.com/TheMrAleX/CircaAndroid/actions/runs/39147800217)
+- [Release correcta](https://github.com/TheMrAleX/CircaAndroid/actions/runs/39147825478)
+
+APK oficial descargado: versión 1.0.5/código 6, firma v2 RSA3072, ARM64 exclusivo, SQLite 3 íntegra y coincidencia completa de las 400 preguntas con los JSON. Servicio LAN no exportado con tipo connectedDevice y permisos LAN/foreground/notificación esperados; sin ubicación ni escaneo Wi-Fi. Las fixtures y keystores no se empaquetan. SHA256:
+
+```text
+c05771068822dfcaf6f3dd3e94815dab31caecfc811a3ce56fd5fdfe50ba63a6
+```
+
+Certificado SHA256: `fd0cefc39cec406fd52c9e579eff943fb2d6f9b65810e2a3dfe0d0004dc2616c`. Es diferente de 1.0.4: hay que desinstalar la anterior y se pierden los datos locales. Una firma estable mediante las secrets descritas al inicio permite actualizaciones futuras compatibles; no recupera la clave temporal anterior.
+
+Esta versión añade INTERNET porque Android lo exige para sockets LAN; no usa servidores externos. Las comprobaciones automatizadas de sockets/Android no equivalen a probar radios Wi-Fi, hotspot ni políticas de ahorro en teléfonos físicos. Véase LAN.md.

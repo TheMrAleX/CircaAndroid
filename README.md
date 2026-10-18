@@ -4,7 +4,7 @@ Juego nativo Android de trivia numérica para **2–8 personas**: pasando un tel
 
 **[Descargar APK firmado v1.0.5](https://github.com/TheMrAleX/CircaAndroid/releases/download/v1.0.5/Aproximado-v1.0.5-arm64-v8a.apk)** · [Release y SHA256](https://github.com/TheMrAleX/CircaAndroid/releases/tag/v1.0.5)
 
-**Firma y actualizaciones:** el workflow puede usar una firma temporal distinta entre versiones. Consulta las notas de la release antes de instalar sobre una versión anterior. [Detalle de firma](RELEASING.md).
+**Firma y actualizaciones:** la firma de 1.0.5 difiere de 1.0.4. Android requiere desinstalar la anterior; se perderán los datos locales. [Detalle de firma](RELEASING.md).
 
 ## LAN por Wi-Fi o hotspot
 

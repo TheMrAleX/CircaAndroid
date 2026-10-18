@@ -45,8 +45,8 @@ La petición de rediseño 1.0.1 sustituye las posiciones rígidas de la spec ori
 - [x] 126 casos: 18 motor, 8 integración y 100 capturas; lint debug y build debug correctos. Revisión de números con cinco decimales, cifra completa y siguiente jugador en pantalla pequeña.
 - [x] Release v1.0.4 publicada; CI y release remotos correctos; APK oficial descargado, SHA256/firma v2/ARM64 y 400 filas verificadas.
 
-## Revisión 1.0.5 en curso
+## Revisión 1.0.5
 - [x] Motor LAN autoritativo y protocolo cifrado con pruebas de sockets reales.
 - [x] Sala Wi-Fi/hotspot, descubrimiento local, entrada IP y reconexión.
 - [x] UI e integración: 173 casos (28 motor/protocolo, 9 Android, 136 visuales), comparación visual correcta; lint debug sin incidencias y APK debug compilado. Build release/R8 firmado y lint release correctos.
-- [ ] Release publicada y APK verificado.
+- [x] v1.0.5 publicada; CI y release remotos correctos; APK oficial descargado y verificado (SHA256, firma v2, ARM64, servicio LAN y catálogo íntegro). Pruebas físicas Wi-Fi/hotspot pendientes por falta de dispositivos.

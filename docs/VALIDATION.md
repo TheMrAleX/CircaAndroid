@@ -90,3 +90,7 @@ CI `39144757551` y release `39144766164` correctos. APK oficial descargado: SHA2
 No hay `/dev/kvm`, emulador instalado ni teléfonos físicos disponibles. Las conexiones reales anteriores son loopback, no ensayos de radios Wi-Fi ni hotspot físico. Las comprobaciones de fabricante/red descritas en LAN.md quedan pendientes de dispositivos; no se declara una auditoría criptográfica externa ni garantía frente a usuarios maliciosos que posean el código.
 
 Build release local 1.0.5 con R8, recursos reducidos y firma v2 correcto; lint release sin incidencias.
+
+## Publicación 1.0.5 verificada
+
+CI `39147800217` y release `39147825478` correctos. APK oficial descargado: SHA256 `c05771068822dfcaf6f3dd3e94815dab31caecfc811a3ce56fd5fdfe50ba63a6`, firma v2 RSA3072, versión 1.0.5/código 6 y ARM64 exclusivo. Catálogo SQLite 3 íntegro y coincidencia completa de sus 400 filas con los JSON. Manifest con servicio LAN connectedDevice no exportado, permisos normales LAN/foreground/wake lock y notificaciones opcionales; sin permisos de ubicación ni escaneo. Firma distinta de 1.0.4 y necesidad de desinstalar documentadas en README/RELEASING. Las pruebas físicas descritas en LAN.md siguen pendientes por falta de dispositivos.
