@@ -1,16 +1,16 @@
 # Aproximado
 
-Juego nativo Android de trivia numérica para **2–8 personas** que se pasan un teléfono. 430 preguntas en español, 12 categorías y funcionamiento **100 % offline**: sin permiso de Internet, anuncios ni analytics.
+Juego nativo Android de trivia numérica para **2–8 personas** que se pasan un teléfono. 400 preguntas en español, 12 categorías y funcionamiento **100 % offline**: sin permiso de Internet, anuncios ni analytics.
 
-**[Descargar APK firmado v1.0.3](https://github.com/TheMrAleX/CircaAndroid/releases/download/v1.0.3/Aproximado-v1.0.3-arm64-v8a.apk)** · [Release y SHA256](https://github.com/TheMrAleX/CircaAndroid/releases/tag/v1.0.3)
+**[Descargar APK firmado v1.0.4](https://github.com/TheMrAleX/CircaAndroid/releases/download/v1.0.4/Aproximado-v1.0.4-arm64-v8a.apk)** · [Release y SHA256](https://github.com/TheMrAleX/CircaAndroid/releases/tag/v1.0.4)
 
-**Instalación sobre 1.0.2:** esta release tiene otra firma; requiere desinstalar la anterior y se perderán la partida y el historial locales. [Detalle de firma y actualizaciones](RELEASING.md).
+**Firma y actualizaciones:** si la release usa la firma temporal del workflow, requiere desinstalar APK de otra ejecución y se perderán la partida y el historial locales. Consulta el modo de firma en las notas de la release. [Detalle de firma y actualizaciones](RELEASING.md).
 
 ## Cómo jugar
 
 1. Elige jugadores, nombres, colores distintos, 5/10/15/20 rondas, categorías y dificultad.
-2. Todos leen la pregunta. Pasa el teléfono a la persona indicada.
-3. Cada persona ajusta su estimación arrastrando el panel sobre la regla fija, con los botones finos o con el teclado numérico. Los conteos admiten solo enteros; las pocas medidas que lo necesitan indican su precisión decimal. Confirma sin enseñar la pantalla.
+2. Todos leen la pregunta y empieza el primer jugador.
+3. Cada persona ajusta su estimación arrastrando el panel sobre la regla fija, con los botones finos o con el teclado numérico. Los conteos admiten solo enteros; las pocas medidas que lo necesitan indican su precisión decimal. Al confirmar aparece directamente el selector del siguiente jugador, con nombre, avatar, turno y ronda; el valor anterior desaparece.
 4. Al terminar todos, aparecen la gráfica de barras y la respuesta real, con una leyenda de estimaciones y puntos. Más cerca da más puntos; las escalas logarítmicas comparan proporciones. Exacto: +2; a menos del 1 %: +1. Los empates comparten puesto y puntos.
 5. Consulta el marcador y termina en el podio. Puedes salir y continuar una partida guardada. El selector bloquea capturas y la vista de recientes.
 
@@ -18,12 +18,11 @@ Juego nativo Android de trivia numérica para **2–8 personas** que se pasan un
 
 - **Inicio:** fondo carbón, reglas laterales animadas, título azul con contorno y botones grandes.
 - **Configuración:** tarjetas redondeadas, nombres editables, colores y filtros.
-- **Pase de turno:** pantalla del color del siguiente jugador sin estimaciones anteriores.
 - **Selector:** regla fija y panel del color del jugador que sube o baja con el número en tiempo real; ajuste fino y teclado.
 - **Revelación:** gráfica vertical de barras por estimación, línea de respuesta real, corona y leyenda de puntos.
 - **Marcador y resultado:** puntuación acumulada, puestos compartidos en empate y podio final.
 
-Novedades 1.0.3: 412 preguntas usan enteros y solo 18 medidas admiten decimales explícitos. El teclado y el selector respetan esa precisión. La gráfica lineal parte de cero y muestra el eje numérico para no exagerar diferencias pequeñas; la logarítmica conserva el dominio de la pregunta. Migración de la DB sin reiniciar datos. [Cambios completos](docs/releases/v1.0.3.md).
+Novedades 1.0.4: banco renovado de 400 preguntas reconocibles en 12 categorías, con las cifras de referencia a su precisión publicada: sin redondeos para facilitar aciertos. 351 valores enteros y 49 medidas con decimales. Cambio directo entre jugadores y cabecera integrada. Las partidas antiguas conservan sus preguntas al migrar la DB; las nuevas usan exclusivamente el catálogo nuevo. [Cambios completos](docs/releases/v1.0.4.md).
 
 Ejemplos: [selector de 8 jugadores](docs/screens/selector_320x640_1.3_8p.png), [revelación](docs/screens/reveal_320x640_1.3_8p.png) y [marcador](docs/screens/score_320x640_1.3_8p.png).
 
