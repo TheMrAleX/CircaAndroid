@@ -15,20 +15,20 @@ class LiveRulerTest {
         val deadline=System.nanoTime()+TimeUnit.SECONDS.toNanos(20)
         while(!condition()) { if(System.nanoTime()>deadline) fail("Live update did not arrive");Thread.sleep(10) }
     }
-    @Test fun livePolicyRequiresTwoOrThreeOnlinePlayersAndUnanimousConsent() {
+    @Test fun livePolicySupportsTwoToEightOnlinePlayersAndRequiresUnanimousConsent() {
         for(n in listOf(2,3,4,8)) {
             val tokens=List(n) { token() };val room=LanRoom(pool,tokens[0],"Host")
             tokens.drop(1).forEach { room.join(it,"Invitado") };room.start()
             val s=room.snapshot(tokens[0])
-            assertEquals(n<4,s.liveEnabled)
-            assertEquals(n<4,room.preview(tokens[0],s.gameId,0,s.revision,10.0))
+            assertEquals(true,s.liveEnabled)
+            assertEquals(true,room.preview(tokens[0],s.gameId,0,s.revision,10.0))
             room.preference(tokens.last(),false)
             assertFalse(room.snapshot(tokens[0]).liveEnabled);assertTrue(room.live(tokens.last()).values.isEmpty())
             room.preference(tokens.last(),true)
-            assertEquals(n<4,room.snapshot(tokens[0]).liveEnabled)
+            assertEquals(true,room.snapshot(tokens[0]).liveEnabled)
             room.offline(tokens.last());assertFalse(room.snapshot(tokens[0]).liveEnabled)
             room.join(tokens.last(),"Otro",false);assertFalse(room.snapshot(tokens[0]).liveEnabled)
-            room.preference(tokens.last(),true);assertEquals(n<4,room.snapshot(tokens[0]).liveEnabled)
+            room.preference(tokens.last(),true);assertEquals(true,room.snapshot(tokens[0]).liveEnabled)
         }
         val h=token();val r=LanRoom(pool,h,"Host",hostLiveRuler=false);r.join(token(),"Otro");assertFalse(r.snapshot(h).liveEnabled)
     }
@@ -40,7 +40,7 @@ class LiveRulerTest {
         assertNull(room.snapshot(h).mine);assertFalse(room.snapshot(g).members[0].submitted)
         assertTrue(room.snapshot(g).results.isEmpty());assertEquals(0.0,s.prompt!!.model().answer,0.0)
         room.submit(h,s.gameId,0,11.0);s=room.snapshot(g)
-        assertTrue(room.live(g).values.isEmpty())
+        assertEquals(mapOf(0 to 11.0),room.live(g).values)
         assertFalse(room.preview(h,s.gameId,0,s.revision,49.0))
         room.submit(h,s.gameId,0,48.0);room.submit(g,s.gameId,0,13.0)
         assertEquals(listOf(11.0,13.0),room.snapshot(h).results.single().guesses)
@@ -69,8 +69,8 @@ class LiveRulerTest {
         assertFalse(frame.accepts(s.copy(revision=s.revision+1)))
         assertFalse(frame.copy(values=mapOf(1 to 9.0)).accepts(s))
         assertFalse(frame.copy(values=mapOf(0 to 9.1)).accepts(s))
-        assertFalse(frame.accepts(s.copy(members=s.members.map { it.copy(submitted=true) })))
-        for(values in listOf(mapOf(0 to 1.0,1 to 2.0,2 to 3.0),mapOf(8 to 1.0),mapOf(0 to Double.NaN))) assertThrows(Exception::class.java) { LanWire.decode(LanWire.encode(LanMessage.Live(frame.copy(values=values)))) }
+        assertTrue(frame.accepts(s.copy(members=s.members.map { it.copy(submitted=true) })))
+        for(values in listOf((0..7).associateWith { it.toDouble() },mapOf(8 to 1.0),mapOf(0 to Double.NaN))) assertThrows(Exception::class.java) { LanWire.decode(LanWire.encode(LanMessage.Live(frame.copy(values=values)))) }
     }
     @Test fun realThreePhoneSocketsCoalesceDraftsAndStopWhenAnyPlayerOptsOut() {
         val host=AtomicReference<LanSnapshot>();val hostLive=AtomicReference<LanLiveFrame>()
@@ -94,17 +94,48 @@ class LiveRulerTest {
             await { frames[1].lastOrNull()?.let { it.revision==s.revision && it.values[0]==null }==true }
             // A submission takes priority over the pending draft and keeps its exact value.
             clients[0].submit(s.gameId,0,14.0);await { states[0].get().mine==14.0 }
-            await { hostLive.get()?.revision==host.get().revision && hostLive.get()?.values?.containsKey(states[0].get().self)==false }
+            await { hostLive.get()?.revision==host.get().revision && hostLive.get()?.values?.get(states[0].get().self)==14.0 }
             clients[1].submit(s.gameId,0,13.0);server.submit(s.gameId,0,12.0)
             await { states.all { it.get()?.stage==LanStage.REVEAL } }
             val results=host.get().results.single()
             assertEquals(12.0,results.guesses[0],0.0);assertEquals(14.0,results.guesses[states[0].get().self],0.0);assertEquals(13.0,results.guesses[states[1].get().self],0.0)
         } finally { clients.forEach { it.close() };server.close() }
     }
-    @Test fun fourthSeatDisablesLiveEvenIfItDisconnectsAndReenablesOnlyAfterRemoval() {
+    @Test fun disconnectedSeatDisablesSharingUntilReconnectOrLobbyRemoval() {
         val h=token();val r=LanRoom(pool,h,"Host");val guests=List(3) { token() };guests.forEach { r.join(it,"Otro") }
-        assertFalse(r.snapshot(h).liveEnabled);r.offline(guests.last());assertFalse(r.snapshot(h).liveEnabled)
+        assertTrue(r.snapshot(h).liveEnabled);r.offline(guests.last());assertFalse(r.snapshot(h).liveEnabled)
         r.remove(3);assertTrue(r.snapshot(h).liveEnabled)
         r.preference(h,false);r.remove(2);assertFalse(r.snapshot(h).liveEnabled)
     }
+    @Test fun eightPhoneDraftsFitOneBoundedFrameAndConfirmedBarsFreezeWithoutChangingScores() {
+        val host=AtomicReference<LanSnapshot>();val hostFrame=AtomicReference<LanLiveFrame>()
+        val server=LanServer(pool,"Host",onState={host.set(it)},onLive={hostFrame.set(it)})
+        val states=List(7) { AtomicReference<LanSnapshot>() };val frames=List(7) { AtomicReference<LanLiveFrame>() }
+        val clients=List(7) { i -> LanClient(LanEndpoint.parse("127.0.0.1:${server.port}",true),server.code,token(),"Jugador$i",onState={states[i].set(it)},onConnection={_,_->},onLive={frames[i].set(it)}) }
+        try {
+            await { states.all { it.get()?.members?.size==8 } };server.configure(5,null,emptySet());server.start()
+            await { states.all { it.get()?.stage==LanStage.ANSWERING } }
+            var s=host.get()
+            server.preview(s.gameId,0,s.revision,10.0)
+            clients.forEachIndexed { i,c -> c.preview(s.gameId,0,s.revision,states[i].get().self+10.0) }
+            await { hostFrame.get()?.values?.size==7 && frames.all { it.get()?.values?.size==7 } }
+            for(i in 0..6) {
+                val f=frames[i].get();assertTrue(f.accepts(states[i].get()));assertFalse(f.values.containsKey(states[i].get().self))
+                assertTrue(LanWire.encode(LanMessage.Live(f)).size<256)
+                assertEquals(f,LanWire.decode(LanWire.encode(LanMessage.Live(f))).let { (it as LanMessage.Live).frame })
+            }
+            clients[0].submit(s.gameId,0,20.0)
+            await { states[0].get().mine==20.0 && hostFrame.get()?.values?.get(states[0].get().self)==20.0 }
+            s=host.get();clients[0].preview(s.gameId,0,s.revision,49.0)
+            clients[1].preference(false);await { states.all { it.get()?.liveEnabled==false } && !host.get().liveEnabled }
+            assertTrue(frames.none { it.get()?.accepts(states[0].get())==true })
+            clients[1].preference(true);await { states.all { it.get()?.liveEnabled==true } }
+            await { hostFrame.get()?.revision==host.get().revision && hostFrame.get()?.values==mapOf(states[0].get().self to 20.0) }
+            s=host.get();clients.drop(1).forEach { it.submit(s.gameId,0,12.0) };server.submit(s.gameId,0,12.0)
+            await { states.all { it.get()?.stage==LanStage.REVEAL } }
+            assertEquals(20.0,host.get().results.single().guesses[states[0].get().self],0.0)
+            assertTrue(states.all { it.get().results==host.get().results })
+        } finally { clients.forEach { it.close() };server.close() }
+    }
+
 }

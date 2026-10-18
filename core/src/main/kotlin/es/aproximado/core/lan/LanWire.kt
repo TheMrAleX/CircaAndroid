@@ -32,7 +32,7 @@ sealed interface LanMessage {
     data object Bye: LanMessage
 }
 object LanWire {
-    const val VERSION=2
+    const val VERSION=3
     const val MAX_FRAME=65536
     private fun DataOutputStream.str(s: String) { val b=s.toByteArray(Charsets.UTF_8);require(b.size<=2048);writeInt(b.size);write(b) }
     private fun DataInputStream.str(): String { val n=readInt();require(n in 0..2048);val b=ByteArray(n);readFully(b);return Charsets.UTF_8.newDecoder().decode(ByteBuffer.wrap(b)).toString() }
@@ -87,7 +87,7 @@ object LanWire {
                 val prompt=if(readBoolean()) prompt() else null;val mine=if(readBoolean()) readDouble() else null
                 val results=List(count(20)) { LanRound(prompt(),readDouble(),str(),List(count(8)) { readDouble() }) }
                 val live=readBoolean()
-                require(!live || members.size in 2..3 && members.all { it.online })
+                require(!live || members.size in 2..8 && members.all { it.online })
                 require(room.length<=64 && game.length<=64 && revision>=0 && members.size in 1..8 && self in members.indices && members.map { it.id }==members.indices.toList() && members.all { it.name.isNotBlank() && it.name.length<=12 } && rounds in listOf(5,10,15,20) && (diff==null || diff in 1..3) && round in 0 until rounds)
                 require(stage==LanStage.LOBBY || members.size>=2 && prompt!=null)
                 require(results.all { it.guesses.size==members.size && it.answer.isFinite() && it.answer in it.prompt.min..it.prompt.max && it.guesses.all { v -> es.aproximado.core.EstimateInput.accepts(it.prompt.model(),v) } })
@@ -98,7 +98,7 @@ object LanWire {
             8 -> LanMessage.Preview(str(),readInt(),readLong(),readDouble()).also { require(it.game.length<=64 && it.round in 0..19 && it.revision>=0 && it.value.isFinite()) }
             9 -> LanMessage.Preference(readBoolean())
             10 -> {
-                val game=str();val round=readInt();val revision=readLong();val pairs=List(count(2)) { readInt() to readDouble() }
+                val game=str();val round=readInt();val revision=readLong();val pairs=List(count(7)) { readInt() to readDouble() }
                 require(game.length<=64 && round in 0..19 && revision>=0 && pairs.all { it.first in 0..7 && it.second.isFinite() } && pairs.map { it.first }.distinct().size==pairs.size)
                 LanMessage.Live(LanLiveFrame(game,round,revision,pairs.toMap()))
             }

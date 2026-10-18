@@ -17,8 +17,8 @@ data class LanSnapshot(val roomId: String,val gameId: String,val revision: Long,
 
 /** Transient estimates only. Never persisted or used for scoring. */
 data class LanLiveFrame(val game: String,val round: Int,val revision: Long,val values: Map<Int,Double>) {
-    fun accepts(s: LanSnapshot): Boolean = s.liveEnabled && s.stage==LanStage.ANSWERING && game==s.gameId && round==s.round && revision==s.revision && values.size<=2 && values.all { (id,v) ->
-        id!=s.self && s.members.any { it.id==id && it.online && !it.submitted } && s.prompt?.let { EstimateInput.accepts(it.model(),v) }==true
+    fun accepts(s: LanSnapshot): Boolean = s.liveEnabled && s.stage==LanStage.ANSWERING && game==s.gameId && round==s.round && revision==s.revision && values.size<=s.members.size-1 && values.size<=7 && values.all { (id,v) ->
+        id!=s.self && s.members.any { it.id==id && it.online } && s.prompt?.let { EstimateInput.accepts(it.model(),v) }==true
     }
 }
 
@@ -38,7 +38,7 @@ class LanRoom(private val pool: List<Question>,hostToken: String,hostName: Strin
     private val guesses=mutableMapOf<String,Double>()
     private val results=mutableListOf<LanRound>()
     private val drafts=mutableMapOf<String,Double>()
-    private fun liveEnabled()=seats.size in 2..3 && seats.all { it.online && it.live }
+    private fun liveEnabled()=seats.size in 2..8 && seats.all { it.online && it.live }
     @Synchronized fun join(token: String,name: String,liveRuler: Boolean = true): Int {
         requireToken(token)
         val old=seats.indexOfFirst { it.token==token }
@@ -96,7 +96,7 @@ class LanRoom(private val pool: List<Question>,hostToken: String,hostName: Strin
         drafts[token]=value;return true
     }
     @Synchronized fun live(token: String): LanLiveFrame {
-        val values=if(liveEnabled() && stage==LanStage.ANSWERING) seats.mapIndexedNotNull { i,s -> drafts[s.token]?.takeIf { s.token!=token && s.token !in guesses }?.let { i to it } }.toMap() else emptyMap()
+        val values=if(liveEnabled() && stage==LanStage.ANSWERING) seats.mapIndexedNotNull { i,s -> (guesses[s.token] ?: drafts[s.token])?.takeIf { s.token!=token }?.let { i to it } }.toMap() else emptyMap()
         return LanLiveFrame(gameId,round,revision,values)
     }
     companion object {
