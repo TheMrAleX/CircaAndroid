@@ -20,16 +20,19 @@ import javax.crypto.spec.PBEKeySpec
 import javax.crypto.spec.SecretKeySpec
 
 sealed interface LanMessage {
-    data class Hello(val token: String,val name: String): LanMessage
+    data class Hello(val token: String,val name: String,val liveRuler: Boolean = true): LanMessage
     data class State(val snapshot: LanSnapshot): LanMessage
     data class Submit(val game: String,val round: Int,val value: Double): LanMessage
+    data class Preview(val game: String,val round: Int,val revision: Long,val value: Double): LanMessage
+    data class Preference(val enabled: Boolean): LanMessage
+    data class Live(val frame: LanLiveFrame): LanMessage
     data class Error(val reason: LanFailure): LanMessage
     data object Ping: LanMessage
     data object Pong: LanMessage
     data object Bye: LanMessage
 }
 object LanWire {
-    const val VERSION=1
+    const val VERSION=2
     const val MAX_FRAME=65536
     private fun DataOutputStream.str(s: String) { val b=s.toByteArray(Charsets.UTF_8);require(b.size<=2048);writeInt(b.size);write(b) }
     private fun DataInputStream.str(): String { val n=readInt();require(n in 0..2048);val b=ByteArray(n);readFully(b);return Charsets.UTF_8.newDecoder().decode(ByteBuffer.wrap(b)).toString() }
@@ -46,19 +49,22 @@ object LanWire {
         val bytes=ByteArrayOutputStream()
         DataOutputStream(bytes).use { w -> with(w) {
             when(message) {
-                is LanMessage.Hello -> { writeByte(1);str(message.token);str(message.name) }
+                is LanMessage.Hello -> { writeByte(1);str(message.token);str(message.name);writeBoolean(message.liveRuler) }
                 is LanMessage.Submit -> { writeByte(2);str(message.game);writeInt(message.round);writeDouble(message.value) }
                 is LanMessage.Error -> { writeByte(3);writeInt(message.reason.ordinal) }
                 LanMessage.Ping -> writeByte(4)
                 LanMessage.Pong -> writeByte(5)
                 LanMessage.Bye -> writeByte(6)
+                is LanMessage.Preview -> { writeByte(8);str(message.game);writeInt(message.round);writeLong(message.revision);writeDouble(message.value) }
+                is LanMessage.Preference -> { writeByte(9);writeBoolean(message.enabled) }
+                is LanMessage.Live -> { writeByte(10);val f=message.frame;str(f.game);writeInt(f.round);writeLong(f.revision);writeInt(f.values.size);f.values.forEach { (id,v) -> writeInt(id);writeDouble(v) } }
                 is LanMessage.State -> {
                     writeByte(7);val s=message.snapshot
                     str(s.roomId);str(s.gameId);writeLong(s.revision);writeInt(s.self);writeInt(s.stage.ordinal)
                     writeInt(s.members.size);s.members.forEach { writeInt(it.id);str(it.name);writeBoolean(it.online);writeBoolean(it.submitted) }
                     writeInt(s.rounds);writeInt(s.difficulty ?: 0);writeInt(s.categories.size);s.categories.sorted().forEach { str(it) }
                     writeInt(s.round);writeBoolean(s.prompt!=null);s.prompt?.let { prompt(it) };writeBoolean(s.mine!=null);s.mine?.let { writeDouble(it) }
-                    writeInt(s.results.size);s.results.forEach { r -> prompt(r.prompt);writeDouble(r.answer);str(r.source);writeInt(r.guesses.size);r.guesses.forEach { writeDouble(it) } }
+                    writeInt(s.results.size);s.results.forEach { r -> prompt(r.prompt);writeDouble(r.answer);str(r.source);writeInt(r.guesses.size);r.guesses.forEach { writeDouble(it) } };writeBoolean(s.liveEnabled)
                 }
             }
         } }
@@ -68,7 +74,7 @@ object LanWire {
         require(bytes.size<=MAX_FRAME)
         val r=DataInputStream(ByteArrayInputStream(bytes))
         val message=with(r) { when(readUnsignedByte()) {
-            1 -> LanMessage.Hello(str(),str()).also { LanRoom.requireToken(it.token);LanRoom.cleanName(it.name) }
+            1 -> LanMessage.Hello(str(),str(),readBoolean()).also { LanRoom.requireToken(it.token);LanRoom.cleanName(it.name) }
             2 -> LanMessage.Submit(str(),readInt(),readDouble()).also { require(it.game.length<=64 && it.round in 0..19 && it.value.isFinite()) }
             3 -> LanMessage.Error(LanFailure.entries[readInt()])
             4 -> LanMessage.Ping
@@ -80,12 +86,21 @@ object LanWire {
                 val rounds=readInt();val diff=readInt().takeIf { it!=0 };val cats=List(count(32)) { str() }.toSet();val round=readInt()
                 val prompt=if(readBoolean()) prompt() else null;val mine=if(readBoolean()) readDouble() else null
                 val results=List(count(20)) { LanRound(prompt(),readDouble(),str(),List(count(8)) { readDouble() }) }
+                val live=readBoolean()
+                require(!live || members.size in 2..3 && members.all { it.online })
                 require(room.length<=64 && game.length<=64 && revision>=0 && members.size in 1..8 && self in members.indices && members.map { it.id }==members.indices.toList() && members.all { it.name.isNotBlank() && it.name.length<=12 } && rounds in listOf(5,10,15,20) && (diff==null || diff in 1..3) && round in 0 until rounds)
                 require(stage==LanStage.LOBBY || members.size>=2 && prompt!=null)
                 require(results.all { it.guesses.size==members.size && it.answer.isFinite() && it.answer in it.prompt.min..it.prompt.max && it.guesses.all { v -> es.aproximado.core.EstimateInput.accepts(it.prompt.model(),v) } })
                 require(mine==null || prompt!=null && es.aproximado.core.EstimateInput.accepts(prompt.model(),mine))
                 require(results.size==(when(stage) { LanStage.LOBBY -> 0;LanStage.ANSWERING -> round;else -> round+1 }))
-                LanMessage.State(LanSnapshot(room,game,revision,self,stage,members,rounds,diff,cats,round,prompt,mine,results))
+                LanMessage.State(LanSnapshot(room,game,revision,self,stage,members,rounds,diff,cats,round,prompt,mine,results,live))
+            }
+            8 -> LanMessage.Preview(str(),readInt(),readLong(),readDouble()).also { require(it.game.length<=64 && it.round in 0..19 && it.revision>=0 && it.value.isFinite()) }
+            9 -> LanMessage.Preference(readBoolean())
+            10 -> {
+                val game=str();val round=readInt();val revision=readLong();val pairs=List(count(2)) { readInt() to readDouble() }
+                require(game.length<=64 && round in 0..19 && revision>=0 && pairs.all { it.first in 0..7 && it.second.isFinite() } && pairs.map { it.first }.distinct().size==pairs.size)
+                LanMessage.Live(LanLiveFrame(game,round,revision,pairs.toMap()))
             }
             else -> throw IOException("Unknown message")
         } }

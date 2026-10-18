@@ -6,39 +6,55 @@ import java.net.*
 import java.util.UUID
 import java.util.concurrent.*
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicReference
 import java.security.SecureRandom
 
 private fun daemonThreads(prefix: String)=ThreadFactory { task -> Thread(task,prefix).apply { isDaemon=true } }
 private class Peer(val socket: Socket,val channel: LanChannel,workers: ExecutorService) : Closeable {
     private val queue=ArrayBlockingQueue<LanMessage>(8)
+    val preview=AtomicReference<LanMessage.Preview?>()
     private val closed=AtomicBoolean(false)
     init { workers.execute { try { while(!closed.get()) { val m=queue.take();channel.send(m);if(m==LanMessage.Bye) break } } catch (_: Exception) { } finally { close() } } }
-    fun send(message: LanMessage) {
+    @Synchronized fun send(message: LanMessage) {
         if(closed.get()) return
         // Snapshots are complete: retain only the newest queued state for a slow connection.
-        if(message is LanMessage.State) queue.removeIf { it is LanMessage.State }
+        if(message is LanMessage.State) queue.removeIf { it is LanMessage.State || it is LanMessage.Live }
+        if(message is LanMessage.Live) queue.removeIf { it is LanMessage.Live }
+        if(message is LanMessage.Preview || message is LanMessage.Submit || message is LanMessage.Preference) queue.removeIf { it is LanMessage.Preview }
         if(!queue.offer(message)) close()
     }
     fun read()=channel.receive()
     override fun close() { if(closed.compareAndSet(false,true)) { runCatching { socket.close() };queue.clear();queue.offer(LanMessage.Bye) } }
 }
 
-/** Bounded connections, no network IO in the state actor, no traffic for slider movements. */
+/** Bounded connections, no network IO in the state actor, coalesced transient slider traffic at most eight times per second. */
 class LanServer(pool: List<Question>,hostName: String,val code: String = "%08d".format(java.util.Locale.ROOT,SecureRandom().nextInt(100000000)),
-    private val onState: (LanSnapshot)->Unit,private val onFailure: (LanFailure)->Unit = {}) : Closeable {
+    private val onState: (LanSnapshot)->Unit,private val onFailure: (LanFailure)->Unit = {},hostLiveRuler: Boolean = true,private val onLive: (LanLiveFrame)->Unit = {}) : Closeable {
     private val hostToken=UUID.randomUUID().toString()
-    private val room=LanRoom(pool,hostToken,hostName)
+    private val room=LanRoom(pool,hostToken,hostName,hostLiveRuler=hostLiveRuler)
     private val actor=Executors.newSingleThreadExecutor(daemonThreads("lan-room"))
     private val workers=Executors.newFixedThreadPool(24,daemonThreads("lan-io"))
     private val timer=Executors.newSingleThreadScheduledExecutor(daemonThreads("lan-timeout"))
     private val permits=Semaphore(12)
     private val sockets=ConcurrentHashMap.newKeySet<Socket>()
     private val peers=mutableMapOf<String,Peer>()
+    private val pendingPreview=AtomicReference<LanMessage.Preview?>()
+    private var liveDirty=false
     private val server=ServerSocket().apply { reuseAddress=true;bind(InetSocketAddress(0)) }
     val port: Int get()=server.localPort
     @Volatile private var closed=false
     init {
         actor.execute { onState(room.snapshot(hostToken)) }
+        timer.scheduleAtFixedRate({ if(!closed) runCatching { actor.execute {
+            pendingPreview.getAndSet(null)?.let { if(room.preview(hostToken,it.game,it.round,it.revision,it.value)) liveDirty=true }
+            peers.forEach { (token,peer) -> peer.preview.getAndSet(null)?.let { if(room.preview(token,it.game,it.round,it.revision,it.value)) liveDirty=true } }
+            if(liveDirty) {
+                liveDirty=false
+                if(room.snapshot(hostToken).liveEnabled && room.stage==LanStage.ANSWERING) {
+                    onLive(room.live(hostToken));peers.forEach { (token,peer) -> peer.send(LanMessage.Live(room.live(token))) }
+                }
+            }
+        } } },125,125,TimeUnit.MILLISECONDS)
         Thread({ acceptLoop() },"lan-listen").apply { isDaemon=true;start() }
     }
     private fun acceptLoop() {
@@ -68,22 +84,27 @@ class LanServer(pool: List<Question>,hostName: String,val code: String = "%08d".
             val accepted=actor.submit<Boolean> {
                 if(closed) return@submit false
                 try {
-                    room.join(hello.token,hello.name)
+                    room.join(hello.token,hello.name,hello.liveRuler)
                     peers.put(hello.token,active)?.close()
                     broadcast();true
                 } catch(e: LanException) { active.send(LanMessage.Error(e.reason));timer.schedule({ active.close() },300,TimeUnit.MILLISECONDS);false }
             }.get(3,TimeUnit.SECONDS)
             if(!accepted) { Thread.sleep(350);return }
             socket.soTimeout=15000
-            var window=System.nanoTime();var commands=0
+            var window=System.nanoTime();var commands=0;var previews=0
             while(!closed) {
                 val message=active.read()
-                val now=System.nanoTime();if(now-window>TimeUnit.SECONDS.toNanos(1)) { window=now;commands=0 }
-                if(++commands>12) throw LanException(LanFailure.INVALID)
+                val now=System.nanoTime();if(now-window>TimeUnit.SECONDS.toNanos(1)) { window=now;commands=0;previews=0 }
+                if(message is LanMessage.Preview) {
+                    if(++previews>32) throw LanException(LanFailure.INVALID)
+                    active.preview.set(message);continue
+                }
+                if(message !is LanMessage.Preview && ++commands>12) throw LanException(LanFailure.INVALID)
                 actor.execute {
                     if(peers[hello.token]!==active || closed) return@execute
                     when(message) {
                         LanMessage.Ping -> active.send(LanMessage.Pong)
+                        is LanMessage.Preference -> { room.preference(hello.token,message.enabled);broadcast() }
                         is LanMessage.Submit -> try { room.submit(hello.token,message.game,message.round,message.value);broadcast() } catch(e: LanException) { active.send(LanMessage.Error(e.reason)) }
                         else -> active.close()
                     }
@@ -96,6 +117,7 @@ class LanServer(pool: List<Question>,hostName: String,val code: String = "%08d".
         }
     }
     private fun broadcast() {
+        liveDirty=true
         onState(room.snapshot(hostToken))
         peers.forEach { (token,peer) -> runCatching { peer.send(LanMessage.State(room.snapshot(token))) } }
     }
@@ -103,6 +125,8 @@ class LanServer(pool: List<Question>,hostName: String,val code: String = "%08d".
     fun configure(rounds: Int,difficulty: Int?,categories: Set<String>)=change { room.configure(rounds,difficulty,categories) }
     fun start()=change { room.start() }
     fun submit(game: String,round: Int,value: Double)=change { room.submit(hostToken,game,round,value) }
+    fun preview(game: String,round: Int,revision: Long,value: Double) { if(!closed) pendingPreview.set(LanMessage.Preview(game,round,revision,value)) }
+    fun preference(enabled: Boolean) { pendingPreview.set(null);change { room.preference(hostToken,enabled) } }
     fun advance()=change { room.advance() }
     fun lobby()=change { room.lobby() }
     fun remove(index: Int)=change {
@@ -123,7 +147,7 @@ class LanServer(pool: List<Question>,hostName: String,val code: String = "%08d".
 enum class LanConnection { CONNECTING, CONNECTED, RECONNECTING, FAILED, CLOSED }
 class LanClient(private val endpoint: LanEndpoint,private val code: String,private val token: String,private val name: String,
     private val expectedRoom: String? = null,initialPending: LanMessage.Submit? = null,private val socketFactory: ()->Socket = { Socket() },
-    private val onState: (LanSnapshot)->Unit,private val onConnection: (LanConnection,LanFailure?)->Unit) : Closeable {
+    private val onState: (LanSnapshot)->Unit,private val onConnection: (LanConnection,LanFailure?)->Unit,liveRuler: Boolean = true,private val onLive: (LanLiveFrame)->Unit = {}) : Closeable {
     private val workers=Executors.newFixedThreadPool(3,daemonThreads("lan-client"))
     private val timer=Executors.newSingleThreadScheduledExecutor(daemonThreads("lan-ping"))
     private var task: Future<*>?=null
@@ -131,12 +155,21 @@ class LanClient(private val endpoint: LanEndpoint,private val code: String,priva
     @Volatile private var connecting: Socket?=null
     @Volatile private var closed=false
     @Volatile private var pending: LanMessage.Submit?=initialPending
+    @Volatile private var sharing=liveRuler
+    @Volatile private var latest: LanSnapshot?=null
+    private val preview=AtomicReference<LanMessage.Preview?>()
     private var roomId: String?=expectedRoom
     init {
         task=workers.submit { connectLoop() }
         timer.scheduleAtFixedRate({ peer?.send(LanMessage.Ping) },4,4,TimeUnit.SECONDS)
+        timer.scheduleAtFixedRate({
+            val p=preview.getAndSet(null);val s=latest
+            if(p!=null && s!=null && sharing && pending==null && s.mine==null && s.liveEnabled && s.stage==LanStage.ANSWERING && p.game==s.gameId && p.round==s.round && p.revision==s.revision) peer?.send(p)
+        },125,125,TimeUnit.MILLISECONDS)
     }
-    fun submit(game: String,round: Int,value: Double) { val message=LanMessage.Submit(game,round,value);pending=message;peer?.send(message) }
+    fun submit(game: String,round: Int,value: Double) { preview.set(null);val message=LanMessage.Submit(game,round,value);pending=message;peer?.send(message) }
+    fun preview(game: String,round: Int,revision: Long,value: Double) { if(sharing && pending==null && !closed) preview.set(LanMessage.Preview(game,round,revision,value)) }
+    fun preference(enabled: Boolean) { sharing=enabled;preview.set(null);peer?.send(LanMessage.Preference(enabled)) }
     private fun connectLoop() {
         var failures=0;var everConnected=false
         while(!closed && failures<6) {
@@ -147,7 +180,7 @@ class LanClient(private val endpoint: LanEndpoint,private val code: String,priva
                 socket.tcpNoDelay=true;socket.soTimeout=8000;socket.connect(endpoint.address,5000)
                 val channel=LanChannel.open(socket.getInputStream(),socket.getOutputStream(),code,true)
                 val active=Peer(socket,channel,workers);peer=active
-                active.send(LanMessage.Hello(token,name))
+                active.send(LanMessage.Hello(token,name,sharing))
                 socket.soTimeout=15000
                 while(!closed) {
                     when(val message=active.read()) {
@@ -156,12 +189,14 @@ class LanClient(private val endpoint: LanEndpoint,private val code: String,priva
                             if(roomId!=null && roomId!=s.roomId) throw LanException(LanFailure.ROOM_CHANGED)
                             val firstSnapshot=!welcomed
                             roomId=s.roomId;welcomed=true;everConnected=true;failures=0
+                            latest=s
                             onConnection(LanConnection.CONNECTED,null);onState(s)
                             pending?.let { p ->
                                 if(s.gameId!=p.game || s.round!=p.round || s.stage!=LanStage.ANSWERING || s.mine!=null) pending=null
                                 else if(firstSnapshot) active.send(p)
                             }
                         }
+                        is LanMessage.Live -> latest?.let { if(sharing && message.frame.accepts(it)) onLive(message.frame) }
                         is LanMessage.Error -> {
                             if(message.reason==LanFailure.INVALID) { pending=null;onConnection(LanConnection.CONNECTED,LanFailure.INVALID) }
                             else throw LanException(message.reason)
@@ -179,7 +214,7 @@ class LanClient(private val endpoint: LanEndpoint,private val code: String,priva
                 }
                 failures++
                 onConnection(LanConnection.RECONNECTING,LanFailure.DISCONNECTED)
-            } finally { peer?.close();peer=null;runCatching { connecting?.close() };connecting=null }
+            } finally { latest=null;preview.set(null);peer?.close();peer=null;runCatching { connecting?.close() };connecting=null }
             if(!closed && failures<6) try { Thread.sleep((1000L shl (failures-1).coerceIn(0,3))) } catch (_: InterruptedException) { return }
         }
         if(!closed) onConnection(LanConnection.FAILED,LanFailure.DISCONNECTED)
