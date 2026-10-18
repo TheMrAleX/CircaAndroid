@@ -1,11 +1,11 @@
-# Validación de Aproximado 1.0.1
+# Validación de Aproximado 1.0.2
 
 ## Alcance
 
 - 430 preguntas en 12 categorías; JSON estricto e integridad SQLite.
 - Motor Kotlin: ranking lineal/log, empates, bonus exacto y <1%, cero y fracciones, formato español, selección sin repetir y memoria reciente, partidas completas de 2 y 8 jugadores.
 - Integración Robolectric con Room real: apertura del asset, partidas completas de cinco rondas con 2/8 jugadores, restauración del proceso detrás del pase privado, límites de configuración y estado corrupto.
-- Paparazzi: 68 casos (nueve pantallas, formatos extremos, selector decimal/enorme, filtros, captura reportada y filas de resultados en cuatro configuraciones). 360×800 con 2/8 jugadores; 320×640 con 8 jugadores y fontScale 1.3; 411×914 con 2 jugadores y fontScale 1.3. Se revisaron selector, revelación, marcador, podio, intro, configuración y formatos enormes/decimales. Las listas se desplazan para acceder a todos los jugadores en pantallas pequeñas.
+- Paparazzi: 80 casos (nueve pantallas, formatos extremos, selector decimal/enorme, extremos mínimo/máximo del panel, 3,32 → 3,40, filtros, captura reportada y resultados empatados en cuatro configuraciones). 360×800 con 2/8 jugadores; 320×640 con 8 jugadores y fontScale 1.3; 411×914 con 2 jugadores y fontScale 1.3. Se revisaron selector, revelación, marcador, podio, intro, configuración y formatos enormes/decimales. Las listas se desplazan para acceder a todos los jugadores en pantallas pequeñas.
 - Sin emulador ni dispositivo físico: no se afirma una medición de rendimiento, prueba de gestos táctiles en hardware ni inspección real de recientes. La protección se implementa con FLAG_SECURE exclusivamente en el selector y con eliminación inmediata de la pantalla al pasar turno.
 
 Los renders fuerzan el estado final de las animaciones mediante LocalInspectionMode; comprueban composición y geometría, no el tiempo de cada secuencia. Las pruebas de integración ejecutan el motor y los checkpoints reales sin esa sustitución.
@@ -21,11 +21,11 @@ python3 scripts/build_local_release.py
 
 Para la máquina cloud, `bash scripts/cloud_setup.sh` activa JDK/SDK, respeta el proxy y el almacén de confianza del sistema, valida datos y ejecuta tests/lint/build. No modifica fuentes ni crea worktrees.
 
-## Resultados locales (17 de octubre de 2026)
+## Resultados locales de 1.0.2 (18 de octubre de 2026)
 
 - 430 preguntas válidas; SQLite íntegra y cargada por Room.
-- 13 tests JUnit del motor, 4 tests de integración y 68 renders Paparazzi: 85 casos, 0 fallos y 0 omitidos.
-- verifyPaparazziDebug compara y pasa contra las 68 referencias registradas.
+- 15 tests JUnit del motor, 4 tests de integración y 80 renders Paparazzi: 99 casos, 0 fallos y 0 omitidos.
+- verifyPaparazziDebug compara y pasa contra las 80 referencias registradas.
 - lintDebug y lintRelease pasan; lintDebug informa “No issues found”.
 - APK debug generado; release con minifyEnabled/shrinkResources completada y firma APK v2 comprobada con apksigner. Solo se empaqueta lib/arm64-v8a para la biblioteca nativa transitiva.
 - Script cloud completo ejecutado con éxito; install_script/start_skill guardados como borrador. Publicación del entorno y restauración en una tarea nueva no verificadas.
@@ -47,3 +47,9 @@ La revelación presenta los resultados de inmediato. Las animaciones de navegaci
 CI `39072467739` y release `39089680892` terminaron correctamente para `03267ea`. Se descargó el APK adjunto a v1.0.1 y se verificaron SHA256 `3b024458f846c3efe60c4e692c211a2060dacd551e0900bd1e178d6b1e404353`, firma v2, versión 1.0.1/código 2, ABI exclusivamente ARM64, SQLite íntegra con 430 preguntas y ausencia de INTERNET. Los informes locales finales contienen 13 tests de motor y 72 de app (4 integración + 68 visuales), sin fallos ni omisiones; lint debug y release contienen cero incidencias.
 
 La firma publicada cambió respecto a v1.0.0: se requiere reinstalación, con pérdida de datos locales. Detalles y huellas en RELEASING.md. No se probó en dispositivo físico.
+
+## Revisión visual y funcional 1.0.2
+
+La gráfica vuelve a ser la vista principal. Se revisaron barras, línea de respuesta, leyenda, coronas, empates de ocho jugadores y números grandes en 360×800 (2/8 jugadores), 320×640 y 411×914 con fuente al 130%. Se revisaron el selector al mínimo, al máximo y las capturas 3,32/3,40: marcas fijas y panel/número con altura variable; tamaño de letra y decimales estables. Se retiró el aviso de privacidad del pase de turno.
+
+Tests puros adicionales comprueban dirección, recorrido, límites y reversibilidad del arrastre, además de precisión decimal y ceros finales. Se mantienen las pruebas de partidas completas y restauración con Room. Sin prueba táctil en dispositivo físico ni medición de FPS.

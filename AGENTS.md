@@ -21,3 +21,10 @@ Cada tarea cloud ya está aislada; utilizar este checkout, no crear worktrees sa
 - [x] Release v1.0.1 ARM64 publicada; CI y release remotos correctos; APK descargado, firma y SHA256 verificados.
 
 La petición de rediseño 1.0.1 sustituye las posiciones rígidas de la spec original; conservar jerarquía, legibilidad y privacidad. Justificaciones en DECISIONS.md.
+
+## Revisión 1.0.2
+- [x] Gráfica restaurada como vista principal; barras visibles para 2–8 jugadores.
+- [x] Regla fija y panel de jugador móvil, con número en tiempo real.
+- [x] Aviso de privacidad retirado; decimales y tamaño del número estables.
+- [x] 99 casos: 15 tests de motor, 4 de integración y 80 capturas comparadas; lint debug sin incidencias y APK debug compilado.
+- [ ] APK release, CI remoto y publicación de v1.0.2.
