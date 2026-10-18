@@ -1,6 +1,6 @@
-# Jugar por Wi-Fi o hotspot (1.0.5)
+# Jugar por Wi-Fi o hotspot (1.0.7)
 
-Se necesitan de 2 a 8 teléfonos Android con Aproximado 1.0.5, uno por persona. El anfitrión también juega. El número de clientes que admite un hotspot depende del teléfono; si permite menos, usa una Wi-Fi compartida. No se necesitan Internet, datos móviles, cuentas ni servidores externos. El modo de pasar un solo teléfono sigue disponible en **Jugar**.
+Se necesitan de 2 a 8 teléfonos Android con Aproximado 1.0.7, uno por persona. El anfitrión también juega. El número de clientes que admite un hotspot depende del teléfono; si permite menos, usa una Wi-Fi compartida. No se necesitan Internet, datos móviles, cuentas ni servidores externos. El modo de pasar un solo teléfono sigue disponible en **Jugar**.
 
 ## Misma Wi-Fi
 
@@ -8,7 +8,15 @@ Se necesitan de 2 a 8 teléfonos Android con Aproximado 1.0.5, uno por persona. 
 2. En un teléfono: **Jugar en red local → Tu nombre → Crear sala**.
 3. Comparte el código de ocho dígitos y la **IP:puerto** que aparecen. Si hay varias direcciones, usa la de la red compartida.
 4. En los demás: **Jugar en red local → Tu nombre → Unirse a una sala**. Toca una sala detectada o escribe su IP:puerto y después el código. Toca **Conectar**.
-5. El anfitrión ve quién está conectado, elige rondas/categorías/dificultad e inicia. Todos responden simultáneamente desde su teléfono. La respuesta y las estimaciones se revelan cuando todos confirman. El anfitrión continúa al marcador y a la siguiente ronda.
+5. El anfitrión ve quién está conectado, elige rondas/categorías/dificultad e inicia. Todos responden simultáneamente desde su teléfono. La respuesta real y las estimaciones confirmadas se revelan cuando todos confirman. Los borradores solo se comparten con «Regla en vivo» habilitada por todos en salas de 2 o 3. El anfitrión continúa al marcador y a la siguiente ronda.
+
+## Regla en vivo (1.0.7)
+
+Con **2 o 3 jugadores**, si todos tienen **Ajustes → Regla en vivo** activada y están conectados, puedes ver cómo los rivales mueven su regla. Durante tu selección se muestran indicadores compactos: tócalos para ampliar las reglas. Tras confirmar aparecen las reglas de quienes siguen pensando. Sus valores siguen siendo borradores; al confirmar desaparecen de esta vista y permanecen ocultos hasta la revelación.
+
+El interruptor está activado por defecto y se guarda por teléfono. También puedes apagarlo desde la sala, la vista ampliada o la espera. Si cualquiera lo apaga, se deja de compartir para todos. Con **4–8 plazas**, incluidas las desconectadas, siempre es privado. Los borradores no confirman respuestas ni modifican puntos.
+
+Todos deben usar **1.0.7 (protocolo 2)**; las versiones anteriores de LAN no son compatibles con este cambio. La espera animada sigue disponible en el modo privado.
 
 ## Hotspot de un teléfono
 
@@ -43,12 +51,12 @@ Los permisos foreground connectedDevice permiten una notificación de sesión ac
 
 El código autoriza a participantes de confianza. El tráfico usa P-256 ECDH efímero, autenticación HMAC de la transcripción con PBKDF2-SHA256 (120.000 iteraciones), HKDF-SHA256 y AES-256-GCM con contadores/direcciones separados. Conocer el código no permite descifrar pasivamente las otras conexiones. No es una garantía frente a un participante que conozca el código y controle activamente la red; no se ha contratado una auditoría criptográfica externa. No compartas el código fuera de la sala.
 
-El anfitrión es la autoridad del juego y posee su base de preguntas. Hasta la revelación, el protocolo no envía la respuesta, la fuente, los IDs del catálogo, las preguntas futuras ni las estimaciones ajenas. No es un sistema antitrampas contra un anfitrión o un teléfono modificado. El token de reconexión y los datos de entrada se guardan solo en preferencias privadas, sin backup.
+El anfitrión es la autoridad del juego y posee su base de preguntas. Hasta la revelación, el protocolo no envía la respuesta, la fuente, los IDs del catálogo, las preguntas futuras ni las estimaciones ajenas confirmadas; los borradores son la excepción autorizada por la política de «Regla en vivo». No es un sistema antitrampas contra un anfitrión o un teléfono modificado. El token de reconexión y los datos de entrada se guardan solo en preferencias privadas, sin backup.
 
 ## Diseño y comprobaciones
 
-TCP nativo, sin bibliotecas de red externas. Frames de hasta 64 KiB, cadenas y listas acotadas, máximo doce sockets admitidos (incluidas autenticaciones), máximo ocho plazas y límite de doce comandos por segundo por invitado. Los estados completos se actualizan solo ante acciones discretas y se conserva únicamente el último estado encolado para un receptor lento. Latidos cada cuatro segundos y timeout de lectura de quince segundos. No hay tráfico durante el arrastre de la regla.
+TCP nativo, sin bibliotecas de red externas. Frames de hasta 64 KiB, cadenas y listas acotadas, máximo doce sockets admitidos (incluidas autenticaciones), máximo ocho plazas y límite de doce comandos por segundo por invitado. Los estados completos se actualizan solo ante acciones discretas y se conserva únicamente el último estado encolado para un receptor lento. Latidos cada cuatro segundos y timeout de lectura de quince segundos. Con regla en vivo habilitada, los borradores se coalescen a 8 Hz (último valor por emisor, frames pequeños con hasta dos valores por receptor); no generan snapshots completos. Límite separado de 32 borradores entrantes/s por invitado. Deshabilitada la función, no se envían movimientos. Partida/ronda/revisión y precisión se validan en origen, anfitrión y destino para descartar mensajes atrasados. Los borradores no se guardan y se eliminan al confirmar, desconectar o cambiar la política/ronda.
 
-Las pruebas automatizadas ejecutan partidas 2/8 en el motor, una partida de cinco rondas con ocho participantes por sockets reales, reconexión conservando respuesta, corte de red con reenvío, código incorrecto, privacidad de snapshots, límites, valores inválidos, mensajes tardíos, duplicados, manipulación y replay. Robolectric comprueba el servicio foreground, recreación de ViewModel y puntuación equivalente en ambos teléfonos proyectados. Los renders cubren las pantallas LAN en 360×800 (2/8), 320×640 y 411×914 con fontScale 1.3.
+Las pruebas automatizadas ejecutan partidas 2/8 en el motor, una partida de cinco rondas con ocho participantes por sockets reales, reconexión conservando respuesta, corte de red con reenvío, código incorrecto, privacidad de snapshots, límites, valores inválidos, mensajes tardíos, duplicados, manipulación y replay. Las pruebas de 1.0.7 añaden grupos 2/3/4/8, consentimiento, borradores inválidos/atrasados, coalescencia y sockets con tres participantes sin alterar puntuaciones. Robolectric comprueba recepción y corte de borradores, preferencias persistentes, el servicio foreground, recreación de ViewModel y puntuación equivalente en ambos teléfonos proyectados. Los renders cubren las pantallas LAN en 360×800 (2/8), 320×640 y 411×914 con fontScale 1.3.
 
 **Límite de verificación:** sockets reales en loopback y Android simulado; este entorno no dispone de dos teléfonos físicos ni de emulador con hotspot. Antes de dar por verificado un fabricante/red concretos, comprobar en dispositivos: Wi-Fi sin Internet, hotspot alojado y unido, datos móviles activos, búsqueda NSD/manual, ocho participantes si están disponibles, bloqueo/cambio de app, corte y vuelta de Wi-Fi y cierre del anfitrión. No se atribuyen esas pruebas físicas a las comprobaciones automatizadas.

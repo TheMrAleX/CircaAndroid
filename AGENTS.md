@@ -56,3 +56,9 @@ La petición de rediseño 1.0.1 sustituye las posiciones rígidas de la spec ori
 - [x] 174 casos correctos: 28 motor/protocolo, 9 Android, 136 capturas y 1 ciclo animado de 23 fotogramas. Comparación visual correcta; lint debug y build debug correctos.
 - [x] Release 1.0.6 publicada; CI/release correctos, APK oficial descargado y verificado (SHA256, firma v2, versión 7, ARM64 y 400 preguntas).
 El usuario informó que 1.0.5 funciona correctamente en su prueba; las pruebas físicas disponibles en este entorno siguen siendo ninguna.
+
+## Revisión 1.0.7
+- [x] Protocolo LAN 2 con borradores efímeros, contexto validado, coalescencia 8 Hz y consentimiento unánime; solo 2–3 plazas.
+- [x] Interruptor persistente en Ajustes/sala, indicadores y reglas de lectura; confirmación independiente.
+- [x] 214 casos correctos: 34 motor/protocolo, 10 Android, 168 capturas, 1 ciclo animado y 1 prueba interactiva del selector (71 fotogramas). Comparación visual correcta; lint debug/release sin incidencias, APK debug y release/R8 firmado compilados.
+- [ ] Release 1.0.7 y APK oficial verificado.

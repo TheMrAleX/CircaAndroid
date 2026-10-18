@@ -110,3 +110,15 @@ Build release local 1.0.6 con R8 y firma v2 correcto; lint release sin incidenci
 CI `39153767334` y release `39153772943` correctos. APK oficial descargado: SHA256 `4df4d328df6337c8efefe3a79db566d47a120b80913c3ba7ab3f91316d711b55`, firma v2 RSA3072, versión 1.0.6/código 7, ARM64 exclusivo y catálogo SQLite 3 íntegro con 400 filas idénticas a los JSON. Sin fixtures ni animación APNG de prueba empaquetadas. La firma cambió respecto a 1.0.5 y la consecuencia de instalación está documentada.
 
 También se ejecutaron tres repeticiones limpias de los 28 tests de motor/protocolo, correctas. La validación animada usa renderizado automatizado; no mide fps físicos.
+
+## Regla en vivo 1.0.7
+
+214 casos correctos: 34 motor/protocolo (18 juego, 10 LAN y 6 de reglas en vivo), 10 Android (9 offline/preferencias, 1 LAN), 168 capturas estáticas y 2 pruebas animadas/interactivas. Comparación con verifyPaparazziDebug correcta; lint debug sin incidencias y APK debug compilado. Los 400 registros se validaron y la DB regenerada no presenta cambios.
+
+Cobertura de política 2/3 frente a 4/8 plazas, consentimiento de anfitrión/invitados, desconexión/reconexión, retirada de borradores, precisión/rangos, épocas de consentimiento/ronda, mensajes atrasados y respuestas definitivas inmutables. Sockets reales de tres participantes: ráfaga de 1.000 cambios coalescida al último valor sin incrementar la revisión discreta, opt-out/reactivación y puntuación definitiva conservada. Robolectric verifica la recepción en Android, corte inmediato local, persistencia y limpieza de la vista al salir.
+
+LiveSelectorTest mantiene el selector real conectado al reloj de Compose y ejecuta SetProgress, ajuste fino, actualización ajena, opt-out, reactivación y confirmación mediante semántica. Aserciones sobre valores publicados y confirmados; APNG de 71 fotogramas en docs/screens/live_selector_interaction.png. También se conserva el ciclo de espera de 23 fotogramas. La prueba offline genera valores con la misma precisión explícita del juego: se corrigió una suma de test que podía producir residuos binarios al sumar a objetivos decimales aleatorios, sin relajar la validación de la app.
+
+Revisión visual en 320×640/fontScale 1.3: selección con dos oponentes, espera 2/3, privacidad a partir de 4, modo desactivado, nombres de 12 caracteres, jugador confirmado, números 1.400.000.000 y 0,5, Ajustes y sala. Las cifras largas en vivo se abrevian y su semántica conserva la cifra completa. Los nombres largos pueden ocupar dos líneas; contenido de espera/sheet desplazable y botón inferior fijo. No se atribuyen pruebas físicas Wi-Fi/hotspot ni medidas de fps a estos renders.
+
+Build release local 1.0.7 con R8, reducción de recursos y firma v2 correcto; lint release sin incidencias.
