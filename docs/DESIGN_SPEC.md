@@ -160,3 +160,7 @@ La revelación debe conservar la gráfica vertical de barras. La regla del selec
 ## Corrección del usuario para 1.0.3
 
 Los conteos usan enteros; solo unas pocas medidas admiten decimales mediante metadatos explícitos. La gráfica no debe exagerar la separación de 9,99 y 8,99: las barras lineales parten de cero con alturas proporcionales y eje numérico visible. Las escalas logarítmicas conservan el dominio de la pregunta.
+
+## Corrección del usuario para 1.0.4
+
+Omitir el pase de turno. Tras confirmar, mostrar directamente el selector del siguiente jugador con avatar, nombre, turno y ronda en una cabecera integrada. Reiniciar la estimación y conservar FLAG_SECURE. Conservar las cifras publicadas sin redondear objetivos para facilitar aciertos; en la revelación, permitir leer la cifra completa junto a la representación gráfica.

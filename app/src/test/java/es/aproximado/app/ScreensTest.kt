@@ -26,7 +26,14 @@ class ScreensTest(private val width: Int,private val height: Int,private val sca
     @Test fun home()=capture("home") { HomeScreen(state,Actions()) }
     @Test fun setup()=capture("setup") { SetupScreen(state,Actions()) }
     @Test fun intro()=capture("intro") { IntroScreen(state,Actions()) }
-    @Test fun pass()=capture("pass") { PassScreen(state,Actions()) }
+    @Test fun nextPlayer()=capture("next_player") {
+        val m=state.match!!.copy(config=state.config.copy(players=state.config.players.map { it.copy(name="Alejandra123") }),guesses=listOf(listOf(6500.0)))
+        SelectorScreen(state.copy(match=m),Actions())
+    }
+    @Test fun preciseReference()=capture("precise_reference") {
+        val q=state.pool.first().copy(text="¿Cuántos metros por segundo al cuadrado vale la gravedad estándar de referencia terrestre?",answer=9.80665,unit="m/s²",min=0.0,max=30.0,decimalPlaces=5)
+        RevealScreen(state.copy(pool=listOf(q),match=state.match!!.copy(guesses=listOf(List(players){9.8+it/10.0}))),Actions())
+    }
     @Test fun selector()=capture("selector") { SelectorScreen(state.copy(match=state.match!!.copy(guesses=listOf(emptyList()))),Actions()) }
     @Test fun reveal()=capture("reveal") { RevealScreen(state,Actions()) }
     @Test fun score()=capture("score") { ScoreScreen(state,Actions()) }
@@ -76,6 +83,14 @@ class ScreensTest(private val width: Int,private val height: Int,private val sca
     @Test fun zodiacIntegers()=capture("zodiac_integers") {
         val q=state.pool.first().copy(text="¿Cuántos signos tiene el zodiaco occidental tradicional?",answer=12.0,min=0.0,max=36.0,unit=null,decimalPlaces=0)
         SelectorScreen(state.copy(pool=listOf(q),match=state.match!!.copy(guesses=listOf(emptyList()))),Actions(),initialPosition=.333)
+    }
+    @Test fun preciseSelector()=capture("precise_selector") {
+        val q=state.pool.first().copy(text="¿Cuántos metros por segundo al cuadrado vale la gravedad estándar de referencia terrestre?",answer=9.80665,unit="m/s²",min=0.0,max=30.0,decimalPlaces=5)
+        SelectorScreen(state.copy(pool=listOf(q),match=state.match!!.copy(guesses=listOf(emptyList()))),Actions())
+    }
+    @Test fun fullReferenceCaption()=capture("full_reference_caption") {
+        val q=state.pool.first().copy(text="¿Cuántos kilómetros cuadrados de superficie tiene Brasil según la referencia IBGE de 2015?",answer=8515767.049,unit="km²",min=10000.0,max=100000000.0,scale="log",decimalPlaces=3)
+        RevealScreen(state.copy(pool=listOf(q),match=state.match!!.copy(guesses=listOf(List(players){8000000.0+it*100000.0}))),Actions())
     }
     companion object {
         @JvmStatic @Parameterized.Parameters(name="{0}x{1}@{2}-{3}p") fun params()=listOf(

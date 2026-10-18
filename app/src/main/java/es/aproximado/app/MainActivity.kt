@@ -40,10 +40,10 @@ class MainActivity : ComponentActivity() {
                 if(state.sound) pool?.play(click,if(strong) .25f else .12f,if(strong) .25f else .12f,1,0,if(strong) .8f else 1f)
             }
             SideEffect {
-                if(state.screen==Screen.SELECT) window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+                if(state.screen==Screen.SELECT || state.screen==Screen.PASS) window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
                 else window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
             }
-            val actions=remember(vm) { Actions(vm::screen,vm::configure,vm::count,vm::name,vm::color,vm::start,vm::advance,vm::confirm,vm::nextRound,vm::resume,vm::setting,vm::clear) }
+            val actions=remember(vm) { Actions(vm::screen,vm::configure,vm::count,vm::name,vm::color,vm::start,vm::advance,{ value,round,turn -> vm.confirm(value,round,turn) },vm::nextRound,vm::resume,vm::setting,vm::clear) }
             CompositionLocalProvider(LocalFeedback provides feedback) { AproximadoTheme { AproximadoApp(state,actions) } }
         }
     }
@@ -62,7 +62,7 @@ class MainActivity : ComponentActivity() {
             state.error -> Box(Modifier.fillMaxSize(),contentAlignment=Alignment.Center) { Label(stringResource(R.string.error_load),Modifier.padding(24.dp),center=true) }
             state.screen==Screen.SELECT || state.screen==Screen.PASS -> key(state.screen,state.match?.round,state.match?.turn) {
                 // No outgoing private screen is retained for a crossfade or handoff.
-                if(state.screen==Screen.SELECT) SelectorScreen(state,actions) { exitDialog=true } else PassScreen(state,actions)
+                SelectorScreen(state,actions) { exitDialog=true }
             }
             else -> AnimatedContent(state.screen,transitionSpec={ (fadeIn(tween(300))+slideInVertically(tween(300)){24}) togetherWith (fadeOut(tween(150))+slideOutVertically(tween(300)){-24}) },label="screen") { screen ->
                 when(screen) {

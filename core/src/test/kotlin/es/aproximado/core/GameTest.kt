@@ -178,4 +178,14 @@ class GameTest {
         assertEquals(1.25,(tiny.position(.005)/tiny.position(.004)).toDouble(),1e-6)
     }
 
+    @Test fun publishedPrecisionSurvivesInputFormattingAndScoring() {
+        val gravity=Question("g","Ciencia","Gravedad estándar",9.80665,"m/s²",0.0,30.0,"linear",2,decimalPlaces=5)
+        assertEquals("9,80665",formatNumber(gravity.answer))
+        assertEquals("9,80665",formatEstimate(gravity,gravity.answer))
+        assertEquals("568,26125",formatNumber(568.26125))
+        assertTrue(EstimateInput.accepts(gravity,9.80665))
+        assertFalse(EstimateInput.accepts(gravity,9.806651))
+        assertEquals(2,Scoring.round(gravity,listOf(gravity.answer,9.8)).first().bonus)
+        assertEquals(1,Scoring.round(gravity,listOf(gravity.answer,9.8)).last().bonus)
+    }
 }

@@ -100,7 +100,7 @@ import kotlin.random.Random
             var sizingText=referenceText ?: text
             if(paint.measureText(sizingText)>0 && paint.textSize*available/paint.measureText(sizingText)<36.sp.toPx()) {
                 val numeric=text.replace(".","").replace(",",".").toDoubleOrNull()
-                if(numeric!=null) {
+                if(numeric!=null && kotlin.math.abs(numeric)>=10000) {
                     displayText=formatNumber(numeric,compact=true)
                     val reference=sizingText.replace(".","").replace(",",".").toDoubleOrNull()
                     sizingText=if(reference!=null) formatNumber(reference,compact=true) else displayText

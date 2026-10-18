@@ -52,7 +52,10 @@ import kotlin.math.*
                 q.unit?.let { Label(it,size=13,color=Tokens.muted) }
                 if(q.scale=="log") Label(stringResource(R.string.log_scale),size=12,color=Tokens.muted)
             }
-            BigNumber(formatNumber(q.answer),Modifier.weight(1.5f).height(76.dp),maxSize=52,glass=true)
+            Column(Modifier.weight(1.5f),horizontalAlignment=Alignment.CenterHorizontally) {
+                BigNumber(formatNumber(q.answer),Modifier.height(64.dp),maxSize=52,glass=true)
+                if(formatNumber(q.answer).length>8) Label(formatNumber(q.answer),size=12,center=true)
+            }
         }
         BoxWithConstraints(Modifier.weight(1f).fillMaxWidth().padding(horizontal=12.dp).clipToBounds()
             .clickable(onClickLabel=stringResource(R.string.show_result)) { scope.launch { progress.snapTo(1f) } }) {

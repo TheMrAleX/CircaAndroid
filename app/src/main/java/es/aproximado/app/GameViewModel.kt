@@ -13,13 +13,14 @@ import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 
+// PASS is retained only to read saved games from versions before 1.0.4.
 enum class Screen { HOME, SETUP, INTRO, PASS, SELECT, REVEAL, SCORE, FINAL, SETTINGS }
 data class Config(val players: List<Player> = (0..1).map { Player(it, "") },val rounds: Int = 10,val categories: Set<String> = emptySet(),val difficulty: Int? = null)
 data class Match(val config: Config,val questions: List<String>,val round: Int = 0,val guesses: List<List<Double>> = listOf(emptyList()),val stage: Screen = Screen.INTRO) {
     val currentGuesses get() = guesses.getOrElse(round) { emptyList() }
     val turn get() = currentGuesses.size.coerceAtMost(config.players.lastIndex)
 }
-data class AppState(val screen: Screen = Screen.HOME,val pool: List<Question> = emptyList(),val config: Config = Config(),val match: Match? = null,val recent: List<String> = emptyList(),val sound: Boolean = true,val vibration: Boolean = true,val loading: Boolean = true,val error: Boolean = false)
+data class AppState(val screen: Screen = Screen.HOME,val pool: List<Question> = emptyList(),val config: Config = Config(),val match: Match? = null,val recent: List<String> = emptyList(),val sound: Boolean = true,val vibration: Boolean = true,val loading: Boolean = true,val error: Boolean = false,val savedQuestions: List<Question> = emptyList())
 
 class GameViewModel(app: Application): AndroidViewModel(app) {
     private val prefs = app.getSharedPreferences("aproximado",0)
@@ -30,7 +31,16 @@ class GameViewModel(app: Application): AndroidViewModel(app) {
             try {
                 val pool = withContext(Dispatchers.IO) { QuestionsDb.get(app).questions().all().map { it.model() } }
                 val restored = runCatching { restore(prefs.getString("state",null)) }.getOrNull() ?: AppState()
-                mutable.value = restored.copy(pool=pool,loading=false,screen=Screen.HOME)
+                val archived = withContext(Dispatchers.IO) {
+                    val missing = restored.match?.questions.orEmpty().filterNot { id -> pool.any { it.id==id } }
+                    if(missing.isEmpty()) emptyList() else QuestionsDb.get(app).questions().findByIds(missing).map { it.model() }
+                }
+                val available=(pool+archived).map { it.id }.toSet()
+                val match=restored.match?.takeIf { available.containsAll(it.questions) }?.let {
+                    if(it.stage==Screen.PASS) it.copy(stage=Screen.SELECT) else it
+                }
+                val categories=restored.config.categories.intersect(pool.map { it.category }.toSet())
+                mutable.value = restored.copy(pool=pool,savedQuestions=archived,match=match,config=restored.config.copy(categories=categories),loading=false,screen=Screen.HOME)
             } catch (_: Exception) { mutable.update { it.copy(loading=false,error=true) } }
         }
     }
@@ -48,19 +58,23 @@ class GameViewModel(app: Application): AndroidViewModel(app) {
     fun start(again: Boolean = false) {
         val s=mutable.value
         val raw=if(again) s.match?.config ?: s.config else s.config
-        val config=raw.copy(players=raw.players.map { if(it.name.isBlank()) it.copy(name=getApplication<Application>().getString(R.string.player,it.id+1)) else it })
+        val config=raw.copy(categories=raw.categories.intersect(s.pool.map { it.category }.toSet()),players=raw.players.map { if(it.name.isBlank()) it.copy(name=getApplication<Application>().getString(R.string.player,it.id+1)) else it })
         val selected=runCatching { Selection.select(s.pool,config.rounds,config.categories,config.difficulty,s.recent) }.getOrNull() ?: return
-        update { it.copy(config=config,match=Match(config,selected.map { q->q.id }),screen=Screen.INTRO) }
+        update { it.copy(config=config,match=Match(config,selected.map { q->q.id }),savedQuestions=emptyList(),screen=Screen.INTRO) }
     }
-    fun resume() { val m=mutable.value.match ?: return;screen(if(m.stage==Screen.SELECT) Screen.PASS else m.stage) }
-    fun advance(stage: Screen) = update { it.copy(screen=stage,match=it.match?.copy(stage=stage)) }
-    fun confirm(value: Double) {
+    fun resume() { val m=mutable.value.match ?: return;advance(if(m.stage==Screen.PASS) Screen.SELECT else m.stage) }
+    fun advance(stage: Screen) = update {
+        val next=if(stage==Screen.PASS) Screen.SELECT else stage
+        it.copy(screen=next,match=it.match?.copy(stage=next))
+    }
+    fun confirm(value: Double,expectedRound: Int? = null,expectedTurn: Int? = null) {
         val s=mutable.value;val m=s.match ?: return
         if(s.screen!=Screen.SELECT || m.currentGuesses.size>=m.config.players.size) return
-        val q=s.pool.first { it.id==m.questions[m.round] }
+        if(expectedRound!=null && expectedRound!=m.round || expectedTurn!=null && expectedTurn!=m.turn) return
+        val q=s.question() ?: return
         if(!EstimateInput.accepts(q,value)) return
         val guesses=m.currentGuesses+value
-        val stage=if(guesses.size==m.config.players.size) Screen.REVEAL else Screen.PASS
+        val stage=if(guesses.size==m.config.players.size) Screen.REVEAL else Screen.SELECT
         val all=m.guesses.toMutableList().apply { this[m.round]=guesses }
         update { it.copy(match=m.copy(guesses=all,stage=stage),screen=stage,recent=if(stage==Screen.REVEAL) Selection.remember(it.recent,listOf(q.id)) else it.recent) }
     }
@@ -70,7 +84,7 @@ class GameViewModel(app: Application): AndroidViewModel(app) {
         else update { it.copy(screen=Screen.INTRO,match=m.copy(round=m.round+1,guesses=m.guesses+listOf(emptyList()),stage=Screen.INTRO)) }
     }
     fun setting(sound: Boolean? = null,vibration: Boolean? = null) = update { it.copy(sound=sound ?: it.sound,vibration=vibration ?: it.vibration) }
-    fun clear() = update { it.copy(match=null,recent=emptyList()) }
+    fun clear() = update { it.copy(match=null,recent=emptyList(),savedQuestions=emptyList()) }
     private fun configJson(c: Config)=JSONObject().put("players",JSONArray().apply { c.players.forEach { put(JSONObject().put("id",it.id).put("name",it.name).put("style",it.style)) } }).put("rounds",c.rounds).put("categories",JSONArray(c.categories.toList())).put("difficulty",c.difficulty ?: 0)
     private fun parseConfig(o: JSONObject): Config {
         val players=o.getJSONArray("players").let { a -> (0 until a.length()).map { val p=a.getJSONObject(it);Player(p.getInt("id"),p.getString("name"),p.getInt("style")) } }
@@ -82,8 +96,8 @@ class GameViewModel(app: Application): AndroidViewModel(app) {
         val s=mutable.value
         if(s.loading) return
         val obj=JSONObject().put("config",configJson(s.config)).put("recent",JSONArray(s.recent)).put("sound",s.sound).put("vibration",s.vibration)
-        s.match?.let { m -> obj.put("match",JSONObject().put("config",configJson(m.config)).put("questions",JSONArray(m.questions)).put("round",m.round).put("stage",(if(m.stage==Screen.SELECT) Screen.PASS else m.stage).name).put("guesses",JSONArray().apply { m.guesses.forEach { put(JSONArray(it)) } })) }
-        // commit ensures the secret handoff survives immediate process termination; payload is only a few KB.
+        s.match?.let { m -> obj.put("match",JSONObject().put("config",configJson(m.config)).put("questions",JSONArray(m.questions)).put("round",m.round).put("stage",m.stage.name).put("guesses",JSONArray().apply { m.guesses.forEach { put(JSONArray(it)) } })) }
+        // Checkpoint the current turn on discrete actions, including direct player changes.
         prefs.edit(commit=true) { putString("state",obj.toString()) }
     }
     private fun restore(raw: String?): AppState {
@@ -99,8 +113,8 @@ class GameViewModel(app: Application): AndroidViewModel(app) {
 }
 private fun JSONArray.strings()=(0 until length()).map { getString(it) }
 
-fun AppState.question(): Question? = match?.let { m -> pool.firstOrNull { it.id==m.questions[m.round] } }
+fun AppState.question(): Question? = match?.let { m -> (pool+savedQuestions).firstOrNull { it.id==m.questions[m.round] } }
 fun AppState.scores(): List<List<RoundScore>> {
     val m=match ?: return emptyList()
-    return m.guesses.mapIndexedNotNull { index,guesses -> if(guesses.size==m.config.players.size) pool.firstOrNull { it.id==m.questions[index] }?.let { Scoring.round(it,guesses) } else null }
+    return m.guesses.mapIndexedNotNull { index,guesses -> if(guesses.size==m.config.players.size) (pool+savedQuestions).firstOrNull { it.id==m.questions[index] }?.let { Scoring.round(it,guesses) } else null }
 }

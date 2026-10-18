@@ -31,7 +31,7 @@ class Actions(
     val screen: (Screen)->Unit = {}, val config: ((Config)->Config)->Unit = {},
     val count: (Int)->Unit = {}, val name: (Int,String)->Unit = {_,_->},
     val color: (Int,Int)->Unit = {_,_->}, val start: (Boolean)->Unit = {},
-    val advance: (Screen)->Unit = {}, val confirm: (Double)->Unit = {},
+    val advance: (Screen)->Unit = {}, val confirm: (Double,Int,Int)->Unit = {_,_,_->},
     val next: ()->Unit = {}, val resume: ()->Unit = {},
     val setting: (Boolean?,Boolean?)->Unit = {_,_->}, val clear: ()->Unit = {}
 )
@@ -51,7 +51,7 @@ class Actions(
     Column(Modifier.fillMaxWidth().background(androidx.compose.ui.graphics.Brush.verticalGradient(listOf(Tokens.bg.copy(alpha=0f),Tokens.bg),endY=24f)).padding(horizontal=20.dp).navigationBarsPadding().padding(top=16.dp,bottom=16.dp),verticalArrangement=Arrangement.spacedBy(12.dp),content=content)
 }
 fun emoji(category: String) = when(category) {
-    "Geografía"->"🌎";"Historia"->"🏛";"Ciencia"->"⚗";"Cuerpo humano"->"🫀";"Animales"->"🐾";"Deportes"->"⚽";"Cine y música"->"🎵";"Tecnología"->"💻";"Comida"->"🍉";"Espacio"->"🪐";"Cultura general"->"📚";else->"✨"
+    "Geografía"->"🌎";"Historia"->"🏛";"Ciencia"->"⚗";"Cuerpo humano"->"🫀";"Animales"->"🐾";"Deportes"->"⚽";"Cine y música"->"🎵";"Tecnología"->"💻";"Comida"->"🍉";"Espacio"->"🪐";"Cultura general"->"📚";"Vida cotidiana"->"🏠";else->"✨"
 }
 
 @Composable fun HomeScreen(state: AppState,actions: Actions) {
@@ -179,25 +179,7 @@ fun emoji(category: String) = when(category) {
             Spacer(Modifier.height(32.dp));Label(q.text,size=26,bold=true,center=true)
             q.year?.let { Spacer(Modifier.height(12.dp));Label(stringResource(R.string.year,it),size=13,color=Tokens.muted) }
         }
-        BottomActions { Label(stringResource(R.string.read_together),Modifier.fillMaxWidth(),13,Tokens.muted,center=true);GameButton(stringResource(R.string.start_round),color=Color.White,ink=Tokens.players[0].ink) { actions.advance(Screen.PASS) } }
-    }
-}
-
-@Composable fun PassScreen(state: AppState,actions: Actions) {
-    val m=state.match ?: return;val p=m.config.players[m.turn];val style=Tokens.players[p.style]
-    Column(Modifier.fillMaxSize().background(style.color).systemBarsPadding()) {
-        Row(Modifier.fillMaxWidth().padding(top=28.dp),horizontalArrangement=Arrangement.spacedBy(10.dp,Alignment.CenterHorizontally),verticalAlignment=Alignment.CenterVertically) {
-            m.config.players.forEachIndexed { index,_ -> Box(Modifier.size(if(index==m.turn) 16.dp else 10.dp).clip(CircleShape).background(if(index==m.turn) Color.White else style.ink.copy(alpha=if(index<m.turn) 1f else .3f))) }
-        }
-        Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()).padding(24.dp),horizontalAlignment=Alignment.CenterHorizontally,verticalArrangement=Arrangement.Center) {
-            Label(stringResource(R.string.pass_to),size=18,color=style.ink.copy(alpha=.8f),center=true)
-            Spacer(Modifier.height(24.dp));PlayerAvatar(p.name,style,120.dp,true);Spacer(Modifier.height(20.dp))
-            Label(stringResource(R.string.turn_of,m.turn+1,m.config.players.size),Modifier.padding(bottom=12.dp),13,style.ink,center=true)
-            Label(p.name,size=36,color=style.ink,bold=true,center=true)
-        }
-        Column(Modifier.fillMaxWidth().padding(20.dp),verticalArrangement=Arrangement.spacedBy(16.dp)) {
-            GameButton(stringResource(R.string.ready),color=Color.White,ink=style.ink) { actions.advance(Screen.SELECT) }
-        }
+        BottomActions { Label(stringResource(R.string.read_together),Modifier.fillMaxWidth(),13,Tokens.muted,center=true);GameButton(stringResource(R.string.start_round),color=Color.White,ink=Tokens.players[0].ink) { actions.advance(Screen.SELECT) } }
     }
 }
 
@@ -206,13 +188,12 @@ class PreviewStates: PreviewParameterProvider<AppState> {
 }
 fun previewState(n: Int = 2): AppState {
     val config=Config((0 until n).map { Player(it,listOf("Nico","Ana","Luz","Dani","Sol","Leo","Mar","Paz")[it]) },rounds=10)
-    val q=Question("demo","Geografía","¿Cuántos metros mide aproximadamente el Aconcagua sobre el nivel del mar?",6961.0,"m",100.0,20000.0,"linear",2)
+    val q=Question("demo","Geografía","¿Cuántos metros mide aproximadamente el Aconcagua sobre el nivel del mar?",6960.8,"m",100.0,20000.0,"linear",2,decimalPlaces=1)
     val guesses=listOf(6500.0,4000.0,8500.0,5000.0,7100.0,9000.0,3000.0,6200.0).take(n)
-    val categories=listOf("Geografía","Historia","Ciencia","Cuerpo humano","Animales","Deportes","Cine y música","Tecnología","Comida","Espacio","Cultura general","Curiosidades")
-    val pool=listOf(q)+(1..429).map { q.copy(id="demo$it",category=categories[it%categories.size],difficulty=it%3+1) }
+    val categories=listOf("Geografía","Historia","Ciencia","Cuerpo humano","Animales","Deportes","Cine y música","Tecnología","Comida","Espacio","Cultura general","Vida cotidiana")
+    val pool=listOf(q)+(1..399).map { q.copy(id="demo$it",category=categories[it%categories.size],difficulty=it%3+1) }
     return AppState(pool=pool,config=config,match=Match(config,List(10){"demo"},guesses=listOf(guesses),stage=Screen.REVEAL),loading=false)
 }
 @Preview(widthDp=360,heightDp=800) @Composable fun HomePreview(@PreviewParameter(PreviewStates::class) s: AppState) = AproximadoTheme { HomeScreen(s,Actions()) }
 @Preview(widthDp=360,heightDp=800) @Composable fun SetupPreview(@PreviewParameter(PreviewStates::class) s: AppState) = AproximadoTheme { SetupScreen(s,Actions()) }
 @Preview(widthDp=360,heightDp=800) @Composable fun IntroPreview(@PreviewParameter(PreviewStates::class) s: AppState) = AproximadoTheme { IntroScreen(s,Actions()) }
-@Preview(widthDp=360,heightDp=800) @Composable fun PassPreview(@PreviewParameter(PreviewStates::class) s: AppState) = AproximadoTheme { PassScreen(s.copy(match=s.match?.copy(guesses=listOf(emptyList()))),Actions()) }

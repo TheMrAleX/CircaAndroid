@@ -114,7 +114,7 @@ fun formatNumber(value: Double, compact: Boolean = false, fractionDigits: Int? =
         compact && abs >= 1e4 -> { divisor = 1e3; suffix = " mil" }
         else -> { divisor = 1.0; suffix = "" }
     }
-    val pattern = if (divisor != 1.0) "#,##0.#" else if (fractionDigits == null) "#,##0.###" else "#,##0" + if (fractionDigits > 0) "." + "0".repeat(fractionDigits) else ""
+    val pattern = if (divisor != 1.0) "#,##0.#" else if (fractionDigits == null) "#,##0.######" else "#,##0" + if (fractionDigits > 0) "." + "0".repeat(fractionDigits) else ""
     return DecimalFormat(pattern, symbols).format(if (value == 0.0) 0.0 else value / divisor) + suffix
 }
 

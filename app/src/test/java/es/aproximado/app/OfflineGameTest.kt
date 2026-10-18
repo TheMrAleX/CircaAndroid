@@ -27,7 +27,7 @@ class OfflineGameTest {
         val vm=GameViewModel(app)
         withTimeout(20000) { vm.state.first { !it.loading } }
         assertFalse("Room asset failed to load",vm.state.value.error)
-        assertEquals(430,vm.state.value.pool.size)
+        assertEquals(400,vm.state.value.pool.size)
         return vm
     }
     @Test fun actualRoomAssetAndCompleteTwoAndEightPlayerMatches()=runBlocking {
@@ -37,9 +37,9 @@ class OfflineGameTest {
             val ids=vm.state.value.match!!.questions
             assertEquals(5,ids.toSet().size)
             repeat(5) { round ->
-                vm.advance(Screen.PASS)
+                vm.advance(Screen.SELECT)
                 repeat(n) { turn ->
-                    assertEquals(Screen.PASS,vm.state.value.screen)
+                    assertEquals(Screen.SELECT,vm.state.value.screen)
                     assertEquals(turn,vm.state.value.match!!.turn)
                     vm.advance(Screen.SELECT)
                     val q=vm.state.value.question()!!
@@ -55,14 +55,14 @@ class OfflineGameTest {
             assertTrue(vm.state.value.recent.containsAll(ids))
         }
     }
-    @Test fun processDeathRestoresConfirmedGuessesBehindPrivateHandoff()=runBlocking {
-        val first=loaded();first.start();first.advance(Screen.PASS);first.advance(Screen.SELECT)
+    @Test fun processDeathRestoresTheNextPlayerDirectly()=runBlocking {
+        val first=loaded();first.start();first.advance(Screen.SELECT);first.advance(Screen.SELECT)
         val answer=first.state.value.question()!!.answer
         first.confirm(answer);first.advance(Screen.SELECT)
         val restored=loaded()
         assertEquals(Screen.HOME,restored.state.value.screen)
         restored.resume()
-        assertEquals(Screen.PASS,restored.state.value.screen)
+        assertEquals(Screen.SELECT,restored.state.value.screen)
         assertEquals(listOf(answer),restored.state.value.match!!.currentGuesses)
         assertEquals(1,restored.state.value.match!!.turn)
     }
@@ -82,10 +82,10 @@ class OfflineGameTest {
     }
     @Test fun precisionMetadataAndIntegerKeyboardAreEnforcedByTheViewModel()=runBlocking {
         val initial=loaded()
-        val zodiac=initial.state.value.pool.first { it.id=="cultura_035" }
+        val zodiac=initial.state.value.pool.first { it.id=="v104_cultura_001" }
         assertEquals(0,zodiac.decimalPlaces)
-        assertEquals(412,initial.state.value.pool.count { it.decimalPlaces==0 })
-        assertEquals(18,initial.state.value.pool.count { it.decimalPlaces>0 })
+        assertEquals(351,initial.state.value.pool.count { it.decimalPlaces==0 })
+        assertEquals(49,initial.state.value.pool.count { it.decimalPlaces>0 })
         initial.configure { it.copy(rounds=5) };initial.start()
         val prefs=app.getSharedPreferences("aproximado",0)
         val state=org.json.JSONObject(prefs.getString("state",null)!!)
@@ -97,29 +97,58 @@ class OfflineGameTest {
         assertEquals(Screen.SELECT,restored.state.value.screen)
         assertTrue(restored.state.value.match!!.currentGuesses.isEmpty())
         restored.confirm(12.0)
-        assertEquals(Screen.PASS,restored.state.value.screen)
+        assertEquals(Screen.SELECT,restored.state.value.screen)
         assertEquals(listOf(12.0),restored.state.value.match!!.currentGuesses)
     }
-    @Test fun installedVersionOneDatabaseMigratesWithoutLosingQuestions()=runBlocking {
-        val name="questions-migration-test.db"
-        app.deleteDatabase(name)
-        val file=app.getDatabasePath(name);file.parentFile!!.mkdirs()
-        javaClass.getResourceAsStream("/questions-v1.db")!!.use { input -> file.outputStream().use { input.copyTo(it) } }
-        android.database.sqlite.SQLiteDatabase.openDatabase(file.path,null,android.database.sqlite.SQLiteDatabase.OPEN_READWRITE).use { old ->
-            old.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)")
-            old.execSQL("INSERT OR REPLACE INTO room_master_table VALUES (42,'a75ced22a5d0aabbdaea789f3f207a34')")
+    @Test fun installedDatabasesKeepArchivedQuestionsButSelectOnlyTheNewCatalog()=runBlocking {
+        val fresh=loaded().state.value.pool
+        for(version in listOf(1,2)) {
+            val name="questions-migration-$version.db"
+            app.deleteDatabase(name)
+            val file=app.getDatabasePath(name);file.parentFile!!.mkdirs()
+            javaClass.getResourceAsStream("/questions-v$version.db")!!.use { input -> file.outputStream().use { input.copyTo(it) } }
+            val db=androidx.room.Room.databaseBuilder(app,QuestionsDb::class.java,name)
+                .addMigrations(QuestionsDb.precisionMigration(app),QuestionsDb.catalogMigration(app)).build()
+            try {
+                assertEquals(fresh,db.questions().all().map { it.model() })
+                val old=db.questions().findByIds(listOf("cultura_035","deportes_004","curiosidades_013")).map { it.model() }
+                assertEquals(3,old.size)
+                assertEquals(0,old.first { it.id=="cultura_035" }.decimalPlaces)
+                assertEquals(2,old.first { it.id=="deportes_004" }.decimalPlaces)
+                assertEquals(3,old.first { it.id=="curiosidades_013" }.decimalPlaces)
+                val saved=AppState(pool=fresh,savedQuestions=old,match=Match(Config(rounds=5),List(5){"cultura_035"},guesses=listOf(listOf(12.0,13.0))))
+                assertEquals(12.0,saved.question()!!.answer,0.0)
+                assertEquals(2,saved.scores().single().size)
+                val cursor=db.openHelper.readableDatabase.query("SELECT count(*) FROM questions")
+                cursor.use { assertTrue(it.moveToFirst());assertEquals(830,it.getInt(0)) }
+            } finally { db.close();app.deleteDatabase(name) }
         }
-        val db=androidx.room.Room.databaseBuilder(app,QuestionsDb::class.java,name)
-            .addMigrations(QuestionsDb.precisionMigration(app)).build()
-        try {
-            val migrated=db.questions().all().map { it.model() }
-            val fresh=loaded().state.value.pool
-            assertEquals(fresh,migrated)
-            assertEquals(430,migrated.size)
-            assertEquals(0,migrated.first { it.id=="cultura_035" }.decimalPlaces)
-            assertEquals(2,migrated.first { it.id=="deportes_004" }.decimalPlaces)
-            assertEquals(3,migrated.first { it.id=="curiosidades_013" }.decimalPlaces)
-        } finally { db.close();app.deleteDatabase(name) }
     }
-
+    @Test fun staleConfirmationCannotSubmitForTheNextPlayer()=runBlocking {
+        val vm=loaded();vm.count(8);vm.start();vm.advance(Screen.SELECT)
+        val q=vm.state.value.question()!!
+        vm.confirm(q.answer,0,0)
+        assertEquals(Screen.SELECT,vm.state.value.screen)
+        assertEquals(1,vm.state.value.match!!.turn)
+        vm.confirm(q.answer,0,0)
+        assertEquals(listOf(q.answer),vm.state.value.match!!.currentGuesses)
+        vm.confirm(q.answer,0,1)
+        assertEquals(2,vm.state.value.match!!.turn)
+    }
+    @Test fun referenceFiguresKeepPublishedPrecisionAndLegacyPassRestoresAsSelector()=runBlocking {
+        val vm=loaded();val pool=vm.state.value.pool
+        assertEquals(8848.86,pool.first { it.id=="v104_geografia_001" }.answer,0.0)
+        assertEquals(3682.0,pool.first { it.id=="v104_geografia_002" }.answer,0.0)
+        val gravity=pool.first { it.id=="v104_ciencia_018" }
+        assertEquals(5,gravity.decimalPlaces)
+        assertTrue(es.aproximado.core.EstimateInput.accepts(gravity,9.80665))
+        vm.start()
+        val prefs=app.getSharedPreferences("aproximado",0)
+        val json=org.json.JSONObject(prefs.getString("state",null)!!)
+        json.getJSONObject("match").put("stage","PASS")
+        prefs.edit().putString("state",json.toString()).commit()
+        val restored=loaded();restored.resume()
+        assertEquals(Screen.SELECT,restored.state.value.screen)
+        assertTrue(restored.state.value.match!!.currentGuesses.isEmpty())
+    }
 }
