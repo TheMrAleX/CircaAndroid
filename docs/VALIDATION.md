@@ -41,3 +41,9 @@ CI #39070609124 y release #39070610379 completadas con éxito para `4b5012e`. Se
 Se revisaron los renders de las nueve pantallas, especialmente 320×640 con fontScale 1.3. Se añadieron regresiones del ejemplo Argentina (23 frente a 28/38), ocho aciertos simultáneos con nombres largos, resultados logarítmicos enormes, selector con decimales y cifras enormes, y configuración desplazada hasta dificultad. Las listas muestran más jugadores al desplazarse: no intentan apilar ocho etiquetas en el mismo gráfico.
 
 La revelación presenta los resultados de inmediato. Las animaciones de navegación, botones, marcador y podio permanecen; no se retiene una pantalla privada durante una transición. La cancelación de inercia está revisada en código; no se afirma una prueba gestual en un teléfono físico.
+
+## Evidencia remota 1.0.1 (18 de octubre de 2026)
+
+CI `39072467739` y release `39089680892` terminaron correctamente para `03267ea`. Se descargó el APK adjunto a v1.0.1 y se verificaron SHA256 `3b024458f846c3efe60c4e692c211a2060dacd551e0900bd1e178d6b1e404353`, firma v2, versión 1.0.1/código 2, ABI exclusivamente ARM64, SQLite íntegra con 430 preguntas y ausencia de INTERNET. Los informes locales finales contienen 13 tests de motor y 72 de app (4 integración + 68 visuales), sin fallos ni omisiones; lint debug y release contienen cero incidencias.
+
+La firma publicada cambió respecto a v1.0.0: se requiere reinstalación, con pérdida de datos locales. Detalles y huellas en RELEASING.md. No se probó en dispositivo físico.

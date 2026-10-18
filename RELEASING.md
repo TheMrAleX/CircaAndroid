@@ -52,3 +52,19 @@ SHA256 del APK publicado:
 ```
 
 La compilación local con firma temporal genera un SHA diferente: no se debe comparar con el hash del APK de GitHub. Usa el archivo .sha256 adjunto al mismo APK.
+
+## Publicación verificada: v1.0.1
+
+Publicada el 18 de octubre de 2026 desde `03267ea` (versionCode 2):
+
+- [Release y APK](https://github.com/TheMrAleX/CircaAndroid/releases/tag/v1.0.1)
+- [CI correcto del código publicado](https://github.com/TheMrAleX/CircaAndroid/actions/runs/39072467739)
+- [Release completada correctamente](https://github.com/TheMrAleX/CircaAndroid/actions/runs/39089680892)
+
+El APK descargado verifica firma v2, ARM64 exclusivo, 430 preguntas, integridad SQLite y ausencia de permiso INTERNET. SHA256:
+
+```text
+3b024458f846c3efe60c4e692c211a2060dacd551e0900bd1e178d6b1e404353
+```
+
+**Instalación sobre v1.0.0:** las firmas publicadas son diferentes. Certificado SHA256 de v1.0.0: `fcf0d2fc923660af0cad63fa2b17ca6fd18103947c44e6f7b9bed73f5c47170c`; de v1.0.1: `46a0e40c09b58d21576070b49a37bb6348e2e0e82defa4d00ff6ef36e162245d`. Para instalar v1.0.1 hay que desinstalar v1.0.0, perdiendo partida e historial locales. Configurar una clave estable permite conservar compatibilidad entre las futuras versiones que usen esa clave; no recupera la clave temporal anterior.

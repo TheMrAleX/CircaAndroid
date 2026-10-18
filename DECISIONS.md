@@ -38,3 +38,5 @@
 
 - La revelación muestra inmediatamente el resultado: se retiran las animaciones de barras/puntos flotantes que mezclaban etiquetas y números. Las listas mantienen espacio propio para cada dato y permiten desplazamiento con ocho jugadores.
 - v1.0.1 incrementa versionCode a 2. El script local toma el nombre del APK de Gradle. El workflow publica notas de esta versión y avisa explícitamente si utilizó firma temporal; sin la clave original no se promete actualización encima de v1.0.0.
+
+- Se verificaron ambas firmas oficiales: v1.0.1 no puede actualizar directamente el APK v1.0.0. Se documenta reinstalación y pérdida de partida/historial; no se distribuyen ni conservan claves temporales en el repositorio.

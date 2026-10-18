@@ -18,6 +18,6 @@ Cada tarea cloud ya está aislada; utilizar este checkout, no crear worktrees sa
 - [x] Motor: precisión independiente de la respuesta, extremos exactos y comparaciones lineales/logarítmicas.
 - [x] 13 tests de motor, 4 de integración y 68 renders registrados; build debug y lint correctos.
 - [x] Comparación final de las 68 referencias; 85 casos sin fallos ni omisiones, lint debug sin incidencias.
-- [ ] Release ARM64 y verificación remota.
+- [x] Release v1.0.1 ARM64 publicada; CI y release remotos correctos; APK descargado, firma y SHA256 verificados.
 
 La petición de rediseño 1.0.1 sustituye las posiciones rígidas de la spec original; conservar jerarquía, legibilidad y privacidad. Justificaciones en DECISIONS.md.
