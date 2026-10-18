@@ -70,3 +70,5 @@
 - Los números pequeños con muchos decimales se ajustan al ancho conservando todas las cifras; abreviación solo para magnitudes grandes. La revelación conserva la gráfica proporcional y ofrece la respuesta completa si el número gigante necesita abreviarse.
 
 - Revisión final de precisión: diámetro solar nominal IAU (1.391.400 km), diámetro ecuatorial terrestre de referencia NASA (12.756,2 km), períodos de Júpiter/Saturno en días publicados y contexto Planck+BAO explícito. El catálogo final tiene 350 valores enteros y 50 con decimales. La migración 2→3 se congela con este catálogo al publicar v1.0.4.
+
+- Publicación: mantener tag v1.0.4 en el código validado `24ff8c6`. Release oficial comprobada tras descargar el APK, no solo por el estado del workflow. La firma temporal es distinta de 1.0.3; documentar la desinstalación necesaria y la pérdida de datos, sin afirmar compatibilidad de actualización.

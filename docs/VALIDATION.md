@@ -73,3 +73,7 @@ La regresión 9,99/8,99 comprueba la relación de alturas 9,99/8,99 y una separa
 CI `39093624442` y release `39093675819` terminaron correctamente para `bd071e8`. Se descargaron el APK y SHA256 oficiales; checksum `7c83874ab90fb5d412665b91a28c31f1236c76087821aae1ba21a549e15fa435`. Se verificaron firma v2, versión 1.0.3/código 4, ABI ARM64 exclusivo, ausencia de INTERNET, integridad SQLite, esquema 2 y distribución de precisión 412/6/10/2 para 0/1/2/3 decimales. El APK incluye la migración y excluye la DB fixture de pruebas. Informes locales: 17 tests de motor y 94 de app (6 de integración + 88 visuales), sin fallos ni omitidos; comparación de las 88 referencias y lint debug/release correctos.
 
 Las firmas oficiales de 1.0.2 y 1.0.3 difieren. La instalación pública requiere desinstalar la anterior y borra sus datos locales; la migración de Room probada solo puede preservar datos en una actualización firmada con clave compatible. Detalle en RELEASING.md. Sin prueba física ni medición de FPS.
+
+## Publicación 1.0.4 verificada
+
+CI `39144757551` y release `39144766164` correctos. APK oficial descargado: SHA256 `4878e463a6df6eb8aefc351aece68ce799f612b7572eeeba01a065b54098c027`, firma v2 RSA3072, versión 1.0.4/código 5, ARM64 exclusivo, sin INTERNET, DB3 íntegra y coincidencia completa de las 400 filas con los JSON. Lint debug/release local: sin incidencias; build release con R8 y firma correcto. El certificado difiere del de 1.0.3, con las consecuencias de instalación documentadas en RELEASING.md.

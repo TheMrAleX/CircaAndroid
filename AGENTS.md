@@ -38,9 +38,9 @@ La petición de rediseño 1.0.1 sustituye las posiciones rígidas de la spec ori
 - [x] Comparación de las 88 referencias correcta.
 - [x] Release v1.0.3 publicada; CI y release correctos; APK oficial descargado y verificado (firma v2, SHA256, ARM64 y DB v2 con 412 enteras/18 decimales).
 
-## Revisión 1.0.4 en curso
+## Revisión 1.0.4
 - [x] Catálogo activo reemplazado: 400 preguntas cotidianas, cifras de referencia sin redondeo artificial.
 - [x] Pase retirado; cabecera integrada y cambio directo de jugador con estado reiniciado.
 - [x] Room 3 y migración conservadora para partidas antiguas.
 - [x] 126 casos: 18 motor, 8 integración y 100 capturas; lint debug y build debug correctos. Revisión de números con cinco decimales, cifra completa y siguiente jugador en pantalla pequeña.
-- [ ] Publicación y verificación de v1.0.4.
+- [x] Release v1.0.4 publicada; CI y release remotos correctos; APK oficial descargado, SHA256/firma v2/ARM64 y 400 filas verificadas.
