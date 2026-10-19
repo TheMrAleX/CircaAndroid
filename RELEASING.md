@@ -1,6 +1,6 @@
 # Publicar Aproximado
 
-`release.yml` se ejecuta al enviar un tag `v*`. Requiere que el tag coincida con `versionName`. La versión actual es 1.0.8 (código 9). Ejecuta validación de las 400 preguntas, tests, lint release, R8 y reducción de recursos. Publica `Aproximado-v1.0.8-arm64-v8a.apk` firmado y su archivo SHA256 en GitHub Releases con notas generadas.
+`release.yml` se ejecuta al enviar un tag `v*`. Requiere que el tag coincida con `versionName`. La versión actual es 1.0.9 (código 10). Ejecuta validación de las 800 preguntas, tests, lint release, R8 y reducción de recursos. Publica `Aproximado-v1.0.9-arm64-v8a.apk` firmado y su archivo SHA256 en GitHub Releases con notas generadas.
 
 ## Firma estable (recomendada)
 
@@ -24,11 +24,11 @@ Desde el checkout ya commiteado en main, con Git autenticado:
 
 ```sh
 git push -u origin main
-git tag v1.0.8
-git push origin v1.0.8
+git tag v1.0.9
+git push origin v1.0.9
 ```
 
-Si el tag ya existe localmente, omite la segunda línea. Comprueba el resultado en Actions → Signed ARM64 release y en Releases. Con gh autenticado: `gh run list --workflow release.yml` y `gh release view v1.0.8`. El workflow usa `github.token` con `contents: write`; no requiere un PAT personal.
+Si el tag ya existe localmente, omite la segunda línea. Comprueba el resultado en Actions → Signed ARM64 release y en Releases. Con gh autenticado: `gh run list --workflow release.yml` y `gh release view v1.0.9`. El workflow usa `github.token` con `contents: write`; no requiere un PAT personal.
 
 ## ARMv8
 

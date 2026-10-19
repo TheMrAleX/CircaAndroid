@@ -70,3 +70,9 @@ La petición actual sustituye MIT para las nuevas distribuciones: licencia propi
 - [x] 235 casos correctos: 35 motor/protocolo, 10 Android, 188 capturas, 1 ciclo de espera y 1 interacción táctil (81 fotogramas). Comparación visual correcta; lint debug sin incidencias y APK debug compilado.
 - [x] Build release/R8 firmado y lint release sin incidencias; licencias empaquetadas idénticas a los textos del repo.
 - [x] Release 1.0.8 publicada; CI/release correctos. APK oficial descargado y verificado: SHA256, firma v2, versión/código 1.0.8/9, ARM64, 400 preguntas y licencias actuales/históricas.
+
+## Revisión 1.0.9
+- [x] 800 preguntas validadas, 400 anteriores intactas, 12 categorías; Room 4 con migración aditiva y fixture v3.
+- [x] Historial común persistente local/LAN, registro al mostrar, invitados y abandono; sorteo de no vistas y reutilización antigua aleatoria.
+- [x] 244 casos correctos, comparación de 188 capturas y dos pruebas visuales animadas/interactivas; lint debug/release sin incidencias, APK debug y release/R8 firmado compilados.
+- [ ] Publicación y verificación del APK oficial.

@@ -1,8 +1,19 @@
-# Validación de Aproximado 1.0.6
+# Validación de Aproximado 1.0.9
+
+## Resultados 1.0.9 (19 de octubre de 2026)
+
+- 800 filas válidas; rangos, precisión, identidad y textos únicos. Comparación de los JSON contra el tag 1.0.8: las 400 preguntas anteriores no cambian. Migraciones SQL 1→2 y 2→3 idénticas a las publicadas.
+- Room 4: instalación nueva con 800 activas; pruebas de migración desde fixtures reales 1, 2 y 3. Desde 1/2 se conservan 430 archivadas (1.230 filas totales); desde 3 quedan las 800 activas. Sin migración destructiva.
+- **244 casos, cero fallos, errores ni omitidos:** 42 de motor/protocolo, 12 de integración Android, 188 capturas, una interacción del selector (81 fotogramas) y un ciclo animado de espera (23 fotogramas).
+- Sorteo: recorrer las 800 antes de repetir; proteger las 600 últimas al agotarse el banco, variar el orden de las candidatas antiguas y respetar filtros/identidades duplicadas. Pruebas de abandono en 30 salas nuevas, restauración, importación única del historial legado y borrado sin resurrección del guardado antiguo.
+- Integración Android con sockets reales: una misma instalación juega como anfitrión, se une como invitado y vuelve a crear sala; las preguntas vistas en ambos roles se conservan y excluyen del sorteo posterior. No se transmite el historial completo entre teléfonos.
+- Comparación Paparazzi correcta; solo se actualizó el texto de versión en la referencia de Ajustes. `lintDebug` sin incidencias y `assembleDebug` correcto.
+- `lintRelease` sin incidencias; release con R8/reducción de recursos compilada y APK local firmado, verificado con apksigner v2.
+- Muestreo público de 16 hechos nuevos coincidente; tres accesos oficiales bloqueados con 403. No equivale a verificación individual de las 400 altas: [informe](question-audit-v1.0.9.json).
 
 ## Alcance
 
-- 400 preguntas nuevas en 12 categorías (350 enteras y 50 con decimales publicados); JSON estricto e integridad SQLite.
+- 800 preguntas en 12 categorías (723 enteras y 77 con decimales publicados); JSON estricto e integridad SQLite. Las 400 anteriores se conservan sin cambios.
 - Motor Kotlin: ranking lineal/log, empates, bonus exacto y <1%, cero y fracciones, formato español, selección sin repetir y memoria reciente, partidas completas de 2 y 8 jugadores.
 - Integración Robolectric con Room real: apertura del asset, partidas completas de cinco rondas con 2/8 jugadores, restauración directa en el selector del siguiente jugador, límites de configuración y estado corrupto.
 - Paparazzi: 100 casos: las ocho pantallas vigentes, formatos extremos, extremos de la regla, decimales estables, filtros, empates, signos zodiacales enteros, cabecera del siguiente jugador, medidas con cinco decimales, respuesta completa y el caso 9,99/8,99 en cuatro configuraciones. 360×800 con 2/8 jugadores; 320×640 con 8 jugadores y fontScale 1.3; 411×914 con 2 jugadores y fontScale 1.3. Se revisaron selector, revelación, marcador, podio, intro, configuración y formatos enormes/decimales. Las listas se desplazan para acceder a todos los jugadores en pantallas pequeñas.

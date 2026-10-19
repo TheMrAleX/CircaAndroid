@@ -1,6 +1,6 @@
-# Jugar por Wi-Fi o hotspot (1.0.8)
+# Jugar por Wi-Fi o hotspot (1.0.9)
 
-Se necesitan de 2 a 8 teléfonos Android con Aproximado 1.0.8, uno por persona. El anfitrión también juega. El número de clientes que admite un hotspot depende del teléfono; si permite menos, usa una Wi-Fi compartida. No se necesitan Internet, datos móviles, cuentas ni servidores externos. El modo de pasar un solo teléfono sigue disponible en **Jugar**.
+Se necesitan de 2 a 8 teléfonos Android con Aproximado 1.0.9 (también compatible con 1.0.8, protocolo 3), uno por persona. El anfitrión también juega. El número de clientes que admite un hotspot depende del teléfono; si permite menos, usa una Wi-Fi compartida. No se necesitan Internet, datos móviles, cuentas ni servidores externos. El modo de pasar un solo teléfono sigue disponible en **Jugar**.
 
 ## Misma Wi-Fi
 
@@ -10,7 +10,7 @@ Se necesitan de 2 a 8 teléfonos Android con Aproximado 1.0.8, uno por persona. 
 4. En los demás: **Jugar en red local → Tu nombre → Unirse a una sala**. Toca una sala detectada o escribe su IP:puerto y después el código. Toca **Conectar**.
 5. El anfitrión ve quién está conectado, elige rondas/categorías/dificultad e inicia. Todos responden simultáneamente desde su teléfono. La respuesta real se revela cuando todos confirman. Con «Regla en vivo» habilitada por todos se ven las barras de los 2–8 jugadores; sin consentimiento unánime, las estimaciones son privadas. El anfitrión continúa al marcador y a la siguiente ronda.
 
-## Regla en vivo (1.0.8)
+## Regla en vivo (1.0.9)
 
 Con **2–8 jugadores**, si todos tienen **Ajustes → Regla en vivo** activada y están conectados, el selector muestra un único gráfico con todas las barras, incluida la tuya. Tu nombre y color aparecen arriba. Arrastra verticalmente sobre cualquier columna, el fondo, la leyenda o el área de controles para ajustar **solo tu estimación**. Conservas los botones +/− y el teclado.
 
@@ -62,3 +62,7 @@ TCP nativo, sin bibliotecas de red externas. Frames de hasta 64 KiB, cadenas y l
 Las pruebas automatizadas ejecutan partidas 2/8 en el motor, una partida de cinco rondas con ocho participantes por sockets reales, reconexión conservando respuesta, corte de red con reenvío, código incorrecto, privacidad de snapshots, límites, valores inválidos, mensajes tardíos, duplicados, manipulación y replay. Las pruebas de 1.0.8 añaden grupos 2/3/4/8, consentimiento, borradores inválidos/atrasados, coalescencia y sockets con tres y ocho participantes sin alterar puntuaciones. La interacción del selector se verifica mediante acciones de accesibilidad y un gesto táctil real sobre una columna ajena, incluyendo retirada y restauración de las ocho barras al cambiar el consentimiento. Robolectric comprueba recepción y corte de borradores, preferencias persistentes, el servicio foreground, recreación de ViewModel y puntuación equivalente en ambos teléfonos proyectados. Los renders cubren las pantallas LAN en 360×800 (2/8), 320×640 y 411×914 con fontScale 1.3.
 
 **Límite de verificación:** sockets reales en loopback y Android simulado; este entorno no dispone de dos teléfonos físicos ni de emulador con hotspot. Antes de dar por verificado un fabricante/red concretos, comprobar en dispositivos: Wi-Fi sin Internet, hotspot alojado y unido, datos móviles activos, búsqueda NSD/manual, ocho participantes si están disponibles, bloqueo/cambio de app, corte y vuelta de Wi-Fi y cierre del anfitrión. No se atribuyen esas pruebas físicas a las comprobaciones automatizadas.
+
+## Sorteo e historial (1.0.9)
+
+El anfitrión utiliza su historial persistente, compartido con el modo de un teléfono, para priorizar preguntas no vistas. Los invitados 1.0.9 recuerdan una huella del texto al recibirlo: si después crean una sala o juegan en un teléfono, también evitan esas preguntas. No se intercambia el historial completo entre participantes; el sorteo no puede garantizar preguntas nuevas para todos los invitados. Solo se registran preguntas ya mostradas, sin guardar borradores ni revelar respuestas anticipadamente. Borrar historial/datos o desinstalar reinicia la memoria local.
