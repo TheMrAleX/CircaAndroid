@@ -69,4 +69,4 @@ La petición actual sustituye MIT para las nuevas distribuciones: licencia propi
 - [x] Protocolo LAN 3 y gráfico compartido de 2–8 barras; arrastre propio probado sobre una columna ajena, privacidad opcional y confirmaciones congeladas.
 - [x] 235 casos correctos: 35 motor/protocolo, 10 Android, 188 capturas, 1 ciclo de espera y 1 interacción táctil (81 fotogramas). Comparación visual correcta; lint debug sin incidencias y APK debug compilado.
 - [x] Build release/R8 firmado y lint release sin incidencias; licencias empaquetadas idénticas a los textos del repo.
-- [ ] Publicación 1.0.8 y APK oficial verificado.
+- [x] Release 1.0.8 publicada; CI/release correctos. APK oficial descargado y verificado: SHA256, firma v2, versión/código 1.0.8/9, ARM64, 400 preguntas y licencias actuales/históricas.

@@ -161,3 +161,9 @@ Certificado SHA256: `796d4fa9761a60176edb757fb650bf86d0401b906593d19114dacc877d0
 Tag `v1.0.7` en `0debc0c`, versión/código 1.0.7/8. CI `39157398548` y release `39157400077` correctos. APK adjunto descargado y verificado: SHA256 `33428d603750768a7d98f7b50cd15b4a15189edcef7a0a3b284aa0cec09946f1`; firma v2 RSA3072; certificado SHA256 `8e15df891f10c74284011ff5c647b232c4040a26fa4e032d2449aee8fafabae4`. ARM64 exclusivo y Room 3 con 400 preguntas íntegras.
 
 La clave temporal difiere de 1.0.6: Android exige desinstalar la anterior antes de instalar este APK, perdiendo sus datos locales. Las instrucciones de firma estable anteriores evitan cambios de identidad en futuras publicaciones. Protocolo LAN 2: todos los teléfonos de la sala deben instalar 1.0.7.
+
+## Verificación publicada: 1.0.8
+
+Tag `v1.0.8` en `7055ab5`, versión/código 1.0.8/9. CI `39162263478` y release `39162272704` correctos. APK adjunto descargado y verificado: SHA256 `649f7932e905c13ebe2dd448840bfc79931ab5bdb19043cfef98b6ab45bffb4a`; firma v2 RSA3072; certificado SHA256 `09fdd2183338d439a51801a3863ff21428708b16363e0e477dec6e28c3145b87`. ARM64 exclusivo, Room 3 con 400 preguntas íntegras y licencias actual/MIT histórica/OFL empaquetadas correctamente.
+
+La clave temporal difiere de 1.0.7: Android exige desinstalar la anterior, perdiendo sus datos locales. Todos los teléfonos de la sala deben instalar 1.0.8 (protocolo LAN 3). La firma estable descrita arriba evita cambios de identidad en futuras publicaciones.

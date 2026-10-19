@@ -142,3 +142,9 @@ Revisión de 320×640/fontScale 1.3: ocho barras, pregunta completa (incluida la
 LICENSE actual idéntica al texto empaquetado; MIT histórico y OFL de Fredoka también empaquetados y accesibles desde Acerca de. No se revocan los permisos MIT previos. Este entorno sigue sin teléfonos físicos: las pruebas LAN usan sockets loopback y Android simulado.
 
 Build release local 1.0.8 con R8 y reducción de recursos correcto; lint release sin incidencias y firma v2 válida. LICENSE, MIT histórico y OFL empaquetados coinciden byte a byte con sus textos del repositorio.
+
+## Publicación 1.0.8 verificada
+
+Tag v1.0.8 en `7055ab5`. [CI 39162263478](https://github.com/TheMrAleX/CircaAndroid/actions/runs/39162263478) y [release 39162272704](https://github.com/TheMrAleX/CircaAndroid/actions/runs/39162272704) correctos. APK oficial y archivo SHA256 descargados: `649f7932e905c13ebe2dd448840bfc79931ab5bdb19043cfef98b6ab45bffb4a`. Firma v2 RSA3072 verificada; certificado SHA256 `09fdd2183338d439a51801a3863ff21428708b16363e0e477dec6e28c3145b87`. Versión/código 1.0.8/9, minSdk 26, target 35 y solo arm64-v8a. SQLite 3 íntegro con 400 filas; todos los campos coinciden con el asset local validado. LICENSE actual, MIT histórico hasta 1.0.7 y OFL de Fredoka empaquetados coinciden con los del repositorio.
+
+La firma temporal difiere de 1.0.7: reinstalación y pérdida de datos locales documentadas. Todos los participantes deben usar 1.0.8 por el protocolo LAN 3. Las pruebas físicas Wi-Fi/hotspot de esta función siguen pendientes por falta de dispositivos.
