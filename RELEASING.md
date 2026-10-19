@@ -167,3 +167,21 @@ La clave temporal difiere de 1.0.6: Android exige desinstalar la anterior antes 
 Tag `v1.0.8` en `7055ab5`, versión/código 1.0.8/9. CI `39162263478` y release `39162272704` correctos. APK adjunto descargado y verificado: SHA256 `649f7932e905c13ebe2dd448840bfc79931ab5bdb19043cfef98b6ab45bffb4a`; firma v2 RSA3072; certificado SHA256 `09fdd2183338d439a51801a3863ff21428708b16363e0e477dec6e28c3145b87`. ARM64 exclusivo, Room 3 con 400 preguntas íntegras y licencias actual/MIT histórica/OFL empaquetadas correctamente.
 
 La clave temporal difiere de 1.0.7: Android exige desinstalar la anterior, perdiendo sus datos locales. Todos los teléfonos de la sala deben instalar 1.0.8 (protocolo LAN 3). La firma estable descrita arriba evita cambios de identidad en futuras publicaciones.
+
+## Publicación verificada: v1.0.9
+
+Publicada el 19 de octubre de 2026 desde `4443b43` (versionCode 10):
+
+- [Release y APK](https://github.com/TheMrAleX/CircaAndroid/releases/tag/v1.0.9)
+- [CI correcto del código publicado](https://github.com/TheMrAleX/CircaAndroid/actions/runs/39186748661)
+- [Release completada correctamente](https://github.com/TheMrAleX/CircaAndroid/actions/runs/39186748729)
+
+El APK descargado verifica firma v2, SHA256 adjunto, versión/código 1.0.9/10, minSdk 26/target 35, ARM64 exclusivo y Room 4 íntegra con 800 preguntas. Todos los campos de las filas coinciden con el asset validado localmente; las tres licencias empaquetadas coinciden con los archivos originales.
+
+SHA256 del APK publicado:
+
+```text
+cbce373ba2c8aa6623591555c5d554e5cefc10a0d0863a202d79eeb00fbc9c23
+```
+
+Certificado SHA256: `ad6e238fd028490a33fc083b5ee690f660d6f490b7b726bed0d1b07f8078d87a`. Difiere de 1.0.8: Android exige desinstalar la anterior, borrando partida, ajustes e historial locales. Las migraciones conservan los datos cuando la actualización usa la misma firma; no pueden evitar el borrado impuesto por una reinstalación. Para siguientes versiones instala una identidad estable mediante las cuatro secrets documentadas arriba.

@@ -133,3 +133,5 @@
 - Room 4 añade solamente las 400 altas mediante migration_3_4.sql. Mantener inmutables 1→2 y 2→3, conservar DB instalada, IDs anteriores y partidas guardadas; no usar migración destructiva.
 
 - Verificación 1.0.9: 244 casos sin fallos ni omisiones, comparación visual correcta, lint debug/release sin incidencias y compilaciones debug/release R8 correctas. Muestreo de 16 hechos nuevos en repositorios públicos; fuentes oficiales BCE/NASA/NIST bloqueadas con 403. No afirmar auditoría web individual ni ensayos físicos.
+
+- Publicar v1.0.9 desde `4443b43`. CI 39186748661 y release 39186748729 correctos; descargar el APK oficial y verificar SHA256, firma v2, versión/código, ARM64, DB4/800 filas y licencias. La firma temporal difiere de 1.0.8: informar de desinstalación y pérdida del historial anterior; una migración SQLite no puede preservar datos eliminados por desinstalación.

@@ -11,6 +11,8 @@
 - `lintRelease` sin incidencias; release con R8/reducción de recursos compilada y APK local firmado, verificado con apksigner v2.
 - Muestreo público de 16 hechos nuevos coincidente; tres accesos oficiales bloqueados con 403. No equivale a verificación individual de las 400 altas: [informe](question-audit-v1.0.9.json).
 
+- Publicación remota completada: [CI](https://github.com/TheMrAleX/CircaAndroid/actions/runs/39186748661) y [release](https://github.com/TheMrAleX/CircaAndroid/actions/runs/39186748729) correctos. APK oficial descargado: SHA256, firma v2, ARM64, versión/código 1.0.9/10, DB4 con 800 filas idénticas al catálogo y licencias comprobadas. Hash y certificado en RELEASING.md.
+
 ## Alcance
 
 - 800 preguntas en 12 categorías (723 enteras y 77 con decimales publicados); JSON estricto e integridad SQLite. Las 400 anteriores se conservan sin cambios.

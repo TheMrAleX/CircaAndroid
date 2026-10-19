@@ -75,4 +75,4 @@ La petición actual sustituye MIT para las nuevas distribuciones: licencia propi
 - [x] 800 preguntas validadas, 400 anteriores intactas, 12 categorías; Room 4 con migración aditiva y fixture v3.
 - [x] Historial común persistente local/LAN, registro al mostrar, invitados y abandono; sorteo de no vistas y reutilización antigua aleatoria.
 - [x] 244 casos correctos, comparación de 188 capturas y dos pruebas visuales animadas/interactivas; lint debug/release sin incidencias, APK debug y release/R8 firmado compilados.
-- [ ] Publicación y verificación del APK oficial.
+- [x] v1.0.9 publicada; CI/release correctos. APK oficial descargado: firma v2/SHA256, versión/código 1.0.9/10, ARM64, Room 4 con 800 filas y licencias verificados. Firma distinta de 1.0.8 documentada.
