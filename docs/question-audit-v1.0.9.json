@@ -1,0 +1,49 @@
+{
+  "date_utc": "2026-10-19T01:29:33.515064+00:00",
+  "scope": "Muestreo limitado, no verificación individual de las 400 preguntas nuevas.",
+  "sources": {
+    "countries": {
+      "source": "https://raw.githubusercontent.com/mledoze/countries/master/countries.json",
+      "download": "ok",
+      "checked_border_counts": {
+        "ARG": 5,
+        "BOL": 5,
+        "CHL": 3,
+        "CRI": 2,
+        "ECU": 2,
+        "MEX": 3,
+        "PER": 5,
+        "PRT": 1,
+        "PRY": 3,
+        "URY": 2
+      }
+    },
+    "elements": {
+      "source": "https://raw.githubusercontent.com/Bowserinator/Periodic-Table-JSON/master/PeriodicTableJSON.json",
+      "download": "ok",
+      "checked_atomic_numbers": {
+        "Sodium": 11,
+        "Calcium": 20,
+        "Iron": 26,
+        "Copper": 29,
+        "Silver": 47,
+        "Uranium": 92
+      }
+    },
+    "ecb": {
+      "source": "https://www.ecb.europa.eu/euro/coins/50cent/html/index.en.html",
+      "download": "failed",
+      "reason": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    "nasa": {
+      "source": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html",
+      "download": "failed",
+      "reason": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    "nist": {
+      "source": "https://physics.nist.gov/cuu/Units/outside.html",
+      "download": "failed",
+      "reason": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    }
+  }
+}

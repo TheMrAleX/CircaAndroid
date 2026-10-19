@@ -37,8 +37,8 @@ def load_questions():
                 assert Decimal(str(q[key])).normalize().as_tuple().exponent >= -q['decimal_places'], f'{q["id"]}: {key} exceeds decimal_places'
             questions.append(q)
     counts = Counter(q['category'] for q in questions)
-    assert len(questions) >= 400, f'Only {len(questions)} questions'
-    assert len(counts) >= 8 and min(counts.values()) >= 25, counts
+    assert len(questions) >= 800, f'Only {len(questions)} questions'
+    assert len(counts) >= 8 and min(counts.values()) >= 50, counts
     return questions
 if __name__ == '__main__':
     q = load_questions()

@@ -24,3 +24,9 @@ Los accesos directos a NASA, BIPM y RFC Editor devolvieron HTTP 403 por la polí
 Sustituye el conjunto activo anterior por 400 preguntas generales. El muestreo histórico de arriba describe el catálogo anterior y no acredita las 400 filas nuevas. Se conserva la precisión de las referencias: NOAA para profundidad oceánica y composición del aire; anuncios Nepal/China para Everest; institutos geográficos para superficies; NASA para fichas planetarias; BIPM/NIST para constantes y conversiones; USDA FoodData Central/SR Legacy para alimentos; OMS para recomendaciones; reglamentos deportivos para dimensiones y recuentos; BCE e ISO para objetos cotidianos.
 
 En esta revisión los accesos directos a NOAA, Vaticano y Wikipedia devolvieron HTTP 403. No se declara un contraste web individual completo. Las filas incluyen pistas de fuentes conocidas para revisión posterior. Los valores astronómicos son referencias medias publicadas, con la precisión indicada por la fuente; no se han reducido para acercarlos a números fáciles. Las recomendaciones y estimaciones variables se identifican como tales. Los conteos permanecen enteros.
+
+## Ampliación 1.0.9 (19 de octubre de 2026)
+
+400 altas y 400 preguntas anteriores conservadas: 800 en total. Conteos enteros y precisión explícita en las medidas; sin redondeo deliberado para facilitar respuestas. Se revisaron formulaciones, convenciones y semejanzas entre preguntas además de la validación automática de textos únicos.
+
+El [informe del muestreo](question-audit-v1.0.9.json) registra el contraste por HTTPS de diez recuentos de fronteras con mledoze/countries y seis números atómicos con Bowserinator/Periodic-Table-JSON. Los 16 valores coinciden. Las consultas oficiales a BCE, NASA y NIST devolvieron 403 desde la red de este entorno. No se afirma una comprobación web individual de las 400 altas; `source_hint` identifica referencias para revisión humana. No se redistribuyen los datasets consultados.

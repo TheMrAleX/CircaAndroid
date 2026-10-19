@@ -1,6 +1,6 @@
 # Preguntas offline
 
-El catálogo activo de 1.0.4 contiene **400 preguntas en 12 categorías**: 350 conteos/valores enteros y 50 medidas con decimales. Cada categoría tiene al menos 25. Los JSON son la fuente de verdad; `questions.db` es el asset SQLite que abre Room mediante `createFromAsset`.
+El catálogo activo de 1.0.9 contiene **800 preguntas en 12 categorías**: 723 conteos/valores enteros y 77 medidas con decimales. Cada categoría tiene al menos 50. Se conservan sin cambios las 400 preguntas de 1.0.4 y se añaden 400. Los JSON son la fuente de verdad; `questions.db` es el asset SQLite que abre Room mediante `createFromAsset`.
 
 Añade objetos en `data/questions/<categoria>.json`. Campos: `id` único y estable, `category`, `text_es`, `answer` numérico, `unit` (texto o null), `min_plausible`, `max_plausible`, `scale` (`linear`/`log`), `difficulty` (1–3), `as_of_year` (año o null), `source_hint`, `decimal_places` (0–6).
 
@@ -10,7 +10,7 @@ python3 scripts/generate_database.py
 ./gradlew :core:test :app:testDebugUnitTest :app:assembleDebug
 ```
 
-Versiona JSON y SQLite juntos. Se exige ≥400 preguntas, ≥8 categorías, ≥25 por categoría, esquema exacto, números finitos, rangos válidos e IDs/textos únicos. Las escalas logarítmicas requieren mínimo positivo. Usa rangos amplios; los años usan escala lineal.
+Versiona JSON y SQLite juntos. Se exige ≥800 preguntas, ≥8 categorías, ≥50 por categoría, esquema exacto, números finitos, rangos válidos e IDs/textos únicos. Las escalas logarítmicas requieren mínimo positivo. Usa rangos amplios; los años usan escala lineal.
 
 ## Política editorial
 
@@ -22,6 +22,10 @@ Los conteos usan `decimal_places: 0`; las medidas admiten los decimales necesari
 
 ## Migraciones
 
-Esquema Room 3, catálogo activo `catalog_version=2`. Las instalaciones nuevas reciben solo las 400 preguntas nuevas. La migración 2→3 archiva las 430 anteriores como versión 1 y añade el catálogo nuevo, conservando las partidas guardadas. El DAO selecciona solo versión 2 para nuevas partidas; busca IDs antiguos únicamente para continuar una partida existente.
+Esquema Room 4, catálogo activo `catalog_version=2`. Las instalaciones nuevas reciben las 800 preguntas activas. La migración 2→3 archiva las 430 anteriores como versión 1 y añade el catálogo nuevo, conservando las partidas guardadas. El DAO selecciona solo versión 2 para nuevas partidas; busca IDs antiguos únicamente para continuar una partida existente.
 
-`migration_1_2.sql` y `migration_2_3.sql` son históricos **inmutables**. No regenerarlos ni editar sus filas en futuras versiones. El generador actual produce el asset fresco, no actualiza instalaciones existentes. Cada futura edición del catálogo o del esquema distribuido debe incluir su propia migración y probar instalaciones nuevas y actualizadas. Conservar el nombre de la DB instalada para que Room ejecute la cadena de migraciones; no usar migración destructiva.
+La migración 3→4 añade las 400 altas de 1.0.9 sin alterar las preguntas anteriores. Las instalaciones que vienen de 1.0.2 o anteriores conservan además sus 430 preguntas archivadas: 1.230 filas totales, de las cuales 800 activas.
+
+`migration_1_2.sql`, `migration_2_3.sql` y `migration_3_4.sql` son históricos **inmutables**. No regenerarlos ni editar sus filas en futuras versiones. El generador actual produce el asset fresco, no actualiza instalaciones existentes. Cada futura edición del catálogo o del esquema distribuido debe incluir su propia migración y probar instalaciones nuevas y actualizadas. Conservar el nombre de la DB instalada para que Room ejecute la cadena de migraciones; no usar migración destructiva.
+
+La opción histórica `--write-migration-3-4` creó una sola vez las 400 altas y rechaza sobrescribir el archivo congelado. Para ampliar el catálogo después de 1.0.9, crea una migración nueva, no vuelvas a generar las anteriores.

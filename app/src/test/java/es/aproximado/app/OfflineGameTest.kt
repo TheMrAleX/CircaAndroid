@@ -21,13 +21,14 @@ class OfflineGameTest {
         Dispatchers.setMain(UnconfinedTestDispatcher())
         app=RuntimeEnvironment.getApplication()
         app.getSharedPreferences("aproximado",0).edit().clear().commit()
+        app.getSharedPreferences("aproximado-history",0).edit().clear().commit()
     }
     @After fun cleanup() { Dispatchers.resetMain() }
     private suspend fun loaded(): GameViewModel {
         val vm=GameViewModel(app)
         withTimeout(20000) { vm.state.first { !it.loading } }
         assertFalse("Room asset failed to load",vm.state.value.error)
-        assertEquals(400,vm.state.value.pool.size)
+        assertEquals(800,vm.state.value.pool.size)
         return vm
     }
     @Test fun actualRoomAssetAndCompleteTwoAndEightPlayerMatches()=runBlocking {
@@ -93,8 +94,8 @@ class OfflineGameTest {
         val initial=loaded()
         val zodiac=initial.state.value.pool.first { it.id=="v104_cultura_001" }
         assertEquals(0,zodiac.decimalPlaces)
-        assertEquals(350,initial.state.value.pool.count { it.decimalPlaces==0 })
-        assertEquals(50,initial.state.value.pool.count { it.decimalPlaces>0 })
+        assertEquals(723,initial.state.value.pool.count { it.decimalPlaces==0 })
+        assertEquals(77,initial.state.value.pool.count { it.decimalPlaces>0 })
         initial.configure { it.copy(rounds=5) };initial.start()
         val prefs=app.getSharedPreferences("aproximado",0)
         val state=org.json.JSONObject(prefs.getString("state",null)!!)
@@ -111,15 +112,21 @@ class OfflineGameTest {
     }
     @Test fun installedDatabasesKeepArchivedQuestionsButSelectOnlyTheNewCatalog()=runBlocking {
         val fresh=loaded().state.value.pool
-        for(version in listOf(1,2)) {
+        for(version in listOf(1,2,3)) {
             val name="questions-migration-$version.db"
             app.deleteDatabase(name)
             val file=app.getDatabasePath(name);file.parentFile!!.mkdirs()
             javaClass.getResourceAsStream("/questions-v$version.db")!!.use { input -> file.outputStream().use { input.copyTo(it) } }
             val db=androidx.room.Room.databaseBuilder(app,QuestionsDb::class.java,name)
-                .addMigrations(QuestionsDb.precisionMigration(app),QuestionsDb.catalogMigration(app)).build()
+                .addMigrations(QuestionsDb.precisionMigration(app),QuestionsDb.catalogMigration(app),QuestionsDb.expansionMigration(app)).build()
             try {
                 assertEquals(fresh,db.questions().all().map { it.model() })
+                if(version==3) {
+                    val cursor=db.openHelper.readableDatabase.query("SELECT count(*) FROM questions")
+                    cursor.use { assertTrue(it.moveToFirst());assertEquals(800,it.getInt(0)) }
+                    assertEquals(400,fresh.count { it.id.startsWith("v104_") });assertEquals(400,fresh.count { it.id.startsWith("v109_") })
+                    continue
+                }
                 val old=db.questions().findByIds(listOf("cultura_035","deportes_004","curiosidades_013")).map { it.model() }
                 assertEquals(3,old.size)
                 assertEquals(0,old.first { it.id=="cultura_035" }.decimalPlaces)
@@ -129,7 +136,7 @@ class OfflineGameTest {
                 assertEquals(12.0,saved.question()!!.answer,0.0)
                 assertEquals(2,saved.scores().single().size)
                 val cursor=db.openHelper.readableDatabase.query("SELECT count(*) FROM questions")
-                cursor.use { assertTrue(it.moveToFirst());assertEquals(830,it.getInt(0)) }
+                cursor.use { assertTrue(it.moveToFirst());assertEquals(1230,it.getInt(0)) }
             } finally { db.close();app.deleteDatabase(name) }
         }
     }
@@ -160,4 +167,33 @@ class OfflineGameTest {
         assertEquals(Screen.SELECT,restored.state.value.screen)
         assertTrue(restored.state.value.match!!.currentGuesses.isEmpty())
     }
+    @Test fun shownQuestionsRemainExcludedAfterAbandonmentRestartAndModeChanges()=runBlocking {
+        val first=loaded();first.configure { it.copy(rounds=5) };first.start()
+        val shown=first.state.value.question()!!
+        assertTrue(QuestionHistory.read(app).contains(shown.id))
+        assertTrue(QuestionHistory.read(app).contains(es.aproximado.core.Selection.fingerprint(shown.text)))
+        // An unsubmitted round is still seen; a stale saved recent list must not erase shared LAN history.
+        val guestSeen=first.state.value.pool.filter { it.id!=shown.id }.take(30)
+        QuestionHistory.remember(app,guestSeen.map { es.aproximado.core.Selection.fingerprint(it.text) })
+        val restarted=loaded();restarted.start()
+        assertTrue(restarted.state.value.match!!.questions.none { id -> id==shown.id || guestSeen.any { it.id==id } })
+        val ids=restarted.state.value.match!!.questions
+        assertTrue(QuestionHistory.read(app).contains(ids[0]))
+        assertFalse(QuestionHistory.read(app).contains(ids[1])) // Future rounds have not been shown.
+        restarted.advance(Screen.SELECT)
+        repeat(2) { restarted.confirm(restarted.state.value.question()!!.answer) }
+        restarted.nextRound()
+        assertTrue(QuestionHistory.read(app).contains(ids[1]))
+        restarted.clear();assertTrue(QuestionHistory.read(app).isEmpty())
+        assertTrue(loaded().state.value.recent.isEmpty())
+    }
+    @Test fun legacyHistoryIsImportedOnlyOnceAndClearCannotResurrectIt()=runBlocking {
+        val vm=loaded();vm.start()
+        val old=vm.state.value.recent
+        app.getSharedPreferences("aproximado-history",0).edit().clear().commit()
+        val restored=loaded();assertEquals(old,restored.state.value.recent)
+        QuestionHistory.clear(app)
+        assertTrue(loaded().state.value.recent.isEmpty())
+    }
+
 }

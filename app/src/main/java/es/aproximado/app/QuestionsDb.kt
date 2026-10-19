@@ -21,7 +21,7 @@ data class QuestionEntity(
     @Query("SELECT * FROM questions WHERE catalog_version=2 ORDER BY id") suspend fun all(): List<QuestionEntity>
     @Query("SELECT * FROM questions WHERE id IN (:ids)") suspend fun findByIds(ids: List<String>): List<QuestionEntity>
 }
-@Database(entities = [QuestionEntity::class],version = 3,exportSchema = true)
+@Database(entities = [QuestionEntity::class],version = 4,exportSchema = true)
 abstract class QuestionsDb : RoomDatabase() {
     abstract fun questions(): QuestionDao
     companion object {
@@ -39,10 +39,17 @@ abstract class QuestionsDb : RoomDatabase() {
                 }
             }
         }
+        fun expansionMigration(context: Context) = object : Migration(3,4) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                context.assets.open("migration_3_4.sql").bufferedReader().useLines { lines ->
+                    lines.filter { it.isNotBlank() }.forEach { db.execSQL(it) }
+                }
+            }
+        }
         @Volatile private var instance: QuestionsDb? = null
         fun get(context: Context): QuestionsDb = instance ?: synchronized(this) {
             instance ?: Room.databaseBuilder(context.applicationContext,QuestionsDb::class.java,"aproximado-questions-v1.db")
-                .createFromAsset("questions.db").addMigrations(precisionMigration(context.applicationContext),catalogMigration(context.applicationContext)).build().also { instance = it }
+                .createFromAsset("questions.db").addMigrations(precisionMigration(context.applicationContext),catalogMigration(context.applicationContext),expansionMigration(context.applicationContext)).build().also { instance = it }
         }
     }
 }

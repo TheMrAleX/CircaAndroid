@@ -1,0 +1,108 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 4,
+    "identityHash": "f6fd54fd38d8c8a69fdadce79ff3b5c2",
+    "entities": [
+      {
+        "tableName": "questions",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `category` TEXT NOT NULL, `text_es` TEXT NOT NULL, `answer` REAL NOT NULL, `unit` TEXT, `min_plausible` REAL NOT NULL, `max_plausible` REAL NOT NULL, `scale` TEXT NOT NULL, `difficulty` INTEGER NOT NULL, `as_of_year` INTEGER, `source_hint` TEXT NOT NULL, `decimal_places` INTEGER NOT NULL DEFAULT 0, `catalog_version` INTEGER NOT NULL DEFAULT 1, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "category",
+            "columnName": "category",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "text_es",
+            "columnName": "text_es",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "answer",
+            "columnName": "answer",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unit",
+            "columnName": "unit",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "min_plausible",
+            "columnName": "min_plausible",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "max_plausible",
+            "columnName": "max_plausible",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "scale",
+            "columnName": "scale",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "difficulty",
+            "columnName": "difficulty",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "as_of_year",
+            "columnName": "as_of_year",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "source_hint",
+            "columnName": "source_hint",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "decimal_places",
+            "columnName": "decimal_places",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "catalog_version",
+            "columnName": "catalog_version",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "1"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f6fd54fd38d8c8a69fdadce79ff3b5c2')"
+    ]
+  }
+}
