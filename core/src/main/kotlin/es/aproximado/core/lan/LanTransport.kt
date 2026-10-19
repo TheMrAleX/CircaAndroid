@@ -29,9 +29,9 @@ private class Peer(val socket: Socket,val channel: LanChannel,workers: ExecutorS
 
 /** Bounded connections, no network IO in the state actor, coalesced transient slider traffic at most eight times per second. */
 class LanServer(pool: List<Question>,hostName: String,val code: String = "%08d".format(java.util.Locale.ROOT,SecureRandom().nextInt(100000000)),
-    private val onState: (LanSnapshot)->Unit,private val onFailure: (LanFailure)->Unit = {},hostLiveRuler: Boolean = true,private val onLive: (LanLiveFrame)->Unit = {}) : Closeable {
+    private val onState: (LanSnapshot)->Unit,private val onFailure: (LanFailure)->Unit = {},hostLiveRuler: Boolean = true,private val onLive: (LanLiveFrame)->Unit = {},initialHistory: List<String> = emptyList(),private val onQuestionShown: (String)->Unit = {}) : Closeable {
     private val hostToken=UUID.randomUUID().toString()
-    private val room=LanRoom(pool,hostToken,hostName,hostLiveRuler=hostLiveRuler)
+    private val room=LanRoom(pool,hostToken,hostName,initialHistory.toMutableList(),hostLiveRuler=hostLiveRuler)
     private val actor=Executors.newSingleThreadExecutor(daemonThreads("lan-room"))
     private val workers=Executors.newFixedThreadPool(24,daemonThreads("lan-io"))
     private val timer=Executors.newSingleThreadScheduledExecutor(daemonThreads("lan-timeout"))
@@ -123,11 +123,11 @@ class LanServer(pool: List<Question>,hostName: String,val code: String = "%08d".
     }
     private fun change(action: ()->Unit) { if(!closed) runCatching { actor.execute { try { action();broadcast() } catch(e: LanException) { onFailure(e.reason) } } } }
     fun configure(rounds: Int,difficulty: Int?,categories: Set<String>)=change { room.configure(rounds,difficulty,categories) }
-    fun start()=change { room.start() }
+    fun start()=change { room.start();room.currentCatalogId()?.let(onQuestionShown) }
     fun submit(game: String,round: Int,value: Double)=change { room.submit(hostToken,game,round,value) }
     fun preview(game: String,round: Int,revision: Long,value: Double) { if(!closed) pendingPreview.set(LanMessage.Preview(game,round,revision,value)) }
     fun preference(enabled: Boolean) { pendingPreview.set(null);change { room.preference(hostToken,enabled) } }
-    fun advance()=change { room.advance() }
+    fun advance()=change { room.advance();if(room.stage==LanStage.ANSWERING) room.currentCatalogId()?.let(onQuestionShown) }
     fun lobby()=change { room.lobby() }
     fun remove(index: Int)=change {
         val before=peers.keys.toList()

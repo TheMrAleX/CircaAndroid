@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicReference
 
 class LiveRulerTest {
-    private val pool=List(25) { Question("secret$it","Ciencia","¿Cuántas unidades?",12.0,null,0.0,50.0,"linear",1) }
+    private val pool=List(25) { Question("secret$it","Ciencia","¿Cuántas unidades tiene la referencia $it?",12.0,null,0.0,50.0,"linear",1) }
     private fun token()=UUID.randomUUID().toString()
     private fun await(condition: ()->Boolean) {
         val deadline=System.nanoTime()+TimeUnit.SECONDS.toNanos(20)

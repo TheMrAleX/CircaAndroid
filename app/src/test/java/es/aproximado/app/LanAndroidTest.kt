@@ -36,8 +36,9 @@ class LanAndroidTest {
         val app=RuntimeEnvironment.getApplication()
         val offline=app.getSharedPreferences("aproximado",0)
         offline.edit().putString("lan-test-marker","unchanged").commit()
+        QuestionHistory.clear(app)
         val repo=LanRepository.get(app)
-        val pool=List(25) { Question("test$it","Ciencia","¿Cuántas unidades?",12.0,null,0.0,50.0,"linear",1) }
+        val pool=List(25) { Question("test$it","Ciencia","¿Cuántas unidades tiene la referencia $it?",12.0,null,0.0,50.0,"linear",1) }
         repo.livePreference(true);repo.name("Anfitrión");repo.host(pool)
         await { repo.state.value.snapshot!=null && repo.state.value.connection==LanConnection.CONNECTED }
         val intent=shadowOf(app).nextStartedService
@@ -56,6 +57,7 @@ class LanAndroidTest {
             repo.configure(5,null,emptySet());repo.start()
             await { guest.get()?.stage==LanStage.ANSWERING && repo.state.value.snapshot?.stage==LanStage.ANSWERING }
             var s=repo.state.value.snapshot!!
+            assertTrue(QuestionHistory.read(app).contains(es.aproximado.core.Selection.fingerprint(s.prompt!!.text)))
             repo.preview(10.0,s.gameId,0)
             client.preview(s.gameId,0,s.revision,15.0)
             await { repo.state.value.liveValues[1]==15.0 && live.get()?.values?.get(0)==10.0 }
@@ -75,6 +77,30 @@ class LanAndroidTest {
             assertEquals("unchanged",offline.getString("lan-test-marker",null))
             assertFalse(offline.contains("state"))
         } finally { client.close();repo.close();service.destroy() }
+        val firstSeen=QuestionHistory.read(app).toSet()
+        val target=pool.first { es.aproximado.core.Selection.fingerprint(it.text) !in firstSeen }
+        val otherState=AtomicReference<LanSnapshot>()
+        val otherHost=LanServer(pool,"Otro host",onState={otherState.set(it)},initialHistory=pool.filter { it.id!=target.id }.map { it.id })
+        try {
+            val localIp=java.net.NetworkInterface.getNetworkInterfaces().toList().flatMap { it.inetAddresses.toList() }.filterIsInstance<java.net.Inet4Address>().first { it.isSiteLocalAddress }.hostAddress!!
+            repo.endpoint("$localIp:${otherHost.port}");repo.code(otherHost.code);repo.join()
+            await { repo.state.value.connection==LanConnection.CONNECTED && otherState.get()?.members?.size==2 }
+            otherHost.configure(5,null,emptySet());otherHost.start()
+            await { repo.state.value.snapshot?.stage==LanStage.ANSWERING }
+            assertEquals(target.text,repo.state.value.snapshot!!.prompt!!.text)
+            assertTrue(QuestionHistory.read(app).contains(es.aproximado.core.Selection.fingerprint(target.text)))
+        } finally { repo.close();otherHost.close() }
+        repo.host(pool)
+        await { repo.state.value.connection==LanConnection.CONNECTED && repo.state.value.addresses.isNotEmpty() }
+        val nextGuest=AtomicReference<LanSnapshot>()
+        val secondPort=repo.state.value.addresses.first().substringAfterLast(':').toInt()
+        val secondClient=LanClient(LanEndpoint.parse("127.0.0.1:$secondPort",true),repo.state.value.code,UUID.randomUUID().toString(),"Invitado",onState={nextGuest.set(it)},onConnection={_,_->})
+        try {
+            await { repo.state.value.snapshot?.members?.size==2 };repo.configure(5,null,emptySet());repo.start()
+            await { nextGuest.get()?.stage==LanStage.ANSWERING }
+            val fingerprint=es.aproximado.core.Selection.fingerprint(nextGuest.get().prompt!!.text)
+            assertFalse(fingerprint in firstSeen);assertNotEquals(es.aproximado.core.Selection.fingerprint(target.text),fingerprint)
+        } finally { secondClient.close();repo.close() }
         assertFalse(repo.state.value.active)
         assertNull(repo.state.value.snapshot)
         assertTrue(repo.state.value.liveValues.isEmpty())

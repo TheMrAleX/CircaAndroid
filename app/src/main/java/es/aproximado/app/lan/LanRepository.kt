@@ -13,7 +13,9 @@ import android.os.Looper
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
+import es.aproximado.app.QuestionHistory
 import es.aproximado.core.Question
+import es.aproximado.core.Selection
 import es.aproximado.core.EstimateInput
 import es.aproximado.core.lan.*
 import kotlinx.coroutines.flow.*
@@ -38,6 +40,7 @@ class LanRepository private constructor(private val app: Application) {
     private var server: LanServer?=null
     private var client: LanClient?=null
     private var pending: PendingGuess?=null
+    private var rememberedPrompt: String?=null
     private val nsd=app.getSystemService(NsdManager::class.java)
     private var registration: NsdManager.RegistrationListener?=null
     private var discovery: NsdManager.DiscoveryListener?=null
@@ -60,7 +63,7 @@ class LanRepository private constructor(private val app: Application) {
         val liveRuler=mutable.value.liveRuler
         worker.execute {
             try {
-                val room=LanServer(pool,name,onState={ s -> main.post { if(gen==generation) receive(s) } },onFailure={ e -> main.post { if(gen==generation) mutable.update { it.copy(error=e,pending=null) } } },hostLiveRuler=liveRuler,onLive={ f -> main.post { if(gen==generation) receiveLive(f) } })
+                val room=LanServer(pool,name,onState={ s -> main.post { if(gen==generation) receive(s) } },onFailure={ e -> main.post { if(gen==generation) mutable.update { it.copy(error=e,pending=null) } } },hostLiveRuler=liveRuler,onLive={ f -> main.post { if(gen==generation) receiveLive(f) } },initialHistory=QuestionHistory.read(app),onQuestionShown={ id -> pool.firstOrNull { it.id==id }?.let { QuestionHistory.remember(app,listOf(id,Selection.fingerprint(it.text))) };Unit })
                 main.post {
                     if(gen!=generation) { room.close();return@post }
                     server=room;mutable.update { it.copy(code=room.code,connection=LanConnection.CONNECTED,addresses=addresses(room.port)) };register(room.port,name)
@@ -92,6 +95,10 @@ class LanRepository private constructor(private val app: Application) {
     private fun receive(s: LanSnapshot) {
         val old=mutable.value.snapshot
         if(old!=null && old.roomId==s.roomId && s.revision<old.revision) return
+        val prompt=s.prompt
+        if(!mutable.value.host && s.stage==LanStage.ANSWERING && prompt!=null && rememberedPrompt!=prompt.id) {
+            QuestionHistory.remember(app,listOf(Selection.fingerprint(prompt.text)));rememberedPrompt=prompt.id
+        }
         val p=pending
         if(p!=null && (p.game!=s.gameId || p.round!=s.round || s.stage!=LanStage.ANSWERING || s.mine!=null)) { pending=null;clearPending() }
         mutable.update { it.copy(snapshot=s,error=null,pending=pending?.value,liveValues=if(old?.revision==s.revision && s.liveEnabled && it.liveRuler) it.liveValues else emptyMap()) }

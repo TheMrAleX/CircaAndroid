@@ -46,18 +46,31 @@ object Scoring {
 }
 
 object Selection {
+    /** Text identity also lets a LAN guest remember a prompt without receiving its private catalog ID. */
+    fun fingerprint(text: String): String {
+        val normal=java.text.Normalizer.normalize(text,java.text.Normalizer.Form.NFKC).lowercase(java.util.Locale.ROOT).trim().replace(Regex("\\s+")," ")
+        val bytes=java.security.MessageDigest.getInstance("SHA-256").digest(normal.toByteArray(Charsets.UTF_8))
+        val hex="0123456789abcdef"
+        return buildString(69) { append("text:");bytes.forEach { val n=it.toInt() and 255;append(hex[n ushr 4]);append(hex[n and 15]) } }
+    }
     fun select(pool: List<Question>, count: Int, categories: Set<String>, difficulty: Int?, recent: List<String>, random: Random = Random.Default): List<Question> {
         require(count > 0)
-        val eligible = pool.filter { (categories.isEmpty() || it.category in categories) && (difficulty == null || it.difficulty == difficulty) }.distinctBy { it.id }
+        val eligible = pool.filter { (categories.isEmpty() || it.category in categories) && (difficulty == null || it.difficulty == difficulty) }
+            .distinctBy { it.id }.map { it to fingerprint(it.text) }.distinctBy { it.second }
         require(eligible.size >= count) { "Preguntas insuficientes" }
-        // Recent is chronological, oldest first. Shuffle fresh questions but prefer older history if exhausted.
-        val history = recent.withIndex().associate { it.value to it.index }
-        val fresh = eligible.filterNot { it.id in history }.shuffled(random)
-        val reused = eligible.filter { it.id in history }.sortedBy { history[it.id] }
-        return (fresh + reused).take(count)
+        val history=recent.withIndex().associate { it.value to it.index }
+        fun age(entry: Pair<Question,String>)=maxOf(history[entry.first.id] ?: -1,history[entry.second] ?: -1)
+        val fresh=eligible.filter { age(it)<0 }.shuffled(random)
+        val reused=eligible.filter { age(it)>=0 }.sortedBy(::age)
+        val needed=(count-fresh.size).coerceAtLeast(0)
+        val window=maxOf(needed,minOf(eligible.size/4,reused.size))
+        return (fresh+reused.take(window).shuffled(random)).take(count).map { it.first }
     }
-    fun remember(recent: List<String>, played: List<String>, limit: Int = 80): List<String> =
-        (recent.filterNot { it in played } + played.distinct()).takeLast(limit)
+    fun remember(recent: List<String>, played: List<String>, limit: Int = 10000): List<String> {
+        require(limit>0)
+        val moved=played.toSet()
+        return (recent.filterNot { it in moved }.asReversed().distinct().asReversed() + played.asReversed().distinct().asReversed()).takeLast(limit)
+    }
 }
 
 object RulerScale {

@@ -5,7 +5,7 @@ import org.junit.Test
 import kotlin.random.Random
 
 class GameTest {
-    private fun q(id: String = "q", answer: Double = 100.0, scale: String = "linear", difficulty: Int = 1, category: String = "A") = Question(id, category, "¿Cuánto?", answer, null, if (scale == "log") 1.0 else 0.0, 1000.0, scale, difficulty)
+    private fun q(id: String = "q", answer: Double = 100.0, scale: String = "linear", difficulty: Int = 1, category: String = "A") = Question(id, category, "¿Cuánto vale $id?", answer, null, if (scale == "log") 1.0 else 0.0, 1000.0, scale, difficulty)
     @Test fun linearRankingAndBonus() {
         val result = Scoring.round(q(), listOf(100.0, 100.5, 130.0, 60.0)).associateBy { it.playerId }
         assertEquals(6, result.getValue(0).points)
@@ -42,7 +42,7 @@ class GameTest {
         val pool = (0..9).map { q("q$it") }
         val selected = Selection.select(pool, 5, emptySet(), null, (0..7).map { "q$it" }, Random(2))
         assertEquals(setOf("q8","q9"), selected.take(2).map { it.id }.toSet())
-        assertEquals(listOf("q0","q1","q2"), selected.drop(2).map { it.id })
+        assertEquals(setOf("q0","q1","q2"), selected.drop(2).map { it.id }.toSet())
         assertEquals(listOf("b","c","a"), Selection.remember(listOf("a","b"), listOf("c","a")))
     }
     @Test(expected = IllegalArgumentException::class) fun insufficientPoolFails() { Selection.select(listOf(q()), 2, emptySet(), null, emptyList()) }

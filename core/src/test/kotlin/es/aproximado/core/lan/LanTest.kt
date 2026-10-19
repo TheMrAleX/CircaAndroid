@@ -11,7 +11,7 @@ import java.net.*
 
 class LanTest {
     private fun token()=UUID.randomUUID().toString()
-    private val pool=(0..29).map { Question("secret-$it","Ciencia","¿Cuántas unidades tiene esta referencia?",9.80665,"m",0.0,30.0,"linear",2,source="private-source",decimalPlaces=5) }
+    private val pool=(0..29).map { Question("secret-$it","Ciencia","¿Cuántas unidades tiene la referencia $it?",9.80665,"m",0.0,30.0,"linear",2,source="private-source",decimalPlaces=5) }
     private fun waitFor(condition: ()->Boolean) {
         val end=System.nanoTime()+TimeUnit.SECONDS.toNanos(25)
         while(!condition()) { if(System.nanoTime()>end) fail("Timed out waiting for LAN state");Thread.sleep(10) }

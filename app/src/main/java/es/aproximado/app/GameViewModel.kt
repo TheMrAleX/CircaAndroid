@@ -40,7 +40,8 @@ class GameViewModel(app: Application): AndroidViewModel(app) {
                     if(it.stage==Screen.PASS) it.copy(stage=Screen.SELECT) else it
                 }
                 val categories=restored.config.categories.intersect(pool.map { it.category }.toSet())
-                mutable.value = restored.copy(pool=pool,savedQuestions=archived,match=match,config=restored.config.copy(categories=categories),loading=false,screen=Screen.HOME)
+                val history=QuestionHistory.importLegacy(app,restored.recent)
+                mutable.value = restored.copy(recent=history,pool=pool,savedQuestions=archived,match=match,config=restored.config.copy(categories=categories),loading=false,screen=Screen.HOME)
             } catch (_: Exception) { mutable.update { it.copy(loading=false,error=true) } }
         }
     }
@@ -59,10 +60,18 @@ class GameViewModel(app: Application): AndroidViewModel(app) {
         val s=mutable.value
         val raw=if(again) s.match?.config ?: s.config else s.config
         val config=raw.copy(categories=raw.categories.intersect(s.pool.map { it.category }.toSet()),players=raw.players.map { if(it.name.isBlank()) it.copy(name=getApplication<Application>().getString(R.string.player,it.id+1)) else it })
-        val selected=runCatching { Selection.select(s.pool,config.rounds,config.categories,config.difficulty,s.recent) }.getOrNull() ?: return
-        update { it.copy(config=config,match=Match(config,selected.map { q->q.id }),savedQuestions=emptyList(),screen=Screen.INTRO) }
+        val selected=runCatching { Selection.select(s.pool,config.rounds,config.categories,config.difficulty,QuestionHistory.read(getApplication())) }.getOrNull() ?: return
+        val history=QuestionHistory.remember(getApplication(),listOf(selected.first().id,Selection.fingerprint(selected.first().text)))
+        update { it.copy(config=config,match=Match(config,selected.map { q->q.id }),savedQuestions=emptyList(),screen=Screen.INTRO,recent=history) }
     }
-    fun resume() { val m=mutable.value.match ?: return;advance(if(m.stage==Screen.PASS) Screen.SELECT else m.stage) }
+    fun resume() {
+        val m=mutable.value.match ?: return
+        if(m.stage in listOf(Screen.INTRO,Screen.PASS,Screen.SELECT)) mutable.value.question()?.let { q ->
+            val history=QuestionHistory.remember(getApplication(),listOf(q.id,Selection.fingerprint(q.text)))
+            mutable.update { it.copy(recent=history) }
+        }
+        advance(if(m.stage==Screen.PASS) Screen.SELECT else m.stage)
+    }
     fun advance(stage: Screen) = update {
         val next=if(stage==Screen.PASS) Screen.SELECT else stage
         it.copy(screen=next,match=it.match?.copy(stage=next))
@@ -76,16 +85,20 @@ class GameViewModel(app: Application): AndroidViewModel(app) {
         val guesses=m.currentGuesses+value
         val stage=if(guesses.size==m.config.players.size) Screen.REVEAL else Screen.SELECT
         val all=m.guesses.toMutableList().apply { this[m.round]=guesses }
-        update { it.copy(match=m.copy(guesses=all,stage=stage),screen=stage,recent=if(stage==Screen.REVEAL) Selection.remember(it.recent,listOf(q.id)) else it.recent) }
+        update { it.copy(match=m.copy(guesses=all,stage=stage),screen=stage) }
     }
     fun nextRound() {
         val m=mutable.value.match ?: return
         if(m.round+1>=m.config.rounds) advance(Screen.FINAL)
-        else update { it.copy(screen=Screen.INTRO,match=m.copy(round=m.round+1,guesses=m.guesses+listOf(emptyList()),stage=Screen.INTRO)) }
+        else {
+            val next=(mutable.value.pool+mutable.value.savedQuestions).first { it.id==m.questions[m.round+1] }
+            val history=QuestionHistory.remember(getApplication(),listOf(next.id,Selection.fingerprint(next.text)))
+            update { it.copy(screen=Screen.INTRO,match=m.copy(round=m.round+1,guesses=m.guesses+listOf(emptyList()),stage=Screen.INTRO),recent=history) }
+        }
     }
     fun liveRuler(enabled: Boolean) = update { it.copy(liveRuler=enabled) }
     fun setting(sound: Boolean? = null,vibration: Boolean? = null) = update { it.copy(sound=sound ?: it.sound,vibration=vibration ?: it.vibration) }
-    fun clear() = update { it.copy(match=null,recent=emptyList(),savedQuestions=emptyList()) }
+    fun clear() { QuestionHistory.clear(getApplication());update { it.copy(match=null,recent=emptyList(),savedQuestions=emptyList()) } }
     private fun configJson(c: Config)=JSONObject().put("players",JSONArray().apply { c.players.forEach { put(JSONObject().put("id",it.id).put("name",it.name).put("style",it.style)) } }).put("rounds",c.rounds).put("categories",JSONArray(c.categories.toList())).put("difficulty",c.difficulty ?: 0)
     private fun parseConfig(o: JSONObject): Config {
         val players=o.getJSONArray("players").let { a -> (0 until a.length()).map { val p=a.getJSONObject(it);Player(p.getInt("id"),p.getString("name"),p.getInt("style")) } }

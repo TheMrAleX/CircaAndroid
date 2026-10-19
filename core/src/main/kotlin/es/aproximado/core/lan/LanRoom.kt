@@ -59,7 +59,7 @@ class LanRoom(private val pool: List<Question>,hostToken: String,hostName: Strin
     @Synchronized fun start() {
         if(stage!=LanStage.LOBBY || seats.size !in 2..8 || seats.any { !it.online }) throw LanException(LanFailure.INVALID)
         questions=try { Selection.select(pool,rounds,categories,difficulty,history) } catch (_: IllegalArgumentException) { throw LanException(LanFailure.INVALID) }
-        gameId=UUID.randomUUID().toString();round=0;guesses.clear();drafts.clear();results.clear();stage=LanStage.ANSWERING;revision++
+        gameId=UUID.randomUUID().toString();round=0;guesses.clear();drafts.clear();results.clear();stage=LanStage.ANSWERING;rememberCurrent();revision++
     }
     @Synchronized fun submit(token: String,game: String,round: Int,value: Double) {
         if(stage!=LanStage.ANSWERING || game!=gameId || round!=this.round || seats.none { it.token==token } || !EstimateInput.accepts(questions[round],value)) throw LanException(LanFailure.INVALID)
@@ -69,14 +69,13 @@ class LanRoom(private val pool: List<Question>,hostToken: String,hostName: Strin
         if(guesses.size==seats.size) {
             val q=questions[round]
             results.add(LanRound(LanPrompt.of("$gameId:$round",q),q.answer,q.source,seats.map { guesses.getValue(it.token) }))
-            val remembered=Selection.remember(history,listOf(q.id));history.clear();history.addAll(remembered)
             stage=LanStage.REVEAL
         }
     }
     @Synchronized fun advance() {
         when(stage) {
             LanStage.REVEAL -> stage=LanStage.SCORE
-            LanStage.SCORE -> if(round+1==rounds) stage=LanStage.FINISHED else { round++;guesses.clear();stage=LanStage.ANSWERING }
+            LanStage.SCORE -> if(round+1==rounds) stage=LanStage.FINISHED else { round++;guesses.clear();stage=LanStage.ANSWERING;rememberCurrent() }
             else -> throw LanException(LanFailure.INVALID)
         };drafts.clear();revision++
     }
@@ -86,6 +85,8 @@ class LanRoom(private val pool: List<Question>,hostToken: String,hostName: Strin
         return LanSnapshot(id,gameId,revision,self,stage,seats.mapIndexed { i,s -> LanMember(i,s.name,s.online,s.token in guesses) },rounds,difficulty,categories,round,
             questions.getOrNull(round)?.let { LanPrompt.of("$gameId:$round",it) },guesses[token],results.toList(),liveEnabled())
     }
+    private fun rememberCurrent() { val next=Selection.remember(history,listOf(questions[round].id,Selection.fingerprint(questions[round].text)));history.clear();history.addAll(next) }
+    @Synchronized fun currentCatalogId(): String? = questions.getOrNull(round)?.id
     @Synchronized fun preference(token: String,enabled: Boolean) {
         val seat=seats.firstOrNull { it.token==token } ?: throw LanException(LanFailure.INVALID)
         if(seat.live!=enabled) { seat.live=enabled;drafts.clear();revision++ }
