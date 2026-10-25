@@ -191,3 +191,21 @@ cbce373ba2c8aa6623591555c5d554e5cefc10a0d0863a202d79eeb00fbc9c23
 ```
 
 Certificado SHA256: `ad6e238fd028490a33fc083b5ee690f660d6f490b7b726bed0d1b07f8078d87a`. Difiere de 1.0.8: Android exige desinstalar la anterior, borrando partida, ajustes e historial locales. Las migraciones conservan los datos cuando la actualización usa la misma firma; no pueden evitar el borrado impuesto por una reinstalación. Para siguientes versiones instala una identidad estable mediante las cuatro secrets documentadas arriba.
+
+## Publicación verificada: v1.0.10
+
+Publicada el 25 de octubre de 2026 desde `19a0c17` (versionCode 11):
+
+- [Release y tres APK](https://github.com/TheMrAleX/CircaAndroid/releases/tag/v1.0.10)
+- [CI correcto del código publicado](https://github.com/TheMrAleX/CircaAndroid/actions/runs/40201317042)
+- [Release multi-arquitectura correcta](https://github.com/TheMrAleX/CircaAndroid/actions/runs/40201318705)
+
+Se descargaron los tres APK oficiales y sus SHA256. Todos verifican firma v2 con el mismo certificado, versión/código 1.0.10/11, minSdk 26/target 35, Room 4 íntegra con las 800 filas idénticas al catálogo y las tres licencias correctas. ABI comprobadas: ARMv7 contiene solo `armeabi-v7a`, ARM64 solo `arm64-v8a` y universal exactamente `armeabi-v7a`, `arm64-v8a`, `x86`, `x86_64`.
+
+```text
+c0ee396d279bca40585ea02b42d5ffdaf96b4f8297d1db69783397398ac8c65d  Aproximado-v1.0.10-arm64-v8a.apk
+86295370dfc330c2d95feeeee8bb0bfd8c397fe43779ec44c1483e61131c7866  Aproximado-v1.0.10-armeabi-v7a.apk
+04a308810620e625fca672527b051f3f9fc1415713992e9eec0c95b95a1a58d5  Aproximado-v1.0.10-universal.apk
+```
+
+Certificado SHA256: `6c441d17fa3189113e5d248fb2e03f683c7572da63a4ecc9c52276b699bc13fa`. Difiere de 1.0.9, por lo que Android exige desinstalar la anterior y se pierden sus datos locales. Configura las secrets de firma estable descritas al principio de este documento para evitarlo en próximas releases.

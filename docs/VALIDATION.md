@@ -8,6 +8,7 @@
 - Los tres APK destinados a publicación están firmados con APK Signature Scheme v2. Todos declaran versión/código 1.0.10/11, contienen Room 4 íntegra con 800 preguntas y empaquetan el mismo texto de licencia.
 - Tamaños locales aproximados: ARMv7 1,43 MB, ARM64 1,43 MB y universal 1,48 MB. La firma temporal local impide comparar sus SHA256 con los que producirá GitHub.
 - No hay dispositivos físicos ARMv7 ni x86 disponibles en este entorno. Se verificaron empaquetado, recursos, manifest, pruebas JVM/Robolectric y contenido de los APK; no se afirma una instalación física por arquitectura.
+- [CI 40201317042](https://github.com/TheMrAleX/CircaAndroid/actions/runs/40201317042) y [release 40201318705](https://github.com/TheMrAleX/CircaAndroid/actions/runs/40201318705) terminaron correctamente. Se descargaron los tres APK oficiales y sus checksum: todos verifican firma v2 común, versión/código, SDK, Room 4/800 filas y licencias. ABI exactas: ARMv7 solo `armeabi-v7a`, ARM64 solo `arm64-v8a`, universal las cuatro. SHA256 y certificado en RELEASING.md.
 
 ## Resultados 1.0.9 (19 de octubre de 2026)
 

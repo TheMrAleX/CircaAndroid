@@ -81,4 +81,4 @@ La petición actual sustituye MIT para las nuevas distribuciones: licencia propi
 - [x] Configuración de splits para ARMv7, ARM64, x86 y x86_64, con APK universal.
 - [x] Workflow y script local preparados para publicar/verificar ARMv7, ARM64 y universal.
 - [x] 244 casos, comparación visual y lint debug/release correctos; splits y universal inspeccionados, APK locales firmados y DB/licencia/versiones verificadas.
-- [ ] Publicación y verificación de los tres APK oficiales.
+- [x] v1.0.10 publicada; CI/release correctos. Tres APK oficiales descargados y verificados: SHA256, firma v2 común, versión/código, ABI exactas, Room 4/800 filas y licencias. Firma distinta de 1.0.9 documentada.

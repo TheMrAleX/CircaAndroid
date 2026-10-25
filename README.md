@@ -6,6 +6,8 @@ Juego nativo Android de trivia numérica para **2–8 personas**: pasando un tel
 
 **Qué archivo elegir:** usa Universal si no conoces la arquitectura. ARM64 es más pequeño para la mayoría de teléfonos actuales; ARMv7 permite instalar en dispositivos Android 8+ de 32 bits. [Detalle de arquitecturas y firma](RELEASING.md).
 
+**Actualización desde 1.0.9:** la firma de 1.0.10 es distinta. Android exige desinstalar la versión anterior antes de instalarla, lo que borra partida, ajustes e historial locales.
+
 ## LAN por Wi-Fi o hotspot
 
 En **Jugar en red local**, cada persona pone su nombre. Una crea la sala y comparte el código y la IP:puerto; las demás se unen desde la misma Wi-Fi o conectadas al hotspot. La búsqueda de salas es opcional: también se puede escribir la dirección. El anfitrión configura y avanza; todos responden simultáneamente desde su teléfono. Con **2–8 jugadores** y «Regla en vivo» activada por todos, un único gráfico muestra todas las barras, incluida la tuya. Arrastra verticalmente sobre cualquier barra, fondo o leyenda para ajustar solo tu número. Si cualquiera apaga la opción, las estimaciones permanecen privadas.
