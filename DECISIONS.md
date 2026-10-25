@@ -135,3 +135,9 @@
 - Verificación 1.0.9: 244 casos sin fallos ni omisiones, comparación visual correcta, lint debug/release sin incidencias y compilaciones debug/release R8 correctas. Muestreo de 16 hechos nuevos en repositorios públicos; fuentes oficiales BCE/NASA/NIST bloqueadas con 403. No afirmar auditoría web individual ni ensayos físicos.
 
 - Publicar v1.0.9 desde `4443b43`. CI 39186748661 y release 39186748729 correctos; descargar el APK oficial y verificar SHA256, firma v2, versión/código, ARM64, DB4/800 filas y licencias. La firma temporal difiere de 1.0.8: informar de desinstalación y pérdida del historial anterior; una migración SQLite no puede preservar datos eliminados por desinstalación.
+
+## 1.0.10 — compatibilidad de arquitecturas
+
+- Publicar ARMv7 y universal según la petición, conservando también ARM64 para no empeorar tamaño ni continuidad en teléfonos actuales. El universal incorpora `armeabi-v7a`, `arm64-v8a`, `x86` y `x86_64`; son todas las ABI que entrega la dependencia nativa transitiva de AndroidX en este proyecto.
+- Compilar también splits x86/x86_64 para demostrar que sus bibliotecas existen, pero publicar solo ARMv7, ARM64 y universal: los dos splits x86 separados no aportan dispositivos adicionales frente al universal y harían confusa la elección.
+- Subir versionName 1.0.10 y versionCode 11. No cambiar motor, datos ni protocolo LAN 3. Verificar firma, ABI exactas, versión, DB y licencias en cada APK publicado.

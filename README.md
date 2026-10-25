@@ -2,9 +2,9 @@
 
 Juego nativo Android de trivia numérica para **2–8 personas**: pasando un teléfono o con un teléfono por jugador en **LAN por Wi-Fi/hotspot**. 800 preguntas en español y 12 categorías, sin servidores externos, anuncios ni analytics. No requiere acceso a Internet.
 
-**[Descargar APK firmado v1.0.9](https://github.com/TheMrAleX/CircaAndroid/releases/download/v1.0.9/Aproximado-v1.0.9-arm64-v8a.apk)** · [Release y SHA256](https://github.com/TheMrAleX/CircaAndroid/releases/tag/v1.0.9)
+**Descargar v1.0.10:** [Universal](https://github.com/TheMrAleX/CircaAndroid/releases/download/v1.0.10/Aproximado-v1.0.10-universal.apk) · [ARM64](https://github.com/TheMrAleX/CircaAndroid/releases/download/v1.0.10/Aproximado-v1.0.10-arm64-v8a.apk) · [ARMv7](https://github.com/TheMrAleX/CircaAndroid/releases/download/v1.0.10/Aproximado-v1.0.10-armeabi-v7a.apk) · [Release y SHA256](https://github.com/TheMrAleX/CircaAndroid/releases/tag/v1.0.10)
 
-**Firma y actualizaciones:** la publicación usa una firma temporal distinta de la anterior. Android requiere desinstalar la anterior; se perderán sus datos locales. [Detalle de firma](RELEASING.md).
+**Qué archivo elegir:** usa Universal si no conoces la arquitectura. ARM64 es más pequeño para la mayoría de teléfonos actuales; ARMv7 permite instalar en dispositivos Android 8+ de 32 bits. [Detalle de arquitecturas y firma](RELEASING.md).
 
 ## LAN por Wi-Fi o hotspot
 
@@ -30,7 +30,7 @@ Si termina el proceso del anfitrión, la sala termina y hay que crear otra. Algu
 - **Revelación:** gráfica vertical de barras por estimación, línea de respuesta real, corona y leyenda de puntos.
 - **Marcador y resultado:** puntuación acumulada, puestos compartidos en empate y podio final.
 
-Novedades 1.0.9: **800 preguntas y sorteo con memoria persistente**. Se priorizan las preguntas aún no vistas; al agotarlas se sortean las más antiguas. Se recuerda cada pregunta al mostrarla, aunque abandones la partida, y también las que ves como invitado LAN. La memoria es local a cada teléfono; borrar historial, datos o desinstalar la reinicia. Los filtros pequeños pueden obligar a repetir. Protocolo LAN 3, compatible con 1.0.8. [Cambios completos](docs/releases/v1.0.9.md).
+Novedades 1.0.10: **APK para ARMv7 y APK universal**, además del ARM64 habitual. El universal incluye ARMv7, ARM64, x86 y x86_64 para maximizar la compatibilidad. El juego, las 800 preguntas y el protocolo LAN 3 se conservan sin cambios. [Cambios completos](docs/releases/v1.0.10.md).
 
 [Selector con ocho barras](docs/screens/shared_all_selector_320x640_1.3_8p.png) · [Espera compartida](docs/screens/shared_all_waiting_320x640_1.3_8p.png) · [Prueba interactiva de arrastre](docs/screens/live_selector_interaction.png). El modo privado conserva la [espera animada](docs/screens/waiting_orbit.png).
 

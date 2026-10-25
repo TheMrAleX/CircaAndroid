@@ -76,3 +76,9 @@ La petición actual sustituye MIT para las nuevas distribuciones: licencia propi
 - [x] Historial común persistente local/LAN, registro al mostrar, invitados y abandono; sorteo de no vistas y reutilización antigua aleatoria.
 - [x] 244 casos correctos, comparación de 188 capturas y dos pruebas visuales animadas/interactivas; lint debug/release sin incidencias, APK debug y release/R8 firmado compilados.
 - [x] v1.0.9 publicada; CI/release correctos. APK oficial descargado: firma v2/SHA256, versión/código 1.0.9/10, ARM64, Room 4 con 800 filas y licencias verificados. Firma distinta de 1.0.8 documentada.
+
+## Revisión 1.0.10
+- [x] Configuración de splits para ARMv7, ARM64, x86 y x86_64, con APK universal.
+- [x] Workflow y script local preparados para publicar/verificar ARMv7, ARM64 y universal.
+- [x] 244 casos, comparación visual y lint debug/release correctos; splits y universal inspeccionados, APK locales firmados y DB/licencia/versiones verificadas.
+- [ ] Publicación y verificación de los tres APK oficiales.

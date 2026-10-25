@@ -1,4 +1,13 @@
-# Validación de Aproximado 1.0.9
+# Validación de Aproximado 1.0.10
+
+## Resultados locales 1.0.10 (25 de octubre de 2026)
+
+- 244 casos sin fallos, errores ni omisiones; comparación de las 188 referencias Paparazzi y las pruebas visuales animada/interactiva correcta. Solo cambió la referencia de Ajustes por el número de versión.
+- `lintDebug` y `lintRelease` sin incidencias; compilaciones debug y release con R8/reducción de recursos correctas.
+- Cinco salidas Gradle inspeccionadas: splits exclusivos `armeabi-v7a`, `arm64-v8a`, `x86`, `x86_64` y universal. El universal contiene exactamente las cuatro ABI.
+- Los tres APK destinados a publicación están firmados con APK Signature Scheme v2. Todos declaran versión/código 1.0.10/11, contienen Room 4 íntegra con 800 preguntas y empaquetan el mismo texto de licencia.
+- Tamaños locales aproximados: ARMv7 1,43 MB, ARM64 1,43 MB y universal 1,48 MB. La firma temporal local impide comparar sus SHA256 con los que producirá GitHub.
+- No hay dispositivos físicos ARMv7 ni x86 disponibles en este entorno. Se verificaron empaquetado, recursos, manifest, pruebas JVM/Robolectric y contenido de los APK; no se afirma una instalación física por arquitectura.
 
 ## Resultados 1.0.9 (19 de octubre de 2026)
 

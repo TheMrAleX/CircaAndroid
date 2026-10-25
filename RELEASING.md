@@ -1,6 +1,6 @@
 # Publicar Aproximado
 
-`release.yml` se ejecuta al enviar un tag `v*`. Requiere que el tag coincida con `versionName`. La versión actual es 1.0.9 (código 10). Ejecuta validación de las 800 preguntas, tests, lint release, R8 y reducción de recursos. Publica `Aproximado-v1.0.9-arm64-v8a.apk` firmado y su archivo SHA256 en GitHub Releases con notas generadas.
+`release.yml` se ejecuta al enviar un tag `v*`. Requiere que el tag coincida con `versionName`. La versión actual es 1.0.10 (código 11). Ejecuta validación de las 800 preguntas, tests, lint release, R8 y reducción de recursos. Publica APK firmados ARMv7, ARM64 y universal, cada uno con su SHA256, en GitHub Releases con notas generadas.
 
 ## Firma estable (recomendada)
 
@@ -24,15 +24,21 @@ Desde el checkout ya commiteado en main, con Git autenticado:
 
 ```sh
 git push -u origin main
-git tag v1.0.9
-git push origin v1.0.9
+git tag v1.0.10
+git push origin v1.0.10
 ```
 
-Si el tag ya existe localmente, omite la segunda línea. Comprueba el resultado en Actions → Signed ARM64 release y en Releases. Con gh autenticado: `gh run list --workflow release.yml` y `gh release view v1.0.9`. El workflow usa `github.token` con `contents: write`; no requiere un PAT personal.
+Si el tag ya existe localmente, omite la segunda línea. Comprueba el resultado en Actions → Signed multi-architecture release y en Releases. Con gh autenticado: `gh run list --workflow release.yml` y `gh release view v1.0.10`. El workflow usa `github.token` con `contents: write`; no requiere un PAT personal.
 
-## ARMv8
+## Arquitecturas
 
-`ndk.abiFilters` incluye solo `arm64-v8a`. La app usa Kotlin/DEX y una biblioteca nativa transitiva de AndroidX. El APK empaqueta únicamente `lib/arm64-v8a/libandroidx.graphics.path.so`; se distribuye para dispositivos ARM64.
+Gradle genera splits para `armeabi-v7a`, `arm64-v8a`, `x86` y `x86_64`, además de un APK universal. La release publica tres opciones:
+
+- `armeabi-v7a`: teléfonos ARM de 32 bits; el archivo más pequeño para esos dispositivos.
+- `arm64-v8a`: teléfonos ARM de 64 bits; recomendado para la mayoría de dispositivos actuales.
+- `universal`: contiene las cuatro ABI y Android elige la biblioteca correcta al instalar; ofrece máxima compatibilidad a cambio de mayor tamaño.
+
+Los splits x86 y x86_64 separados se compilan para verificar su disponibilidad, pero no se publican porque el universal ya cubre emuladores y dispositivos x86. Los tres APK publicados contienen el mismo código, recursos, versión y firma.
 
 ## Publicación verificada: v1.0.0
 
